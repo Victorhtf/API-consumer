@@ -11,42 +11,27 @@ import img2logo from '../assets/logo/logo-text.png'
 
 const Aside = styled.div`
   background-color: #182136;
-  max-width: 20%;
+  max-width: 15%;
+  min-width: 15%;
   color: #f0eff4;
   height: 100vh;
   padding: 1rem;
-  background: #182136;
 
-  
-  .main {
-    width: 30%;
-    align-self: center;
-    justify-self: center;
-    background-color:white;
+  .trademark {
     display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: center;
-    margin-bottom:2rem;
+    gap: 50px;
+    justify-content: space-around;
+    margin-bottom: 4rem;
+    margin-top: 1.5rem;
+    cursor: pointer;
+  
   }
-
+  .img1-logo {
+    width: 20%;
+  }
   .logo {
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 10px;
-    flex: 1;
-  }
-  .title {
-    justify-content: center;
-    align-self: center;
-    padding: 0px 10px 0px 10px;
-    margin-bottom: 4px;
-  }
-  .img-logo {
-    background-color: white;
-    padding: 4px 8px 4px 8px;
-    border-radius: 10px;
   }
   .icon {
     font-size: 22px;
@@ -63,6 +48,7 @@ const Aside = styled.div`
 
     &:hover {
       background-color: #3498db;
+      cursor: pointer;
       
     }
   }
@@ -91,12 +77,12 @@ function Sidebar() {
 
   function handleNavigate(routes) {
     navigate(`/${routes}`)
+    console.log('ok')
   }
   return (
     <>
       <Aside>
-        <div className="main">
-          <h1 className='title'> CRUD</h1>
+        <div className="trademark" onClick={ () => {{handleNavigate('crud')}}} >
           <div className="logo">
             <img className="img1-logo" src={img1logo}/>
             <img className="img2-logo" src={img2logo}/>
@@ -106,9 +92,9 @@ function Sidebar() {
           {
             routes.map((routes, index) => {
               return (
-                <div key={index} className='items'>
+                <div onClick={() => {handleNavigate(routes.route)}} key={index} className='items'>
                   <div className='icon'>{routes.icon()}</div>
-                  <p onClick={() => {handleNavigate(routes.route)}} key={index}>{routes.name}</p>
+                  <p key={index}>{routes.name}</p>
                 </div>
               )
             })
