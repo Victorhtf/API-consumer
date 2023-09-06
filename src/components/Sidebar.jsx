@@ -27,11 +27,17 @@ const Aside = styled.div`
   
   }
   .img1-logo {
-    width: 20%;
+    width: 25%;
+
+  }
+  .img2-logo {
+    width: 75%;
+
   }
   .logo {
     display: flex;
     align-items: center;
+
   }
   .icon {
     font-size: 22px;

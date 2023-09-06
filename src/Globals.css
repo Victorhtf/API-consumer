@@ -2,9 +2,25 @@
     margin: 0;
     padding: 0px;
     box-sizing: border-box;
-    font-family: "Montserrat", Helvetica, Arial, serif;
+    font-family: 'Inter', sans-serif;
+    transition: 0.5;
 }
+
+:root {
+    --h1-font-size: 30px;
+    --h2-font-size: 25px;
+    --h3-font-size: 20px;
+    --h4-font-size: 15px;
+    --h5-font-size: 10px;
+    --h6-font-size: 5px;
+    --paragraph-font-size: 12px;
+    --primary-font-color: #100C08;
+    --btn-border-radius: 2px;
+    --btn-primary-color: #2596be;
+}
+
 
 body {
     background-color: #0c1323;
+
 }

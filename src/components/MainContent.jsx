@@ -1,6 +1,6 @@
 // import styled from 'styled-components'
 import styled from "styled-components"
-
+import Users from "./Users/Users"
 import Header from "./Header"
 
 
@@ -15,20 +15,17 @@ const Card = styled.div `
     border-radius: 10px;
     justify-content: space-between;
     margin: 12px;
+    padding: 5px;
     flex: 1;
     `
 function MainContent () {
     return (
         <Box>
-            <Header
-                isActive={true}
-            >
+            <Header isActive={true}>
                 <p>SOU PARAGRAFO</p>
             </Header>
-
             <Card>
-
-
+                <Users/>
             </Card>
         </Box>
     )
