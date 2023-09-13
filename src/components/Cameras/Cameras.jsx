@@ -1,18 +1,7 @@
-import Sidebar from "../Sidebar";
-import CamerasContent from "./CamerasContent";
-import styled from 'styled-components'
+import React from "react";
 
-const Box = styled.div `
-    display: flex;
-    `
-
-function Cameras () {
-    return (
-        <Box>
-            <Sidebar/>
-            <CamerasContent/>
-        </Box>
-    )
-}
+const Cameras = () => {
+  return <div>Cameras</div>;
+};
 
 export default Cameras;

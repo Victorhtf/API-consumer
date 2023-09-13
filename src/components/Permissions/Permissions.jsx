@@ -1,18 +1,7 @@
-import Sidebar from "../Sidebar"
-import PermissionsContent from "./PermissionsContent.jsx"
-import styled from "styled-components"
-
-const Box = styled.div `
-  display: flex;
-  `
+import React from "react";
 
 const Permissions = () => {
-  return (
-    <Box>
-        <Sidebar/>
-        <PermissionsContent/>
-    </Box>
-  )
-}
+  return <div>Permissions</div>;
+};
 
-export default Permissions
+export default Permissions;

@@ -1,13 +1,12 @@
-import styled from 'styled-components'; 
-import { useNavigate } from 'react-router-dom';
-import { BsFillShieldLockFill, BsFillBuildingsFill} from 'react-icons/bs'
-import { FaUsers } from 'react-icons/fa'
-import { BiSolidCameraHome, BiTestTube }  from  'react-icons/bi'
-import {VscServerEnvironment } from 'react-icons/vsc'
-import { RiCustomerService2Fill } from 'react-icons/ri'
-import img1logo from '../assets/logo/logo-primary.png'
-import img2logo from '../assets/logo/logo-text.png'
-
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { BsFillShieldLockFill, BsFillBuildingsFill } from "react-icons/bs";
+import { FaUsers } from "react-icons/fa";
+import { BiSolidCameraHome, BiTestTube } from "react-icons/bi";
+import { VscServerEnvironment } from "react-icons/vsc";
+import { RiCustomerService2Fill } from "react-icons/ri";
+import img1logo from "../assets/logo/logo-primary.png";
+import img2logo from "../assets/logo/logo-text.png";
 
 const Aside = styled.div`
   background-color: #182136;
@@ -24,20 +23,16 @@ const Aside = styled.div`
     margin-bottom: 4rem;
     margin-top: 1.5rem;
     cursor: pointer;
-  
   }
   .img1-logo {
     width: 25%;
-
   }
   .img2-logo {
     width: 75%;
-
   }
   .logo {
     display: flex;
     align-items: center;
-
   }
   .icon {
     font-size: 22px;
@@ -55,7 +50,6 @@ const Aside = styled.div`
     &:hover {
       background-color: #3498db;
       cursor: pointer;
-      
     }
   }
   .icon {
@@ -67,49 +61,64 @@ const Aside = styled.div`
     font-size: 13px;
     cursor: pointer;
   }
-  `
+`;
 
 function Sidebar() {
   const routes = [
-    {route: 'users', name:'Usuários', icon: FaUsers},
-    {route: 'permissions', name:'Permissões', icon: BsFillShieldLockFill},
-    {route: 'cameras', name:'Câmeras', icon: BiSolidCameraHome},
-    {route: 'ambients', name:'Ambientes', icon: VscServerEnvironment},
-    {route: 'business_units', name:'Unidades de negócio', icon: BsFillBuildingsFill},
-    {route: 'customer', name:'Customer', icon: RiCustomerService2Fill},
-    {route: 'test', name:'Experimentar', icon: BiTestTube}];
+    { route: "users", name: "Usuários", icon: FaUsers },
+    { route: "permissions", name: "Permissões", icon: BsFillShieldLockFill },
+    { route: "cameras", name: "Câmeras", icon: BiSolidCameraHome },
+    { route: "ambients", name: "Ambientes", icon: VscServerEnvironment },
+    { route: "business_units", name: "Unidades de negócio", icon: BsFillBuildingsFill },
+    { route: "customer", name: "Customer", icon: RiCustomerService2Fill },
+    { route: "test", name: "Experimentar", icon: BiTestTube },
+  ];
 
   const navigate = useNavigate();
 
   function handleNavigate(routes) {
-    navigate(`/${routes}`)
-    console.log('ok')
+    navigate(`/${routes}`);
+    console.log("ok");
   }
   return (
     <>
       <Aside>
-        <div className="trademark" onClick={ () => {{handleNavigate('crud')}}} >
+        <div
+          className="trademark"
+          onClick={() => {
+            {
+              handleNavigate("crud");
+            }
+          }}>
           <div className="logo">
-            <img className="img1-logo" src={img1logo}/>
-            <img className="img2-logo" src={img2logo}/>
+            <img
+              className="img1-logo"
+              src={img1logo}
+            />
+            <img
+              className="img2-logo"
+              src={img2logo}
+            />
           </div>
         </div>
         <div>
-          {
-            routes.map((routes, index) => {
-              return (
-                <div onClick={() => {handleNavigate(routes.route)}} key={index} className='items'>
-                  <div className='icon'>{routes.icon()}</div>
-                  <p key={index}>{routes.name}</p>
-                </div>
-              )
-            })
-          }
+          {routes.map((routes, index) => {
+            return (
+              <div
+                onClick={() => {
+                  handleNavigate(routes.route);
+                }}
+                key={index}
+                className="items">
+                <div className="icon">{routes.icon()}</div>
+                <p key={index}>{routes.name}</p>
+              </div>
+            );
+          })}
         </div>
       </Aside>
-      
     </>
-  )
+  );
 }
 
-export default Sidebar
+export default Sidebar;

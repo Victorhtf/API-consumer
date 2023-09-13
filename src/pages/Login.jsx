@@ -17,7 +17,9 @@ const Box = styled.div `
     background-size: cover;
     `
 
-const ModalBox = styled.div `
+const FormBox = styled.div `
+    width: 300px;
+    height: 350px;
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -30,7 +32,14 @@ const ModalBox = styled.div `
     -webkit-backdrop-filter: blur(10.1px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     gap: 15px;
+
+    .username {
+        width: 100%;
+    }
     
+    .password {
+        width: 100%;
+    }
     
     h3 {
         color: #171717;
@@ -46,6 +55,7 @@ const ModalBox = styled.div `
     }
 
     input {
+        width: 100%;
         border: none;
         border-radius: 20px;
         height: 25px;
@@ -59,15 +69,15 @@ const ButtonBox = styled.div `
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
+    justify-content: flex-end;
     align-items: align-items;
-    margin: 1rem 0 1rem 0;
     width: 100%;
 
 
     button {
         border: none;
         padding: 0.6rem;
-        border-radius: 15px;
+        border-radius: 5px;
         background: linear-gradient(to right, rgb(173, 83, 137), rgb(60, 16, 83));
         color: white;
         font-weight: 500;
@@ -93,7 +103,7 @@ function Login() {
 
     return (
         <Box>
-            <ModalBox>
+            <FormBox>
                 <h3>LOGIN</h3>
                 <div className="username">
                     <p>Type your username</p>
@@ -107,7 +117,7 @@ function Login() {
                     <button onClick={()=> {navigate('/crud')}}>Login</button>
                     <button>Cadastre-se</button>
                 </ButtonBox>
-            </ModalBox>
+            </FormBox>
         </Box>
     )
 }
