@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import loginbg1 from "../assets/system_pages/login-bg1.jpg"
 import loginbg2 from "../assets/system_pages/login-bg2.jpg"
 import loginbg3 from "../assets/system_pages/login-bg3.jpg"
+import intradataLogo from "../assets/logo/logo-complete.png"
 import axios from "axios";
 // import { useEffect } from "react";
 
@@ -24,7 +25,7 @@ const Box = styled.div `
 const FormBox = styled.div `
     background-color: red;
     width: 300px;
-    height: 310px;
+    height: 360px;
     display: flex;
     flex-direction: column;
     padding: 2rem 3rem 1rem 3rem;
@@ -43,6 +44,14 @@ const FormBox = styled.div `
         justify-content: space-between;
         display: flex;
         padding: 0rem 0px 1rem 0px;
+    }
+
+    .description {
+        justify-self: center;
+        align-self: center;
+        display: flex;
+        text-align: center;
+        margin-top: 10px
     }
 
     .inputs {
@@ -80,7 +89,7 @@ const FormBox = styled.div `
     input {
         width: 100%;
         border: none;
-        border-radius: 20px;
+        border-radius: 4px;
         height: 25px;
         padding-left: 10px;
         font-size: 12px;
@@ -110,8 +119,8 @@ const ButtonBox = styled.div `
         &:hover {
             background: #171717;
             color: white;
-            transform: scale(1.1);
-            transition: 0.8s;
+            transform: scale(1.05);
+            transition: 1s;
         }
     }
 
@@ -132,10 +141,9 @@ function Login() {
                     password: values.password
                 }
             })
-            alert('OK')
             navigate('/crud');
         } catch (error) {
-            alert('ERROR')
+            alert('Falha na autenticação')
             console.log(error);
         }
     }
@@ -148,6 +156,7 @@ function Login() {
 
     return (
         <Box>
+            
             <Formik
                 initialValues={{ username: "", password: "" }}
                 validationSchema={ValidateSchema}
@@ -164,7 +173,11 @@ function Login() {
                 }) => (
                     <FormBox>
                         <form onSubmit={handleSubmit} className="form">
-                            <h3>LOGIN</h3>
+                            <div>
+                                <img src={intradataLogo} alt={intradataLogo} altColor=""/>
+                                <p className="description">Faça login para ter acesso aos recursos!</p>
+                            </div>
+
                             <div className="inputs">
                                 <div className="username">
                                         <input
