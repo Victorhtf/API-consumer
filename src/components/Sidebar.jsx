@@ -48,7 +48,7 @@ const Aside = styled.div`
     gap: 20px;
 
     &:hover {
-      background-color: #3498db;
+      background-color: #48c2f1;
       cursor: pointer;
     }
   }

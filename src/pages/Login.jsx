@@ -1,9 +1,13 @@
-import { useState } from "react"
+// import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import styled from 'styled-components'
-import loginbg1 from '../assets/system_pages/login-bg1.jpg'
-import loginbg2 from '../assets/system_pages/login-bg2.jpg'
-import loginbg3 from '../assets/system_pages/login-bg3.jpg'
+import styled from "styled-components"
+import { Formik } from "formik"
+import * as Yup from "yup";
+import loginbg1 from "../assets/system_pages/login-bg1.jpg"
+import loginbg2 from "../assets/system_pages/login-bg2.jpg"
+import loginbg3 from "../assets/system_pages/login-bg3.jpg"
+import axios from "axios";
+// import { useEffect } from "react";
 
 
 
@@ -18,12 +22,12 @@ const Box = styled.div `
     `
 
 const FormBox = styled.div `
+    background-color: red;
     width: 300px;
-    height: 350px;
-    align-items: center;
+    height: 310px;
     display: flex;
     flex-direction: column;
-    padding: 1rem 3rem 1rem 3rem;
+    padding: 2rem 3rem 1rem 3rem;
     border-radius: 20px;
     background: rgba(255, 255, 255, 0.36);
     border-radius: 16px;
@@ -31,20 +35,39 @@ const FormBox = styled.div `
     backdrop-filter: blur(10.1px);
     -webkit-backdrop-filter: blur(10.1px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    gap: 15px;
+    justify-content: space-between;
 
-    .username {
-        width: 100%;
+    .form {
+        flex: 1;
+        flex-direction: column;
+        justify-content: space-between;
+        display: flex;
+        padding: 0rem 0px 1rem 0px;
     }
-    
-    .password {
+
+    .inputs {
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+
+    .required {
+        color: #A10000;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        align-self: center;
+        font-size: 0.8rem;
+        
+         
     }
     
     h3 {
         color: #171717;
         font-weight: 700;
         font-size: 20px;
+        align-self: center;
     }
 
     p {
@@ -96,30 +119,89 @@ const ButtonBox = styled.div `
 
 
 function Login() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-
     const navigate = useNavigate();
+
+
+
+    async function handleSubmit(values) {
+        
+        try {
+            const response = await axios.post('https://localhost:8889/v1/auth/login', {}, {
+                auth: {
+                    username: values.username,
+                    password: values.password
+                }
+            })
+            alert('OK')
+            navigate('/crud');
+        } catch (error) {
+            alert('ERROR')
+            console.log(error);
+        }
+    }
+
+
+    const ValidateSchema = Yup.object().shape({
+        username: Yup.string().required("Username is required."),
+        password: Yup.string().required("Password is required."),
+    })
 
     return (
         <Box>
-            <FormBox>
-                <h3>LOGIN</h3>
-                <div className="username">
-                    <p>Type your username</p>
-                    <input type='text' placeholder='Username' value={username} onChange={(e) => {setUsername(e.target.value)}}/>
-                </div>
-                <div className="password">
-                    <p>Type your password</p>
-                    <input type="password" placeholder='Password' value={password} onChange={(e) => {setPassword(e.target.value)}}/>
-                </div>
-                <ButtonBox>
-                    <button onClick={()=> {navigate('/crud')}}>Login</button>
-                    <button>Cadastre-se</button>
-                </ButtonBox>
-            </FormBox>
+            <Formik
+                initialValues={{ username: "", password: "" }}
+                validationSchema={ValidateSchema}
+                onSubmit={handleSubmit}
+            >
+                {({
+                    values,
+                    errors,
+                    touched,
+                    handleChange,
+                    handleBlur,
+                    handleSubmit,
+                    isSubmitting,
+                }) => (
+                    <FormBox>
+                        <form onSubmit={handleSubmit} className="form">
+                            <h3>LOGIN</h3>
+                            <div className="inputs">
+                                <div className="username">
+                                        <input
+                                            type="text"
+                                            id="username"
+                                            placeholder="Username"
+                                            value={values.username}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        <p className="required">
+                                            {errors.username && errors.username}
+                                        </p>
+                                    </div>
+                                    <div className="password">
+                                        <input
+                                            type="password"
+                                            id="password"
+                                            placeholder="Password"
+                                            value={values.password}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        />
+                                        <p className="required">
+                                            {errors.password && errors.password}
+                                        </p>
+                                    </div>
+                            </div>
+                            <ButtonBox>
+                                <button type="submit">Login</button>
+                                <button>Cadastre-se</button>
+                            </ButtonBox>
+                    </form>
+                    </FormBox>
+                )}
+            </Formik>
         </Box>
-    )
-}
+    );}
 
 export default Login
