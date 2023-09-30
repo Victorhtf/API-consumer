@@ -3,7 +3,6 @@
     padding: 0px;
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
-    transition: 0.4s;
 }
 
 :root {
@@ -19,6 +18,7 @@
     --btn-primary-color: #2596be;
     --card-color: #fff;
     --card-border-radius: 5px;
+    --line-height: 40px;
 }
 
 

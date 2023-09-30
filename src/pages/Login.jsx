@@ -8,9 +8,7 @@ import loginbg2 from "../assets/system_pages/login-bg2.jpg"
 import loginbg3 from "../assets/system_pages/login-bg3.jpg"
 import intradataLogo from "../assets/logo/logo-complete.png"
 import axios from "axios";
-// import { useEffect } from "react";
-
-
+import { intradataConfig } from "../env";
 
 
 const Box = styled.div `
@@ -124,31 +122,83 @@ const ButtonBox = styled.div `
         }
     }
 
-`
+    `
 
 
 function Login() {
+    const baseServiceUrl = `${intradataConfig['protocol']}://${intradataConfig['url']}`
     const navigate = useNavigate();
 
+    async function handleMyInformation(token) {
+        const finalUrl = `${baseServiceUrl}:${intradataConfig['port']}/${intradataConfig['basePath']}/user/me`
+    
+        const response = await axios.get(finalUrl, {
+            headers: {
+                auth: token
+            }
+        })
+    
+        if (response.data !== undefined) {
+    
+            const user = {
+                id: response.data.user_id,
+                name: response.data.username,
+                roles: response.data.roles,
+                permissions: response.data.permissions,
+                meta_integrations: response.data.meta_integrations
+            }
+    
+            const refresh_token = response.headers.token
+
+    
+            return { user, refresh_token }
+
+            
+        } else {
+            return { user: undefined, refresh_token: undefined }
+        }
+    }
 
 
-    async function handleSubmit(values) {
-        
+    // Login authentication
+    async function handleLogin(values) {
+        const finalUrl = `${baseServiceUrl}:${intradataConfig['port']}/${intradataConfig['basePath']}/auth/login`;
         try {
-            const response = await axios.post('https://localhost:8889/v1/auth/login', {}, {
+
+            const response = await axios.post(finalUrl, {}, {
                 auth: {
                     username: values.username,
                     password: values.password
                 }
             })
-            navigate('/crud');
+
+            const {user, refresh_token} = await handleMyInformation(response.data.token)
+
+            for (const key in user) {
+                sessionStorage.setItem(key, JSON.stringify(user[key]))
+
+            }
+
+            sessionStorage.setItem('token', refresh_token)
+            
+            const userPermissions = sessionStorage.getItem('permissions')
+
+            if (userPermissions === '["ALL"]') {
+                navigate('/crud');
+
+
+            } else {
+                alert('You must be logged in')
+            }
+
+
+
         } catch (error) {
-            alert('Falha na autenticação')
             console.log(error);
         }
     }
 
-
+    // Set the schema to validate form
     const ValidateSchema = Yup.object().shape({
         username: Yup.string().required("Username is required."),
         password: Yup.string().required("Password is required."),
@@ -160,7 +210,7 @@ function Login() {
             <Formik
                 initialValues={{ username: "", password: "" }}
                 validationSchema={ValidateSchema}
-                onSubmit={handleSubmit}
+                onSubmit={handleLogin}
             >
                 {({
                     values,
@@ -174,7 +224,7 @@ function Login() {
                     <FormBox>
                         <form onSubmit={handleSubmit} className="form">
                             <div>
-                                <img src={intradataLogo} alt={intradataLogo} altColor=""/>
+                                <img src={intradataLogo}/>
                                 <p className="description">Faça login para ter acesso aos recursos!</p>
                             </div>
 

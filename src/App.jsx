@@ -5,6 +5,9 @@ import ListUsers from "./components/Users/ListUsers.jsx";
 import Permissions from "./components/Permissions/Permissions.jsx";
 import Cameras from "./components/Cameras/Cameras.jsx";
 import BaseLayout from "./layouts/BaseLayout.jsx";
+import ModalContent from "./components/Users/ModalContent.jsx";
+import Main from "./components/Users/Main.jsx";
+import Tabela from "./components/Users/usersTable.jsx";
 
 function App() {
   return (
@@ -24,6 +27,11 @@ function App() {
           element={<ListUsers />}
         />
         <Route
+          path="/create"
+          element={<ModalContent />}
+        />
+        
+        <Route
           path="/permissions"
           element={<Permissions />}
         />
@@ -31,10 +39,14 @@ function App() {
           path="/cameras"
           element={<Cameras />}
         />
-        {/* <Route
-          path="/business-units"
-          element={<Crud />}
-        /> */}
+        <Route
+          path="/main"
+          element={<Main/>}
+        />
+        <Route
+          path="/table"
+          element={<Tabela/>}
+        />
       </Routes>
     </BrowserRouter>
   );

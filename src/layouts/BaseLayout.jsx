@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import "../Globals.css";
+import ListUsers from "../components/Users/ListUsers";
 
 const RowBox = styled.div`
   display: flex;
@@ -23,13 +24,15 @@ const Card = styled.div`
   border-radius: var(--card-border-radius);
 `;
 
-function BaseLayout() {
+function BaseLayout(props) {
   return (
     <RowBox>
       <Sidebar />
       <ColumnBox>
         <Header />
-        <Card>{/* Lógica de aparecer permissions ou users e etc */}</Card>
+        <Card>
+          {props.children}
+        </Card>
       </ColumnBox>
     </RowBox>
   );

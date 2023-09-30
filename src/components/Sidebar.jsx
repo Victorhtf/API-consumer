@@ -78,7 +78,6 @@ function Sidebar() {
 
   function handleNavigate(routes) {
     navigate(`/${routes}`);
-    console.log("ok");
   }
   return (
     <>

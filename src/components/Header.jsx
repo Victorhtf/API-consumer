@@ -44,7 +44,6 @@ const Box = styled.div`
 function Header(props) {
   const navigate = useNavigate();
   return (
-    console.log(props),
     (
       <Box>
         <div className="logout">
