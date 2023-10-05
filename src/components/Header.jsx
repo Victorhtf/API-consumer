@@ -41,26 +41,31 @@ const Box = styled.div`
   }
 `;
 
-function Header(props) {
+function Header() {
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate("/");
+    alert("Usuário desconectado");
+  };
+
   return (
-    (
-      <Box>
-        <div className="logout">
-          <div className="text">
-            <p>Seja bem vindo</p>
-            <p className="name">Victor</p>
-          </div>
-          <div
-            onClick={() => {
-              navigate("/");
-            }}
-            className="icon">
-            <BiLogOut />
-          </div>
+    <Box>
+      <div className="logout">
+        <div className="text">
+          <p>Seja bem vindo</p>
+          <p className="name">Victor</p>
         </div>
-      </Box>
-    )
+        <div
+          onClick={() => {
+            handleLogout();
+          }}
+          className="icon"
+        >
+          <BiLogOut />
+        </div>
+      </div>
+    </Box>
   );
 }
 

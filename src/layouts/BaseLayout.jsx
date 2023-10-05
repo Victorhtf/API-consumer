@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import "../Globals.css";
-import ListUsers from "../components/Users/ListUsers";
 
 const RowBox = styled.div`
   display: flex;
@@ -21,6 +20,7 @@ const Card = styled.div`
   background-color: var(--card-color);
   height: 100%;
   margin: 15px;
+  padding: 30px;
   border-radius: var(--card-border-radius);
 `;
 
@@ -30,9 +30,7 @@ function BaseLayout(props) {
       <Sidebar />
       <ColumnBox>
         <Header />
-        <Card>
-          {props.children}
-        </Card>
+        <Card>{props.children}</Card>
       </ColumnBox>
     </RowBox>
   );

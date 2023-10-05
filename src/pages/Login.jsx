@@ -10,6 +10,10 @@ import intradataLogo from "../assets/logo/logo-complete.png"
 import axios from "axios";
 import { intradataConfig } from "../env";
 
+//Set up the requisition route.
+const baseServiceUrl = `${intradataConfig['protocol']}://${intradataConfig['url']}`
+const finalUrl = `${baseServiceUrl}:${intradataConfig['port']}/${intradataConfig['basePath']}/user`;
+
 
 const Box = styled.div `
     display: flex;
@@ -126,9 +130,7 @@ const ButtonBox = styled.div `
 
 
 function Login() {
-    const baseServiceUrl = `${intradataConfig['protocol']}://${intradataConfig['url']}`
     const navigate = useNavigate();
-
     async function handleMyInformation(token) {
         const finalUrl = `${baseServiceUrl}:${intradataConfig['port']}/${intradataConfig['basePath']}/user/me`
     
@@ -185,6 +187,7 @@ function Login() {
 
             if (userPermissions === '["ALL"]') {
                 navigate('/crud');
+                alert('Usuário logado')
 
 
             } else {

@@ -1,99 +1,106 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from 'react';
-import { DownOutlined } from '@ant-design/icons';
-import axios from 'axios';
-import { Form,  Space, Table, Tag } from 'antd';
-import { intradataConfig } from '../../env';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Form, Space, Table, Tag } from "antd";
+import { intradataConfig } from "../../env";
+import { useDispatch } from "react-redux";
+import { setSelectedUser } from "../../features/redux/setUser/slice";
+import { getToken } from "../../auth/authentications";
 
+//Set up the requisition
+const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
+const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
 
-const baseServiceUrl = `${intradataConfig['protocol']}://${intradataConfig['url']}`
-
-
-const defaultTitle = () => 'Listar usuários.';
-function UsersTable () {
-  const bordered = false
-  const [size, setSize] = useState('large')
-  const showTitle = false
-  const showHeader = true
-  const rowSelection = {}
+const defaultTitle = () => "Listar usuários.";
+function UsersTable() {
+  const bordered = false;
+  const [size, setSize] = useState("large");
+  const showTitle = false;
+  const showHeader = true;
+  const rowSelection = {};
   const [tableLayout, setTableLayout] = useState();
-  const [top, setTop] = useState('none');
-  const [bottom, setBottom] = useState('bottomRight');
+  const [top, setTop] = useState("none");
+  const [bottom, setBottom] = useState("bottomRight");
   const [ellipsis, setEllipsis] = useState(false);
   const [yScroll, setYScroll] = useState(false);
   const [xScroll, setXScroll] = useState();
-  const [loading, setLoading] = useState(true)
-
-  const [users, setUsers] = useState([])
+  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState([]);
   // const [roleFilters, setRoleFilters] = useState([])
 
+  const dispatch = useDispatch();
 
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key:'id'
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
     },
     {
-      title: 'Username',
-      dataIndex: 'username',
+      title: "Username",
+      dataIndex: "username",
       sorter: true,
     },
     {
-      title: 'E-mail',
-      dataIndex: 'email',
-          // onFilter: (value, record) => record.address.indexOf(value) === 0,
+      title: "E-mail",
+      dataIndex: "email",
+      // onFilter: (value, record) => record.address.indexOf(value) === 0,
     },
     {
-      title: 'Roles',
-      key: 'tags',
-      dataIndex: 'roles',
-      render: roles => (
+      title: "Roles",
+      key: "tags",
+      dataIndex: "roles",
+      render: (roles) => (
         <>
-          {roles.map(role => (
-            <Tag color='red' key={role}>
-                {role.name.toUpperCase()}
+          {roles.map((role) => (
+            <Tag color="red" key={role}>
+              {role.name.toUpperCase()}
             </Tag>
           ))}
         </>
       ),
     },
     {
-      title: 'Data da criação',
-      key: 'created_date',
-      dataIndex: 'created_date',
+      title: "Data da criação",
+      key: "created_date",
+      dataIndex: "created_date",
       sorter: true,
       render: (date) => {
-        return new Date(date).toLocaleDateString('pt-BR');
+        return new Date(date).toLocaleDateString("pt-BR");
+      },
     },
-  },
     {
-      title: 'Ações',
-      key: 'ações',
+      title: "Ações",
+      key: "ações",
       render: (row) => (
         <Space size="middle">
-          <a onClick={ () => {handleDelete(row.id)}}>Delete</a>
-          <a>
-            <Space>
-              Editar
-              <DownOutlined />
-            </Space>
+          <a
+            onClick={() => {
+              handleDelete(row.id);
+            }}
+          >
+            Delete
+          </a>
+          <a
+            onClick={() => {
+              handleEdit(row);
+            }}
+          >
+            <Space>Editar</Space>
           </a>
         </Space>
       ),
     },
   ];
 
-
-
   const tableColumns = columns.map((item) => ({
     ...item,
     ellipsis,
   }));
-  if (xScroll === 'fixed') {
+  if (xScroll === "fixed") {
     tableColumns[0].fixed = true;
-    tableColumns[tableColumns.length - 1].fixed = 'right';
+    tableColumns[tableColumns.length - 1].fixed = "right";
   }
   const tableProps = {
     bordered,
@@ -106,61 +113,60 @@ function UsersTable () {
     tableLayout,
   };
 
-
+  //Edit users
+  function handleEdit(row) {
+    // setOpen(open)
+    // const {userData} = row
+    dispatch(setSelectedUser(row));
+    console.log(row);
+  }
 
   // Cancel the loading animation
   const handleLoadingChange = (enable) => {
     setLoading(enable);
   };
 
-
   // Fetch all users from database
-  async function fetchUsers (token) {
-    const finalUrl = `${baseServiceUrl}:${intradataConfig['port']}/${intradataConfig['basePath']}/user`;
-
+  async function fetchUsers(token) {
     try {
       const response = await axios.get(finalUrl, {
         headers: {
-            auth: token
-      }
-  })
+          auth: token,
+        },
+      });
       const usersData = response.data;
-      setUsers(usersData) 
-      handleLoadingChange()
+      setUsers(usersData);
+      handleLoadingChange();
     } catch (error) {
-      console.log('erro')
+      console.log("erro");
     }
   }
-
 
   // Delete user from database
   async function handleDelete(id) {
-    console.log(id)
-    const token = sessionStorage.getItem('token')
-    const finalUrl = `${baseServiceUrl}:${intradataConfig['port']}/${intradataConfig['basePath']}/user`;
+    const token = getToken();
+    console.log(token);
+    const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
     try {
       const deletedUser = await axios.delete(`${finalUrl}/${id}`, {
         headers: {
-          auth: token
-        }
-      })
-      fetchUsers(token)
-      alert(`Usuário deletado com sucesso: ${deletedUser}`)
-      
+          auth: token,
+        },
+      });
+      fetchUsers(token);
+      alert(`Usuário deletado com sucesso: ${deletedUser}`);
     } catch (error) {
-      console.log('erro')
+      console.log("erro");
     }
   }
 
-
   useEffect(() => {
     async function callFetchUsers() {
-      const token = sessionStorage.getItem('token')
-      await fetchUsers(token)
+      const token = sessionStorage.getItem("token");
+      await fetchUsers(token);
     }
-  callFetchUsers()
-  }, [])
-
+    callFetchUsers();
+  }, []);
 
   return (
     <>
@@ -170,8 +176,7 @@ function UsersTable () {
         style={{
           marginBottom: 16,
         }}
-      >
-      </Form>
+      ></Form>
       <Table
         {...tableProps}
         pagination={{
