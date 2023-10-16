@@ -1,17 +1,7 @@
 import styled from "styled-components";
-import "../../Globals.css";
-// import { MdDeleteSweep } from 'react-icons/md'
-// import{ FiEdit3 } from "react-icons/fi"
-import BaseLayout from "../../layouts/BaseLayout";
-import CreateUserContent from "./CreateUserContent";
-// import { useEffect } from "react"
-// import axios from "axios"
-// import { intradataConfig } from "../../env"
-// import { useState } from "react"
-// import { getToken } from "../../auth/authentications"
-// import Modal from "./Modal.jsx"
-// import React from "react"
-// import UsersTable from "./usersTable"
+import "../../../Globals.css";
+import BaseLayout from "../../../layouts/BaseLayout.jsx";
+import CreateUserContent from "./CreateUserContent.jsx";
 
 const Box = styled.div`
   width: 100%;

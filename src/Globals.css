@@ -6,20 +6,33 @@
 }
 
 :root {
+  /* Font size */
   --h1-font-size: 30px;
   --h2-font-size: 25px;
   --h3-font-size: 20px;
   --h4-font-size: 15px;
   --h5-font-size: 10px;
   --h6-font-size: 5px;
-  --paragraph-font-size: 12px;
-  --primary-font-color: #100c08;
-  --btn-border-radius: 2px;
-  --btn-primary-color: #2596be;
-  --card-color: #fff;
+  --paragraph-text-size: 12px;
+
+  /* Font color */
+  --primary-text-color: #ffffff;
+  --secondary-text-color: #1f1f1f;
+
+  /* Card */
+  --card-bg-color: #fff;
+
+  /* Button */
+  --btn-border-radius: 6px;
+  --btn-bg-color: #1874fc;
+  --btn-2bg-color: #ffffff;
+  --btn-font-size: 15px;
+  --btn-border-color: 1px #e0dcdc solid;
+  --font-size: 300;
+
+  /*  */
   --card-border-radius: 5px;
   --line-height: 40px;
-  --btn-bg-color: #202434;
 }
 
 body {

@@ -4,16 +4,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Form, Space, Table, Tag } from "antd";
 import { intradataConfig } from "../../env";
-import { useDispatch } from "react-redux";
-import { setSelectedUser } from "../../features/redux/setUser/slice";
 import { getToken } from "../../auth/authentications";
+import Modal from "../Modal";
 
 //Set up the requisition
 const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
 const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
 
 const defaultTitle = () => "Listar usuários.";
+
 function UsersTable() {
+  const [open, setOpen] = useState(false);
   const bordered = false;
   const [size, setSize] = useState("large");
   const showTitle = false;
@@ -28,8 +29,6 @@ function UsersTable() {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   // const [roleFilters, setRoleFilters] = useState([])
-
-  const dispatch = useDispatch();
 
   const columns = [
     {
@@ -115,9 +114,7 @@ function UsersTable() {
 
   //Edit users
   function handleEdit(row) {
-    // setOpen(open)
     // const {userData} = row
-    dispatch(setSelectedUser(row));
     console.log(row);
   }
 
@@ -144,6 +141,7 @@ function UsersTable() {
 
   // Delete user from database
   async function handleDelete(id) {
+    setOpen(true);
     const token = getToken();
     console.log(token);
     const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
@@ -170,6 +168,7 @@ function UsersTable() {
 
   return (
     <>
+      <Modal open={open} title={"Título 1"} setOpen={setOpen}></Modal>
       <Form
         layout="inline"
         className="components-table-demo-control-bar"

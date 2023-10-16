@@ -1,6 +1,6 @@
-import { Button, Form, Space, Input, Select, Switch } from "antd";
-import { routes } from "../../env";
-import { getToken } from "../../auth/authentications";
+import { Button, Form, Input, Select, Space } from "antd";
+import { routes } from "../../../env";
+import { getToken } from "../../../auth/authentications";
 import axios from "axios";
 import { useState } from "react";
 
@@ -27,7 +27,6 @@ const CreateUserContent = () => {
 
       const token = getToken();
       setLoading(true);
-      console.log(loading);
 
       const { email, username, roles } = values;
       const userRoutes = routes.user;
@@ -39,7 +38,7 @@ const CreateUserContent = () => {
         role_names: roles,
       };
 
-      const createdUser = await axios.post(userRoutes.create, body, {
+      await axios.post(userRoutes.create, body, {
         headers: {
           auth: token,
         },
@@ -85,7 +84,8 @@ const CreateUserContent = () => {
             message: "O nome de usuário não pode conter espaços em branco",
           },
         ]}
-        hasFeedback
+        //Validation to see if username its avaliable in realtime
+        // hasFeedback
       >
         <Input />
       </Form.Item>
@@ -130,19 +130,19 @@ const CreateUserContent = () => {
         </Select>
       </Form.Item>
 
-      <Form.Item>
-        <Space>
-          <Button htmlType="reset">Limpar</Button>
-        </Space>
-      </Form.Item>
-
-      <Form.Item>
-        <Space>
-          <Button block type="primary" htmlType="submit">
-            Submit
+      <Space style={{ display: "flex", justifyContent: "flex-end" }}>
+        <Form.Item>
+          <Button block htmlType="reset">
+            Limpar
           </Button>
-        </Space>
-      </Form.Item>
+        </Form.Item>
+
+        <Form.Item>
+          <Button block type="primary" htmlType="submit">
+            Enviar
+          </Button>
+        </Form.Item>
+      </Space>
     </Form>
   );
 };

@@ -1,20 +1,11 @@
 import styled from "styled-components";
-import "../../Globals.css";
-// import { MdDeleteSweep } from 'react-icons/md'
-// import{ FiEdit3 } from "react-icons/fi"
-import BaseLayout from "../../layouts/BaseLayout";
-// import { useEffect } from "react"
-// import axios from "axios"
-// import { intradataConfig } from "../../env"
-// import { useState } from "react"
-// import { getToken } from "../../auth/authentications"
-import Modal from "../../components/Modal";
-// import React from "react"
-import UsersTable from "./usersTable";
-import { Button } from "antd";
-import { useNavigate } from "react-router-dom";
+import "../../../Globals.css";
+import BaseLayout from "../../../pages/BaseLayout.jsx";
+import Modal from "../../Modal.jsx";
+import UsersTable from "../usersTable.jsx";
 import { useState } from "react";
-import CreateUserContent from "./CreateUserContent";
+import CreateUserContent from "../CreateUser/CreateUserContent.jsx";
+import "../../../Globals.css";
 
 const Box = styled.div`
   width: 100%;
@@ -23,7 +14,6 @@ const Box = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  color: var(--primary-font-color);
 
   .box {
     width: 70%;
@@ -37,10 +27,12 @@ const Box = styled.div`
     align-self: flex-end;
     justify-content: flex-start;
     border: none;
-    padding: 7px;
+    padding: 7px 15px 7px 15px;
     margin-bottom: 10px;
     border-radius: var(--btn-border-radius);
     cursor: pointer;
+    height: 40px;
+    text-transform: uppercase;
   }
 
   .label {
@@ -52,7 +44,6 @@ const Box = styled.div`
 function ListUsers() {
   const [open, setOpen] = useState(false);
   console.log(open);
-  const navigate = useNavigate();
 
   return (
     <>

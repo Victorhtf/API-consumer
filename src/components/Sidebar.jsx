@@ -15,6 +15,7 @@ const Aside = styled.div`
   color: #f0eff4;
   height: 100vh;
   padding: 1rem;
+  position: sticky;
 
   .trademark {
     display: flex;
@@ -69,7 +70,11 @@ function Sidebar() {
     { route: "permissions", name: "Permissões", icon: BsFillShieldLockFill },
     { route: "cameras", name: "Câmeras", icon: BiSolidCameraHome },
     { route: "ambients", name: "Ambientes", icon: VscServerEnvironment },
-    { route: "business_units", name: "Unidades de negócio", icon: BsFillBuildingsFill },
+    {
+      route: "business_units",
+      name: "Unidades de negócio",
+      icon: BsFillBuildingsFill,
+    },
     { route: "customer", name: "Customer", icon: RiCustomerService2Fill },
     { route: "test", name: "Experimentar", icon: BiTestTube },
   ];
@@ -88,16 +93,11 @@ function Sidebar() {
             {
               handleNavigate("crud");
             }
-          }}>
+          }}
+        >
           <div className="logo">
-            <img
-              className="img1-logo"
-              src={img1logo}
-            />
-            <img
-              className="img2-logo"
-              src={img2logo}
-            />
+            <img className="img1-logo" src={img1logo} />
+            <img className="img2-logo" src={img2logo} />
           </div>
         </div>
         <div>
@@ -108,7 +108,8 @@ function Sidebar() {
                   handleNavigate(routes.route);
                 }}
                 key={index}
-                className="items">
+                className="items"
+              >
                 <div className="icon">{routes.icon()}</div>
                 <p key={index}>{routes.name}</p>
               </div>

@@ -1,7 +1,7 @@
 // import MainContent from "../components/MainContent";
 import styled from "styled-components";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import Sidebar from "../components/Sidebar.jsx";
+import Header from "../components/Header.jsx";
 import "../Globals.css";
 
 const RowBox = styled.div`
