@@ -5,7 +5,7 @@ import axios from "axios";
 import { Form, Space, Table, Tag } from "antd";
 import { intradataConfig } from "../../env";
 import { getToken } from "../../auth/authentications";
-import Modal from "../Modal";
+import CreateUserModal from "./CreateUserModal/CreateUserModal";
 
 //Set up the requisition
 const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
@@ -168,7 +168,7 @@ function UsersTable() {
 
   return (
     <>
-      <Modal open={open} title={"Título 1"} setOpen={setOpen}></Modal>
+      <CreateUserModal open={open} setOpen={setOpen}></CreateUserModal>
       <Form
         layout="inline"
         className="components-table-demo-control-bar"

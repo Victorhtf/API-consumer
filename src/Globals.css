@@ -30,6 +30,11 @@
   --btn-border-color: 1px #e0dcdc solid;
   --font-size: 300;
 
+  /* Input */
+  --input-border-radius: 6px;
+  --input-border-color: 1px #e0dcdc solid;
+  --input-border-color-when-hover:
+
   /*  */
   --card-border-radius: 5px;
   --line-height: 40px;

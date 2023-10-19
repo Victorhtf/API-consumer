@@ -1,10 +1,9 @@
 import styled from "styled-components";
-import "../../../Globals.css";
 import BaseLayout from "../../../pages/BaseLayout.jsx";
-import Modal from "../../Modal.jsx";
 import UsersTable from "../usersTable.jsx";
 import { useState } from "react";
-import CreateUserContent from "../CreateUser/CreateUserContent.jsx";
+import CreateUserModal from "../CreateUserModal/CreateUserModal.jsx";
+// import CreateUserContent from "../CreateUser/CreateUserContent.jsx";
 import "../../../Globals.css";
 
 const Box = styled.div`
@@ -43,13 +42,10 @@ const Box = styled.div`
 
 function ListUsers() {
   const [open, setOpen] = useState(false);
-  console.log(open);
 
   return (
     <>
-      <Modal open={open} title={"Título 1"} setOpen={setOpen}>
-        <CreateUserContent />
-      </Modal>
+      <CreateUserModal open={open} setOpen={setOpen}></CreateUserModal>
       <BaseLayout>
         <Box>
           <button
