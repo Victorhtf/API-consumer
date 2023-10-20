@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import "../../../Globals.css";
 import BaseLayout from "../../../layouts/BaseLayout.jsx";
-import CreateUserContent from "./CreateUserContent.jsx";
+// import CreateUserContent from "./CreateUserContent.jsx";
+import Loading from "../../Loading/Loading";
 
 const Box = styled.div`
   width: 100%;
@@ -42,7 +43,8 @@ function CreateUser() {
   return (
     <BaseLayout>
       <Box>
-        <CreateUserContent />
+        <Loading />
+        {/* <CreateUserContent /> */}
       </Box>
     </BaseLayout>
   );

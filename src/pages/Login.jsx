@@ -7,6 +7,8 @@ import loginbg3 from "../assets/system_pages/login-bg3.jpg";
 import intradataLogo from "../assets/logo/logo-complete.png";
 import axios from "axios";
 import { intradataConfig } from "../env";
+import { useState } from "react";
+import Loading from "../components/Loading/Loading";
 
 //Set up the requisition route.
 const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
@@ -149,6 +151,11 @@ function Login() {
 
   // Login authentication
   async function handleLogin(values) {
+    setTimeout(() => {
+      setRemoveLoading(true);
+      console.log("Loading ok");
+    }, 3000);
+
     const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/auth/login`;
     try {
       const response = await axios.post(
@@ -191,8 +198,11 @@ function Login() {
     password: Yup.string().required("Password is required."),
   });
 
+  const [removeLoading, setRemoveLoading] = useState(true);
+
   return (
     <Box>
+      {!removeLoading && <Loading />}
       <Formik
         initialValues={{ username: "", password: "" }}
         validationSchema={ValidateSchema}
