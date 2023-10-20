@@ -15,6 +15,9 @@ import { routes } from "../../../env";
 
 import { useState } from "react";
 
+import React from "react";
+import { toast } from "react-toastify";
+
 import { getToken } from "../../../auth/authentications";
 
 const ModalFade = styled.div`
@@ -120,9 +123,9 @@ function CreateUserModal(props) {
   ];
 
   //Set up the submit function
-  async function handleSubmit(values) {
+  async function handleSubmit(values, { setSubmitting, resetForm }) {
     try {
-      //Verify if the user already exists on database
+      setSubmitting(true);
 
       const token = getToken();
 
@@ -144,17 +147,15 @@ function CreateUserModal(props) {
           auth: token,
         },
       });
+      setSubmitting(false);
 
-      setOpen(false);
-      try {
-        const response = await axios.get(finalUrl, {
-          headers: {
-            auth: token,
-          },
-        });
-      } catch (error) {}
+      setOpenCreateModal(false);
+
+      toast.success("Usuário adicionado com sucesso!");
+
+      resetForm();
     } catch (error) {
-      console.log(error);
+      toast.error("Ops, algo deu errado. Por favor, tente novamente");
     }
   }
 
@@ -164,13 +165,12 @@ function CreateUserModal(props) {
       email: "",
       roles: [],
     },
-    onSubmit: () => {
-      handleSubmit(formik.values);
-    },
+
+    onSubmit: handleSubmit,
   });
 
-  const { open, setOpen } = props;
-  if (!open) return null;
+  const { openCreateModal, setOpenCreateModal } = props;
+  if (!openCreateModal) return null;
   return (
     <ModalFade>
       <div className="modal-card">
@@ -180,7 +180,7 @@ function CreateUserModal(props) {
             style={{ color: "#171717" }}
             className="close-icon"
             onClick={() => {
-              setOpen(false);
+              setOpenCreateModal(false);
             }}
           />
         </div>
@@ -235,8 +235,19 @@ function CreateUserModal(props) {
                 </div>
               </div>
               <div className="buttons">
-                <button className="btn-reset-form">Limpar</button>
-                <button type="submit" className="btn-submit-form">
+                <button
+                  onClick={() => {
+                    formik.resetForm();
+                  }}
+                  className="btn-reset-form"
+                >
+                  Limpar
+                </button>
+                <button
+                  disabled={formik.isSubmitting}
+                  type="submit"
+                  className="btn-submit-form"
+                >
                   Submit
                 </button>
               </div>

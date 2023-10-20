@@ -5,6 +5,7 @@ import { useState } from "react";
 import CreateUserModal from "../CreateUserModal/CreateUserModal.jsx";
 // import CreateUserContent from "../CreateUser/CreateUserContent.jsx";
 import "../../../Globals.css";
+import { ToastContainer } from "react-toastify";
 
 const Box = styled.div`
   width: 100%;
@@ -41,17 +42,22 @@ const Box = styled.div`
 `;
 
 function ListUsers() {
-  const [open, setOpen] = useState(false);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  // const [openDeleteModal, setOpen] = useState(false);
 
   return (
     <>
-      <CreateUserModal open={open} setOpen={setOpen}></CreateUserModal>
+      <CreateUserModal
+        openCreateModal={openCreateModal}
+        setOpenCreateModal={setOpenCreateModal}
+      ></CreateUserModal>
+      {/* <DeleteUserModal open={open} setOpen={setOpen}></DeleteUserModal> */}
       <BaseLayout>
         <Box>
           <button
             className="add-user-btn"
             onClick={() => {
-              setOpen(true);
+              setOpenCreateModal(true);
             }}
           >
             Adicionar usuário
