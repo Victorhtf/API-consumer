@@ -12,7 +12,7 @@ import Loading from "../components/Loading/Loading";
 
 //Set up the requisition route.
 const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
-const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
+// const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
 
 const Box = styled.div`
   display: flex;
@@ -151,10 +151,7 @@ function Login() {
 
   // Login authentication
   async function handleLogin(values) {
-    setTimeout(() => {
-      setRemoveLoading(true);
-      console.log("Loading ok");
-    }, 3000);
+    !removeLoading ? setRemoveLoading(true) : setRemoveLoading(false);
 
     const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/auth/login`;
     try {
@@ -183,7 +180,6 @@ function Login() {
 
       if (userPermissions === '["ALL"]') {
         navigate("/crud");
-        alert("Usuário logado");
       } else {
         alert("You must be logged in");
       }
@@ -246,6 +242,7 @@ function Login() {
                   </p>
                 </div>
               </div>
+
               <ButtonBox>
                 <button type="submit">Login</button>
                 <button>Cadastre-se</button>
