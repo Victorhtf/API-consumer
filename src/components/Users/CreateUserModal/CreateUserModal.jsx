@@ -120,7 +120,8 @@ function CreateUserModal(props) {
   ];
 
   //Set up the submit function
-  async function handleSubmit(values, { setSubmitting, resetForm }) {
+  async function handleSubmit(values, props) {
+    const { fetchUsers, setSubmitting, resetForm } = props;
     try {
       setSubmitting(true);
 
@@ -151,8 +152,9 @@ function CreateUserModal(props) {
       toast.success(`Usuário '${values.username}' adicionado com sucesso!`);
 
       resetForm();
+
+      fetchUsers();
     } catch (error) {
-      alert("a");
       toast.error("Ops, algo deu errado. Por favor, tente novamente");
     }
   }

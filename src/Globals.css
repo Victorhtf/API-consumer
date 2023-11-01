@@ -69,7 +69,10 @@ body {
   display: flex;
   margin-bottom: 10px;
   justify-content: space-between;
+  top: 0;
+  left: 0;
 }
+
 
 .warn-text {
   margin-bottom: 20px;  

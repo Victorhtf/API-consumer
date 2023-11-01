@@ -7,6 +7,7 @@ import { intradataConfig } from "../../../env";
 import { getToken } from "../../../auth/authentications";
 import CreateUserModal from "../CreateUserModal/CreateUserModal";
 import DeleteUserModal from "../DeleteUser/DeleteUserModal";
+import EditUserModal from "../EditUser/EditUserModal";
 
 //Set up the requisition
 const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
@@ -17,6 +18,7 @@ const defaultTitle = () => "Listar usuários.";
 function UsersTable() {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
   const bordered = false;
   const [size, setSize] = useState("large");
   const showTitle = false;
@@ -127,23 +129,26 @@ function UsersTable() {
   }
 
   // Cancel the loading animation
-  const handleLoadingChange = (enable) => {
-    setLoading(enable);
-  };
+  // const handleLoadingChange = (enable) => {
+  //   setLoading(enable);
+  // };
 
   // Fetch all users from database
-  async function fetchUsers(token) {
+  async function fetchUsers() {
     try {
       const response = await axios.get(finalUrl, {
         headers: {
-          auth: token,
+          auth: getToken(),
         },
       });
       const usersData = response.data;
       setUsers(usersData);
-      handleLoadingChange();
+
+      setLoading(false);
+      console.log("fetchUsers ok");
     } catch (error) {
       console.log("erro");
+      setLoading(false);
     }
   }
 
@@ -155,20 +160,31 @@ function UsersTable() {
 
   useEffect(() => {
     async function callFetchUsers() {
-      const token = sessionStorage.getItem("token");
-      await fetchUsers(token);
+      await fetchUsers();
     }
     callFetchUsers();
   }, []);
 
   return (
     <>
+      <EditUserModal
+        fetchUsers={fetchUsers}
+        row={rowState}
+        openEditModal={openEditModal}
+        setOpenEditModal={setOpenEditModal}
+      />
       <DeleteUserModal
+        fetchUsers={fetchUsers}
         row={rowState}
         openDeleteModal={openDeleteModal}
         setOpenDeleteModal={setOpenDeleteModal}
       ></DeleteUserModal>
-      <CreateUserModal open={open} setOpen={setOpen}></CreateUserModal>
+
+      <CreateUserModal
+        fetchUsers={fetchUsers}
+        open={open}
+        setOpen={setOpen}
+      ></CreateUserModal>
       <Form
         layout="inline"
         className="components-table-demo-control-bar"

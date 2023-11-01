@@ -19,24 +19,31 @@ const Box = styled.div`
   }
 
   .icon {
+    padding: 10px;
     color: white;
-    font-size: 20px;
-    margin: 0 15px 0 15px;
+    font-size: 22px;
     justify-content: center;
     align-items: center;
     display: flex;
     cursor: pointer;
+
+    :hover {
+      background-color: pink;
+    }
   }
 
   .text {
+    font-size: 0.89rem;
     display: flex;
     align-items: flex-end;
     flex-direction: column;
     color: white;
+    margin: 1rem;
   }
 
   .name {
     font-weight: 600;
+    font-size: 0.9rem;
     text-transform: uppercase;
   }
 `;

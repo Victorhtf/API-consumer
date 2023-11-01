@@ -1,4 +1,8 @@
 import styled from "styled-components";
+import { routes } from "../../../env";
+import { getToken } from "../../../auth/authentications";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -87,27 +91,24 @@ const ModalFade = styled.div`
 `;
 
 const DeleteUserModal = (props) => {
-  const { openDeleteModal, setOpenDeleteModal, row } = props;
+  const { openDeleteModal, setOpenDeleteModal, row, fetchUsers } = props;
 
   // Delete user from database
   async function handleDelete(row) {
-    console.log(row.id);
-
     // setOpenDeleteModal(true);
-    // const token = getToken();
-    console.log("handleDelete ok");
-    // const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
-    // try {
-    //   const deletedUser = await axios.delete(`${finalUrl}/${id}`, {
-    //     headers: {
-    //       auth: token,
-    //     },
-    //   });
-    //   fetchUsers(token);
-    //     alert(`Usuário deletado com sucesso: ${deletedUser}`);
-    //   } catch (error) {
-    //     console.log("erro");
-    //   }
+    const token = getToken();
+    try {
+      await axios.delete(`${routes.user.deleteById}/${row.id}`, {
+        headers: {
+          auth: token,
+        },
+      });
+      console.log(`${routes.user.deleteById}/${row.id}`);
+      toast.success(`Usuário "${row.username}" deletado com sucesso`);
+      fetchUsers();
+    } catch (error) {
+      toast.error("Ops, ocorreu algum erro. Tente novamente");
+    }
   }
 
   if (!openDeleteModal) return null;

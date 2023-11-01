@@ -14,6 +14,6 @@ export const routes = {
     listLogged: baseUrl + "/user/me", //POST
     listById: baseUrl + "/user/", //GET
     updateById: baseUrl + "/user/", //UPDATE
-    deleteById: baseUrl + "/user/", //DELETE
+    deleteById: baseUrl + "/user", //DELETE
   },
 };
