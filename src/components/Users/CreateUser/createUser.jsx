@@ -44,7 +44,6 @@ function CreateUser() {
     <BaseLayout>
       <Box>
         <Loading />
-        {/* <CreateUserContent /> */}
       </Box>
     </BaseLayout>
   );

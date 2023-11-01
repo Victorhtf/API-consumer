@@ -2,9 +2,9 @@ import LoadingSVG from "../../assets/animations/loading.svg";
 
 import styled from "styled-components";
 
-const Box = styled.div`
-  width: 100%;
-  height: 100%;
+const LoadingBox = styled.div`
+  width: ${(props) => props.width || "100%"};
+  height: ${(props) => props.height || "100%"};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,17 +14,19 @@ const Box = styled.div`
   backdrop-filter: blur(5px);
   position: relative;
   -webkit-backdrop-filter: blur(5px);
+  position: fixed;
+  z-index: 1000000;
 
   img {
     width: 55px;
   }
 `;
 
-const Loading = () => {
+const Loading = (props) => {
   return (
-    <Box className="loading-container">
+    <LoadingBox width={props.width} height={props.height}>
       <img src={LoadingSVG}></img>
-    </Box>
+    </LoadingBox>
   );
 };
 

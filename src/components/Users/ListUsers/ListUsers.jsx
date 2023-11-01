@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import BaseLayout from "../../../pages/BaseLayout.jsx";
-import UsersTable from "../usersTable.jsx";
+import UsersTable from "./usersTable.jsx";
 import { useState } from "react";
 import CreateUserModal from "../CreateUserModal/CreateUserModal.jsx";
 // import CreateUserContent from "../CreateUser/CreateUserContent.jsx";
 import "../../../Globals.css";
-import { ToastContainer } from "react-toastify";
 
 const Box = styled.div`
   width: 100%;
@@ -43,7 +42,6 @@ const Box = styled.div`
 
 function ListUsers() {
   const [openCreateModal, setOpenCreateModal] = useState(false);
-  // const [openDeleteModal, setOpen] = useState(false);
 
   return (
     <>
@@ -51,17 +49,19 @@ function ListUsers() {
         openCreateModal={openCreateModal}
         setOpenCreateModal={setOpenCreateModal}
       ></CreateUserModal>
-      {/* <DeleteUserModal open={open} setOpen={setOpen}></DeleteUserModal> */}
       <BaseLayout>
         <Box>
-          <button
-            className="add-user-btn"
-            onClick={() => {
-              setOpenCreateModal(true);
-            }}
-          >
-            Adicionar usuário
-          </button>
+          <div className="top-label">
+            <h1> Listar usuários </h1>
+            <button
+              className="add-user-btn"
+              onClick={() => {
+                setOpenCreateModal(true);
+              }}
+            >
+              Adicionar usuário
+            </button>
+          </div>
           <UsersTable />
         </Box>
       </BaseLayout>

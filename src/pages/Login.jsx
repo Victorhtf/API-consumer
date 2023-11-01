@@ -9,6 +9,7 @@ import axios from "axios";
 import { intradataConfig } from "../env";
 import { useState } from "react";
 import Loading from "../components/Loading/Loading";
+import { toast } from "react-toastify";
 
 //Set up the requisition route.
 const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
@@ -38,6 +39,7 @@ const FormBox = styled.div`
   -webkit-backdrop-filter: blur(10.1px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   justify-content: space-between;
+  position: relative;
 
   .form {
     flex: 1;
@@ -180,11 +182,14 @@ function Login() {
 
       if (userPermissions === '["ALL"]') {
         navigate("/crud");
+        toast.sucess("Usuário logado", { autoclose: 1000 });
       } else {
-        alert("You must be logged in");
+        toast.warn("401 - Unauthorized");
+        setRemoveLoading(true);
       }
     } catch (error) {
-      console.log(error);
+      toast.error("404 - Not Found");
+      setRemoveLoading(true);
     }
   }
 
@@ -198,57 +203,59 @@ function Login() {
 
   return (
     <Box>
-      {!removeLoading && <Loading />}
       <Formik
         initialValues={{ username: "", password: "" }}
         validationSchema={ValidateSchema}
         onSubmit={handleLogin}
       >
         {({ values, errors, handleChange, handleBlur, handleSubmit }) => (
-          <FormBox>
-            <form onSubmit={handleSubmit} className="form">
-              <div>
-                <img src={intradataLogo} />
-                <p className="description">
-                  Faça login para ter acesso aos recursos!
-                </p>
-              </div>
-
-              <div className="inputs">
-                <div className="username">
-                  <input
-                    type="text"
-                    id="username"
-                    placeholder="Username"
-                    value={values.username}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <p className="required">
-                    {errors.username && errors.username}
+          <div>
+            {!removeLoading && <Loading width="300px" height="360px" />}
+            <FormBox>
+              <form onSubmit={handleSubmit} className="form">
+                <div>
+                  <img src={intradataLogo} />
+                  <p className="description">
+                    Faça login para ter acesso aos recursos!
                   </p>
                 </div>
-                <div className="password">
-                  <input
-                    type="password"
-                    id="password"
-                    placeholder="Password"
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  <p className="required">
-                    {errors.password && errors.password}
-                  </p>
-                </div>
-              </div>
 
-              <ButtonBox>
-                <button type="submit">Login</button>
-                <button>Cadastre-se</button>
-              </ButtonBox>
-            </form>
-          </FormBox>
+                <div className="inputs">
+                  <div className="username">
+                    <input
+                      type="text"
+                      id="username"
+                      placeholder="Username"
+                      value={values.username}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    <p className="required">
+                      {errors.username && errors.username}
+                    </p>
+                  </div>
+                  <div className="password">
+                    <input
+                      type="password"
+                      id="password"
+                      placeholder="Password"
+                      value={values.password}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    <p className="required">
+                      {errors.password && errors.password}
+                    </p>
+                  </div>
+                </div>
+
+                <ButtonBox>
+                  <button type="submit">Login</button>
+                  <button>Cadastre-se</button>
+                </ButtonBox>
+              </form>
+            </FormBox>
+          </div>
         )}
       </Formik>
     </Box>

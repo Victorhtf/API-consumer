@@ -13,9 +13,6 @@ import axios from "axios";
 
 import { routes } from "../../../env";
 
-import { useState } from "react";
-
-import React from "react";
 import { toast } from "react-toastify";
 
 import { getToken } from "../../../auth/authentications";
@@ -129,12 +126,12 @@ function CreateUserModal(props) {
 
       const token = getToken();
 
-      const { username, email, roles } = values;
+      const { username, email, roles, password } = values;
       const userRoutes = routes.user;
 
       const body = {
         username: username,
-        password: "mudar@123",
+        password: password,
         email: email,
         role_names: roles,
       };
@@ -142,7 +139,7 @@ function CreateUserModal(props) {
       console.log(body);
       console.log(userRoutes.create);
 
-      const response = await axios.post(userRoutes.create, body, {
+      await axios.post(userRoutes.create, body, {
         headers: {
           auth: token,
         },
@@ -151,10 +148,11 @@ function CreateUserModal(props) {
 
       setOpenCreateModal(false);
 
-      toast.success("Usuário adicionado com sucesso!");
+      toast.success(`Usuário '${values.username}' adicionado com sucesso!`);
 
       resetForm();
     } catch (error) {
+      alert("a");
       toast.error("Ops, algo deu errado. Por favor, tente novamente");
     }
   }
@@ -162,11 +160,15 @@ function CreateUserModal(props) {
   const formik = useFormik({
     initialValues: {
       username: "",
+      password: "",
       email: "",
       roles: [],
     },
 
     onSubmit: handleSubmit,
+    resetForm: () => {
+      formik.resetForm();
+    },
   });
 
   const { openCreateModal, setOpenCreateModal } = props;
@@ -193,7 +195,7 @@ function CreateUserModal(props) {
                     fullWidth
                     size="small"
                     id="username"
-                    label="Username"
+                    label="Nome de usuário"
                     variant="outlined"
                     name="username"
                     value={formik.values.username}
@@ -204,8 +206,20 @@ function CreateUserModal(props) {
                   <TextField
                     fullWidth
                     size="small"
+                    id="password"
+                    label="Senha"
+                    variant="outlined"
+                    name="password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    fullWidth
+                    size="small"
                     id="email"
-                    label="email"
+                    label="E-mail"
                     variant="outlined"
                     name="email"
                     value={formik.values.email}
@@ -214,14 +228,13 @@ function CreateUserModal(props) {
                 </div>
                 <div className="form-group">
                   <FormControl size="small" fullWidth>
-                    <InputLabel id="roles">Roles</InputLabel>
+                    <InputLabel id="roles">Papéis</InputLabel>
                     <Select
                       multiple
                       fullWidth
-                      labelId="roles"
                       id="roles"
                       name="roles"
-                      label="Roles"
+                      label="roles"
                       value={formik.values.roles}
                       onChange={formik.handleChange}
                     >
@@ -235,12 +248,7 @@ function CreateUserModal(props) {
                 </div>
               </div>
               <div className="buttons">
-                <button
-                  onClick={() => {
-                    formik.resetForm();
-                  }}
-                  className="btn-reset-form"
-                >
+                <button onClick={formik.handleReset} className="btn-reset-form">
                   Limpar
                 </button>
                 <button
@@ -248,7 +256,7 @@ function CreateUserModal(props) {
                   type="submit"
                   className="btn-submit-form"
                 >
-                  Submit
+                  Criar usuário
                 </button>
               </div>
             </div>

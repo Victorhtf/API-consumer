@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Form, Space, Table, Tag } from "antd";
-import { intradataConfig } from "../../env";
-import { getToken } from "../../auth/authentications";
-import CreateUserModal from "./CreateUserModal/CreateUserModal";
+import { intradataConfig } from "../../../env";
+import { getToken } from "../../../auth/authentications";
+import CreateUserModal from "../CreateUserModal/CreateUserModal";
+import DeleteUserModal from "../DeleteUser/DeleteUserModal";
 
 //Set up the requisition
 const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
@@ -15,6 +16,7 @@ const defaultTitle = () => "Listar usuários.";
 
 function UsersTable() {
   const [open, setOpen] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const bordered = false;
   const [size, setSize] = useState("large");
   const showTitle = false;
@@ -26,25 +28,27 @@ function UsersTable() {
   const [ellipsis, setEllipsis] = useState(false);
   const [yScroll, setYScroll] = useState(false);
   const [xScroll, setXScroll] = useState();
+  const [rowState, setRowState] = useState("");
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
-  // const [roleFilters, setRoleFilters] = useState([])
 
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      sorter: (a, b) => a.id - b.id,
     },
     {
       title: "Username",
       dataIndex: "username",
-      sorter: true,
+      sorter: (a, b) => {
+        return a.username.localeCompare(b.username);
+      },
     },
     {
       title: "E-mail",
       dataIndex: "email",
-      // onFilter: (value, record) => record.address.indexOf(value) === 0,
     },
     {
       title: "Roles",
@@ -59,12 +63,17 @@ function UsersTable() {
           ))}
         </>
       ),
+      onFilter: (value, record) => record.roles.indexOf(value) === 0,
     },
     {
       title: "Data da criação",
       key: "created_date",
       dataIndex: "created_date",
-      sorter: true,
+      sorter: (a, b) => {
+        const dateA = new Date(a.created_date);
+        const dateB = new Date(b.created_date);
+        return dateA - dateB;
+      },
       render: (date) => {
         return new Date(date).toLocaleDateString("pt-BR");
       },
@@ -76,7 +85,7 @@ function UsersTable() {
         <Space size="middle">
           <a
             onClick={() => {
-              handleDelete(row.id);
+              handleDeleteModal(row);
             }}
           >
             Delete
@@ -114,8 +123,7 @@ function UsersTable() {
 
   //Edit users
   function handleEdit(row) {
-    // const {userData} = row
-    console.log(row);
+    setRowState(row);
   }
 
   // Cancel the loading animation
@@ -140,22 +148,9 @@ function UsersTable() {
   }
 
   // Delete user from database
-  async function handleDelete(id) {
-    setOpen(true);
-    const token = getToken();
-    console.log(token);
-    const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
-    try {
-      const deletedUser = await axios.delete(`${finalUrl}/${id}`, {
-        headers: {
-          auth: token,
-        },
-      });
-      fetchUsers(token);
-      alert(`Usuário deletado com sucesso: ${deletedUser}`);
-    } catch (error) {
-      console.log("erro");
-    }
+  async function handleDeleteModal(row) {
+    setRowState(row);
+    setOpenDeleteModal(true);
   }
 
   useEffect(() => {
@@ -168,6 +163,11 @@ function UsersTable() {
 
   return (
     <>
+      <DeleteUserModal
+        row={rowState}
+        openDeleteModal={openDeleteModal}
+        setOpenDeleteModal={setOpenDeleteModal}
+      ></DeleteUserModal>
       <CreateUserModal open={open} setOpen={setOpen}></CreateUserModal>
       <Form
         layout="inline"
