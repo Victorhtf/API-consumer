@@ -121,10 +121,8 @@ function CreateUserModal(props) {
 
   //Set up the submit function
   async function handleSubmit(values, props) {
-    const { fetchUsers, setSubmitting, resetForm } = props;
+    const { fetchUsers, resetForm } = props;
     try {
-      setSubmitting(true);
-
       const token = getToken();
 
       const { username, email, roles, password } = values;
@@ -145,7 +143,6 @@ function CreateUserModal(props) {
           auth: token,
         },
       });
-      setSubmitting(false);
 
       setOpenCreateModal(false);
 
@@ -155,6 +152,7 @@ function CreateUserModal(props) {
 
       fetchUsers();
     } catch (error) {
+      console.debug(error);
       toast.error("Ops, algo deu errado. Por favor, tente novamente");
     }
   }

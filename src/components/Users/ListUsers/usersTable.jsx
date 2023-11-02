@@ -8,6 +8,7 @@ import { getToken } from "../../../auth/authentications";
 import CreateUserModal from "../CreateUserModal/CreateUserModal";
 import DeleteUserModal from "../DeleteUser/DeleteUserModal";
 import EditUserModal from "../EditUser/EditUserModal";
+import { toast } from "react-toastify";
 
 //Set up the requisition
 const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
@@ -83,6 +84,7 @@ function UsersTable() {
     {
       title: "Ações",
       key: "ações",
+
       render: (row) => (
         <Space size="middle">
           <a
@@ -145,9 +147,11 @@ function UsersTable() {
       setUsers(usersData);
 
       setLoading(false);
-      console.log("fetchUsers ok");
+
+      toast.success("fetchUsers ok");
     } catch (error) {
-      console.log("erro");
+      toast.error(error);
+
       setLoading(false);
     }
   }
@@ -173,18 +177,16 @@ function UsersTable() {
         openEditModal={openEditModal}
         setOpenEditModal={setOpenEditModal}
       />
+
       <DeleteUserModal
         fetchUsers={fetchUsers}
         row={rowState}
         openDeleteModal={openDeleteModal}
         setOpenDeleteModal={setOpenDeleteModal}
-      ></DeleteUserModal>
+      />
 
-      <CreateUserModal
-        fetchUsers={fetchUsers}
-        open={open}
-        setOpen={setOpen}
-      ></CreateUserModal>
+      <CreateUserModal fetchUsers={fetchUsers} open={open} setOpen={setOpen} />
+
       <Form
         layout="inline"
         className="components-table-demo-control-bar"
@@ -199,7 +201,7 @@ function UsersTable() {
         }}
         columns={tableColumns}
         dataSource={users.length > 0 ? users : []}
-        scroll={scroll}
+        style={{ width: "100%" }}
       />
     </>
   );

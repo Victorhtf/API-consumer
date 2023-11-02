@@ -28,7 +28,6 @@ const Box = styled.div`
     cursor: pointer;
 
     :hover {
-      background-color: pink;
     }
   }
 

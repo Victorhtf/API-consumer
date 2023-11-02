@@ -97,6 +97,7 @@ const DeleteUserModal = (props) => {
   async function handleDelete(row) {
     // setOpenDeleteModal(true);
     const token = getToken();
+
     try {
       await axios.delete(`${routes.user.deleteById}/${row.id}`, {
         headers: {
@@ -104,7 +105,9 @@ const DeleteUserModal = (props) => {
         },
       });
       console.log(`${routes.user.deleteById}/${row.id}`);
+
       toast.success(`Usuário "${row.username}" deletado com sucesso`);
+
       fetchUsers();
     } catch (error) {
       toast.error("Ops, ocorreu algum erro. Tente novamente");
