@@ -8,6 +8,7 @@ import { getToken } from "../../../auth/authentications";
 import CreateUserModal from "../CreateUserModal/CreateUserModal";
 import DeleteUserModal from "../DeleteUser/DeleteUserModal";
 import EditUserModal from "../EditUser/EditUserModal";
+import fetchUsers from "./fetchUsers";
 import { toast } from "react-toastify";
 
 //Set up the requisition
@@ -33,6 +34,7 @@ function UsersTable() {
   const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState("");
   const [loading, setLoading] = useState(true);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
   const [users, setUsers] = useState([]);
 
   const columns = [
@@ -130,43 +132,24 @@ function UsersTable() {
     setRowState(row);
   }
 
-  // Cancel the loading animation
-  // const handleLoadingChange = (enable) => {
-  //   setLoading(enable);
-  // };
-
-  // Fetch all users from database
-  async function fetchUsers() {
-    try {
-      const response = await axios.get(finalUrl, {
-        headers: {
-          auth: getToken(),
-        },
-      });
-      const usersData = response.data;
-      setUsers(usersData);
-
-      setLoading(false);
-
-      toast.success("fetchUsers ok");
-    } catch (error) {
-      toast.error(error);
-
-      setLoading(false);
-    }
-  }
-
   // Delete user from database
   async function handleDeleteModal(row) {
     setRowState(row);
     setOpenDeleteModal(true);
   }
 
-  useEffect(() => {
-    async function callFetchUsers() {
-      await fetchUsers();
+  async function handleUsers() {
+    try {
+      const usersData = await fetchUsers();
+      setUsers(usersData);
+      setLoading(false);
+      toast.success("Usuários carregados com sucesso");
+    } catch (error) {
+      toast.error("Ops, ocorreu algum erro. Tente novamente.");
     }
-    callFetchUsers();
+  }
+  useEffect(() => {
+    handleUsers();
   }, []);
 
   return (
@@ -184,8 +167,6 @@ function UsersTable() {
         openDeleteModal={openDeleteModal}
         setOpenDeleteModal={setOpenDeleteModal}
       />
-
-      <CreateUserModal fetchUsers={fetchUsers} open={open} setOpen={setOpen} />
 
       <Form
         layout="inline"

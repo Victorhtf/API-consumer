@@ -17,6 +17,8 @@ import { toast } from "react-toastify";
 
 import { getToken } from "../../../auth/authentications";
 
+import fetchUsers from "../ListUsers/fetchUsers";
+
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
   position: absolute;
@@ -105,7 +107,7 @@ const ModalFade = styled.div`
   }
 `;
 
-function CreateUserModal(props) {
+const CreateUserModal = (props) => {
   const roles = [
     "SYS_ADMIN",
     "ADMIN",
@@ -119,9 +121,7 @@ function CreateUserModal(props) {
     "CALENDAR_EVENTS_MANAGER",
   ];
 
-  //Set up the submit function
-  async function handleSubmit(values, props) {
-    const { fetchUsers, resetForm } = props;
+  async function handleSubmit(values, { resetForm }) {
     try {
       const token = getToken();
 
@@ -136,7 +136,6 @@ function CreateUserModal(props) {
       };
 
       console.log(body);
-      console.log(userRoutes.create);
 
       await axios.post(userRoutes.create, body, {
         headers: {
@@ -146,11 +145,13 @@ function CreateUserModal(props) {
 
       setOpenCreateModal(false);
 
+      fetchUsers();
+
       toast.success(`Usuário '${values.username}' adicionado com sucesso!`);
 
       resetForm();
 
-      fetchUsers();
+      // resetForm();
     } catch (error) {
       console.debug(error);
       toast.error("Ops, algo deu errado. Por favor, tente novamente");
@@ -165,7 +166,9 @@ function CreateUserModal(props) {
       roles: [],
     },
 
-    onSubmit: handleSubmit,
+    onSubmit: (values, { resetForm }) => {
+      handleSubmit(values, { resetForm });
+    },
     resetForm: () => {
       formik.resetForm();
     },
@@ -251,11 +254,7 @@ function CreateUserModal(props) {
                 <button onClick={formik.handleReset} className="btn-reset-form">
                   Limpar
                 </button>
-                <button
-                  disabled={formik.isSubmitting}
-                  type="submit"
-                  className="btn-submit-form"
-                >
+                <button type="submit" className="btn-submit-form">
                   Criar usuário
                 </button>
               </div>
@@ -265,6 +264,6 @@ function CreateUserModal(props) {
       </div>
     </ModalFade>
   );
-}
+};
 
 export default CreateUserModal;
