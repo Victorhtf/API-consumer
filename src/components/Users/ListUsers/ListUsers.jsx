@@ -2,8 +2,7 @@ import styled from "styled-components";
 import BaseLayout from "../../../pages/BaseLayout.jsx";
 import UsersTable from "./usersTable.jsx";
 import { useState } from "react";
-import CreateUserModal from "../CreateUserModal/CreateUserModal.jsx";
-// import CreateUserContent from "../CreateUser/CreateUserContent.jsx";
+import CreateUserModal from "../CreateUser/CreateUserModal.jsx";
 import "../../../Globals.css";
 
 const Box = styled.div`

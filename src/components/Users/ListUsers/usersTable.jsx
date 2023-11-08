@@ -5,7 +5,7 @@ import axios from "axios";
 import { Form, Space, Table, Tag } from "antd";
 import { intradataConfig } from "../../../env";
 import { getToken } from "../../../auth/authentications";
-import CreateUserModal from "../CreateUserModal/CreateUserModal";
+import CreateUserModal from "../CreateUser/CreateUserModal";
 import DeleteUserModal from "../DeleteUser/DeleteUserModal";
 import EditUserModal from "../EditUser/EditUserModal";
 import { toast } from "react-toastify";
@@ -17,9 +17,11 @@ const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig
 const defaultTitle = () => "Listar usuários.";
 
 function UsersTable() {
+  let isSet = false;
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [users, setUsers] = useState([]);
   const bordered = false;
   const [size, setSize] = useState("large");
   const showTitle = false;
@@ -31,9 +33,8 @@ function UsersTable() {
   const [ellipsis, setEllipsis] = useState(false);
   const [yScroll, setYScroll] = useState(false);
   const [xScroll, setXScroll] = useState();
-  const [rowState, setRowState] = useState("");
+  const [rowState, setRowState] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState([]);
 
   const columns = [
     {
@@ -99,7 +100,13 @@ function UsersTable() {
               handleEdit(row);
             }}
           >
-            <Space>Editar</Space>
+            <Space
+              onClick={() => {
+                handleEdit(row);
+              }}
+            >
+              Editar
+            </Space>
           </a>
         </Space>
       ),
@@ -127,15 +134,16 @@ function UsersTable() {
 
   //Edit users
   function handleEdit(row) {
+    const { roles } = row;
+    const selectedRoles = roles.map((item, index) => {
+      return [item];
+    });
+    console.log(selectedRoles);
     setRowState(row);
+    setOpenEditModal(rowState);
+    console.log(roles);
   }
 
-  // Cancel the loading animation
-  // const handleLoadingChange = (enable) => {
-  //   setLoading(enable);
-  // };
-
-  // Fetch all users from database
   async function fetchUsers() {
     try {
       const response = await axios.get(finalUrl, {
@@ -145,13 +153,10 @@ function UsersTable() {
       });
       const usersData = response.data;
       setUsers(usersData);
-
       setLoading(false);
-
-      toast.success("fetchUsers ok");
+      toast.success("Base de dados atualizada com sucesso!");
     } catch (error) {
       toast.error(error);
-
       setLoading(false);
     }
   }
@@ -162,6 +167,12 @@ function UsersTable() {
     setOpenDeleteModal(true);
   }
 
+  //Reload usersTable
+  function ReloadUsersTable() {
+    isSet = !isSet;
+  }
+
+  // On load
   useEffect(() => {
     async function callFetchUsers() {
       await fetchUsers();
@@ -171,12 +182,15 @@ function UsersTable() {
 
   return (
     <>
-      <EditUserModal
-        fetchUsers={fetchUsers}
-        row={rowState}
-        openEditModal={openEditModal}
-        setOpenEditModal={setOpenEditModal}
-      />
+      {openEditModal && users != undefined && users.length > 0 ? (
+        <EditUserModal
+          fetchUsers={fetchUsers}
+          ReloadUsersTable={ReloadUsersTable()}
+          row={rowState}
+          openEditModal={openEditModal}
+          setOpenEditModal={setOpenEditModal}
+        />
+      ) : null}
 
       <DeleteUserModal
         fetchUsers={fetchUsers}
@@ -185,8 +199,6 @@ function UsersTable() {
         setOpenDeleteModal={setOpenDeleteModal}
       />
 
-      <CreateUserModal fetchUsers={fetchUsers} open={open} setOpen={setOpen} />
-
       <Form
         layout="inline"
         className="components-table-demo-control-bar"
@@ -194,15 +206,17 @@ function UsersTable() {
           marginBottom: 16,
         }}
       ></Form>
-      <Table
-        {...tableProps}
-        pagination={{
-          position: [top, bottom],
-        }}
-        columns={tableColumns}
-        dataSource={users.length > 0 ? users : []}
-        style={{ width: "100%" }}
-      />
+      {users != undefined && users.length > 0 ? (
+        <Table
+          {...tableProps}
+          pagination={{
+            position: [top, bottom],
+          }}
+          columns={tableColumns}
+          dataSource={users.length > 0 ? users : []}
+          style={{ width: "100%" }}
+        />
+      ) : null}
     </>
   );
 }

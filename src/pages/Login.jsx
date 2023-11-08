@@ -182,7 +182,14 @@ function Login() {
 
       if (userPermissions === '["ALL"]') {
         navigate("/crud");
-        toast.sucess("Usuário logado", { autoclose: 1000 });
+        toast.success("Usuário autenticado", {
+          position: "top-center",
+          autoClose: 3000,
+          closeOnClick: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       } else {
         toast.warn("401 - Unauthorized");
         setRemoveLoading(true);

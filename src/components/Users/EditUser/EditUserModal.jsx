@@ -20,6 +20,8 @@ import { getToken } from "../../../auth/authentications";
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 1000;
@@ -105,8 +107,10 @@ const ModalFade = styled.div`
   }
 `;
 
-function EditUserModal(props) {
-  const roles = [
+function EditUserModal({ openEditModal, setOpenEditModal, row }) {
+  const { username, email, roles } = row;
+
+  const rolesList = [
     "SYS_ADMIN",
     "ADMIN",
     "PHYSICAL_WORLD_READER",
@@ -118,15 +122,22 @@ function EditUserModal(props) {
     "CALENDAR_EVENTS_DETAILS_READER",
     "CALENDAR_EVENTS_MANAGER",
   ];
+  if (roles !== undefined) {
+    const selectedRoles = roles.map((role) => role.name);
+    console.log(selectedRoles);
+  }
+
+  console.log(row);
 
   //Set up the submit function
   async function handleSubmit(values, { setSubmitting, resetForm }) {
+    const { username, email, roles, password } = values;
     try {
+      return console.log(values);
       setSubmitting(true);
 
       const token = getToken();
 
-      const { username, email, roles, password } = values;
       const userRoutes = routes.user;
 
       const body = {
@@ -136,9 +147,6 @@ function EditUserModal(props) {
         role_names: roles,
       };
 
-      console.log(body);
-      console.log(userRoutes.create);
-
       await axios.post(userRoutes.create, body, {
         headers: {
           auth: token,
@@ -146,35 +154,36 @@ function EditUserModal(props) {
       });
       setSubmitting(false);
 
-      setOpenCreateModal(false);
+      setOpenEditModal(false);
 
       toast.success(`Usuário '${values.username}' adicionado com sucesso!`);
 
       resetForm();
     } catch (error) {
-      alert("a");
       toast.error("Ops, algo deu errado. Por favor, tente novamente");
     }
   }
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      username: username,
       password: "",
-      email: "",
-      roles: [],
+      email: email,
+      roles: rolesList,
     },
-
     onSubmit: handleSubmit,
     resetForm: () => {
       formik.resetForm();
     },
   });
 
-  const { openEditModal, setOpenEditModal } = props;
   if (!openEditModal) return null;
   return (
-    <ModalFade>
+    <ModalFade
+    // onClick={() => {
+    //   setOpenEditModal(false);
+    // }}
+    >
       <div className="modal-card">
         <div className="top-label">
           <h2>Editar usuário</h2>
@@ -182,10 +191,11 @@ function EditUserModal(props) {
             style={{ color: "#171717" }}
             className="close-icon"
             onClick={() => {
-              setOpenCreateModal(false);
+              setOpenEditModal(false);
             }}
           />
         </div>
+        {console.log(formik)}
         <div className="form-box">
           <form onSubmit={formik.handleSubmit}>
             <div className="content">
@@ -203,6 +213,7 @@ function EditUserModal(props) {
                   />
                 </div>
                 <div className="form-group">
+                  {console.log(formik.values)}
                   <TextField
                     fullWidth
                     size="small"
@@ -231,15 +242,14 @@ function EditUserModal(props) {
                     <InputLabel id="roles">Papéis</InputLabel>
                     <Select
                       multiple
-                      fullWidth
                       id="roles"
                       name="roles"
                       label="roles"
                       value={formik.values.roles}
                       onChange={formik.handleChange}
                     >
-                      {roles.map((item, index) => (
-                        <MenuItem key={index} value={item}>
+                      {rolesList.map((item, index) => (
+                        <MenuItem key={item} value={index}>
                           {item}
                         </MenuItem>
                       ))}
@@ -256,7 +266,7 @@ function EditUserModal(props) {
                   type="submit"
                   className="btn-submit-form"
                 >
-                  Criar usuário
+                  Editar usuário
                 </button>
               </div>
             </div>

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { BiLogOut } from "react-icons/bi";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Box = styled.div`
@@ -52,7 +53,14 @@ function Header() {
 
   const handleLogout = () => {
     navigate("/");
-    alert("Usuário desconectado");
+    toast.error("Usuário desconectado.", {
+      position: "top-center",
+      autoClose: 3000,
+      closeOnClick: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   };
 
   return (

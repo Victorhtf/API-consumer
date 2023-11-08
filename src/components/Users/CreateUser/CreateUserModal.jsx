@@ -120,8 +120,8 @@ function CreateUserModal(props) {
   ];
 
   //Set up the submit function
-  async function handleSubmit(values, props) {
-    const { fetchUsers, resetForm } = props;
+  async function handleSubmit(values, props, fetchUsers) {
+    const { resetForm } = props;
     try {
       const token = getToken();
 
@@ -134,9 +134,6 @@ function CreateUserModal(props) {
         email: email,
         role_names: roles,
       };
-
-      console.log(body);
-      console.log(userRoutes.create);
 
       await axios.post(userRoutes.create, body, {
         headers: {
