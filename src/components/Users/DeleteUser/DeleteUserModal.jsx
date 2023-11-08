@@ -93,9 +93,7 @@ const ModalFade = styled.div`
 const DeleteUserModal = (props) => {
   const { openDeleteModal, setOpenDeleteModal, row, fetchUsers } = props;
 
-  // Delete user from database
   async function handleDelete(row) {
-    // setOpenDeleteModal(true);
     const token = getToken();
 
     try {
@@ -104,7 +102,6 @@ const DeleteUserModal = (props) => {
           auth: token,
         },
       });
-      console.log(`${routes.user.deleteById}/${row.id}`);
 
       toast.success(`Usuário "${row.username}" deletado com sucesso`);
 

@@ -8,6 +8,7 @@ import { getToken } from "../../../auth/authentications";
 import CreateUserModal from "../CreateUser/CreateUserModal";
 import DeleteUserModal from "../DeleteUser/DeleteUserModal";
 import EditUserModal from "../EditUser/EditUserModal";
+import fetchUsers from "./fetchUsers";
 import { toast } from "react-toastify";
 
 //Set up the requisition
@@ -35,6 +36,11 @@ function UsersTable() {
   const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState(null);
   const [loading, setLoading] = useState(true);
+<<<<<<< HEAD
+=======
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [users, setUsers] = useState([]);
+>>>>>>> refs/remotes/origin/dev
 
   const columns = [
     {
@@ -176,8 +182,18 @@ function UsersTable() {
   useEffect(() => {
     async function callFetchUsers() {
       await fetchUsers();
+  async function handleUsers() {
+    try {
+      const usersData = await fetchUsers();
+      setUsers(usersData);
+      setLoading(false);
+      toast.success("Usuários carregados com sucesso");
+    } catch (error) {
+      toast.error("Ops, ocorreu algum erro. Tente novamente.");
     }
-    callFetchUsers();
+  }
+  useEffect(() => {
+    handleUsers();
   }, []);
 
   return (

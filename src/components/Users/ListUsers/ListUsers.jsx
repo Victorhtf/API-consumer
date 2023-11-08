@@ -4,6 +4,7 @@ import UsersTable from "./usersTable.jsx";
 import { useState } from "react";
 import CreateUserModal from "../CreateUser/CreateUserModal.jsx";
 import "../../../Globals.css";
+import { UserProvider } from "./userContext.js";
 
 const Box = styled.div`
   width: 100%;
@@ -44,26 +45,28 @@ function ListUsers() {
 
   return (
     <>
-      <CreateUserModal
-        openCreateModal={openCreateModal}
-        setOpenCreateModal={setOpenCreateModal}
-      ></CreateUserModal>
-      <BaseLayout>
-        <Box>
-          <div className="top-label">
-            <h1> Listar usuários </h1>
-            <button
-              className="add-user-btn"
-              onClick={() => {
-                setOpenCreateModal(true);
-              }}
-            >
-              Adicionar usuário
-            </button>
-          </div>
-          <UsersTable />
-        </Box>
-      </BaseLayout>
+      <UserProvider>
+        <CreateUserModal
+          openCreateModal={openCreateModal}
+          setOpenCreateModal={setOpenCreateModal}
+        ></CreateUserModal>
+        <BaseLayout>
+          <Box>
+            <div className="top-label">
+              <h1> Listar usuários </h1>
+              <button
+                className="add-user-btn"
+                onClick={() => {
+                  setOpenCreateModal(true);
+                }}
+              >
+                Adicionar usuário
+              </button>
+            </div>
+            <UsersTable />
+          </Box>
+        </BaseLayout>
+      </UserProvider>
     </>
   );
 }
