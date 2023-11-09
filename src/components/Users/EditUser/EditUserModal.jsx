@@ -107,9 +107,12 @@ const ModalFade = styled.div`
   }
 `;
 
-function EditUserModal({ openEditModal, setOpenEditModal, row }) {
-  const { username, email, roles } = row;
-
+function EditUserModal({
+  openEditModal,
+  setOpenEditModal,
+  fetchUsers,
+  rowState,
+}) {
   const rolesList = [
     "SYS_ADMIN",
     "ADMIN",
@@ -122,18 +125,17 @@ function EditUserModal({ openEditModal, setOpenEditModal, row }) {
     "CALENDAR_EVENTS_DETAILS_READER",
     "CALENDAR_EVENTS_MANAGER",
   ];
+  const { id, username, email, roles } = rowState;
   if (roles !== undefined) {
     const selectedRoles = roles.map((role) => role.name);
-    console.log(selectedRoles);
   }
 
-  console.log(row);
-
   //Set up the submit function
-  async function handleSubmit(values, { setSubmitting, resetForm }) {
+  async function handleEdit(values, { setSubmitting, resetForm }) {
+    console.log(id);
     const { username, email, roles, password } = values;
     try {
-      return console.log(values);
+      console.log(id, username, email, roles);
       setSubmitting(true);
 
       const token = getToken();
@@ -142,23 +144,33 @@ function EditUserModal({ openEditModal, setOpenEditModal, row }) {
 
       const body = {
         username: username,
-        password: password,
+        // password: password, //No momento o backend não consegue alterar a senha.
         email: email,
         role_names: roles,
       };
+      console.log("ok");
 
-      await axios.post(userRoutes.create, body, {
-        headers: {
-          auth: token,
-        },
-      });
+      const response = await axios.patch(
+        `${userRoutes.updateById}${id}`,
+        body,
+        {
+          headers: {
+            auth: token,
+          },
+        }
+      );
+
+      console.log(response);
+      console.log(body);
       setSubmitting(false);
 
       setOpenEditModal(false);
 
-      toast.success(`Usuário '${values.username}' adicionado com sucesso!`);
+      toast.success(`Usuário '${values.username}' atualizado com sucesso!`);
 
       resetForm();
+
+      fetchUsers();
     } catch (error) {
       toast.error("Ops, algo deu errado. Por favor, tente novamente");
     }
@@ -169,9 +181,9 @@ function EditUserModal({ openEditModal, setOpenEditModal, row }) {
       username: username,
       password: "",
       email: email,
-      roles: rolesList,
+      roles: roles,
     },
-    onSubmit: handleSubmit,
+    onSubmit: handleEdit,
     resetForm: () => {
       formik.resetForm();
     },
@@ -180,9 +192,12 @@ function EditUserModal({ openEditModal, setOpenEditModal, row }) {
   if (!openEditModal) return null;
   return (
     <ModalFade
-    // onClick={() => {
-    //   setOpenEditModal(false);
-    // }}
+      onClick={(e) => {
+        if (e.target.classList.contains("modal-container")) {
+          setOpenEditModal(false);
+        }
+      }}
+      className="modal-container"
     >
       <div className="modal-card">
         <div className="top-label">
@@ -195,7 +210,6 @@ function EditUserModal({ openEditModal, setOpenEditModal, row }) {
             }}
           />
         </div>
-        {console.log(formik)}
         <div className="form-box">
           <form onSubmit={formik.handleSubmit}>
             <div className="content">
@@ -212,8 +226,7 @@ function EditUserModal({ openEditModal, setOpenEditModal, row }) {
                     onChange={formik.handleChange}
                   />
                 </div>
-                <div className="form-group">
-                  {console.log(formik.values)}
+                {/* <div className="form-group">
                   <TextField
                     fullWidth
                     size="small"
@@ -224,7 +237,7 @@ function EditUserModal({ openEditModal, setOpenEditModal, row }) {
                     value={formik.values.password}
                     onChange={formik.handleChange}
                   />
-                </div>
+                </div> */}
                 <div className="form-group">
                   <TextField
                     fullWidth

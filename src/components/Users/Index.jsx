@@ -1,27 +1,28 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable no-unused-vars */
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Form, Space, Table, Tag } from "antd";
-import { intradataConfig } from "../../../env";
-import { getToken } from "../../../auth/authentications";
-import CreateUserModal from "../CreateUser/CreateUserModal";
-import DeleteUserModal from "../DeleteUser/DeleteUserModal";
-import EditUserModal from "../EditUser/EditUserModal";
-import fetchUsers from "./fetchUsers";
+//React
+import React, { useState, useEffect, useCallback } from "react";
+
+//Libs
+import { Input, Form, Space, Table, Tag } from "antd";
 import { toast } from "react-toastify";
+import axios from "axios";
+
+//Components
+import CreateUserModal from "./CreateUser/CreateUserModal";
+import DeleteUserModal from "./DeleteUser/DeleteUserModal";
+import EditUserModal from "./EditUser/EditUserModal";
+//User configs
+import { intradataConfig } from "../../env";
+import { getToken } from "../../auth/authentications";
 
 //Set up the requisition
 const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
 const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
 
-const defaultTitle = () => "Listar usuários.";
-
-function UsersTable() {
-  let isSet = false;
+function Index({ openCreateModal, setOpenCreateModal }) {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
+
   const [users, setUsers] = useState([]);
   const bordered = false;
   const [size, setSize] = useState("large");
@@ -36,22 +37,79 @@ function UsersTable() {
   const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState(null);
   const [loading, setLoading] = useState(true);
-<<<<<<< HEAD
-=======
-  const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [users, setUsers] = useState([]);
->>>>>>> refs/remotes/origin/dev
+  const [openModalDeleteUsers, setOpenModalDeleteUsers] = useState(false);
+  const [openModalEditUsers, setOpenModalEditUsers] = useState(false);
+  const [rows, setRows] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
 
+  //Load table
+  useEffect(() => {
+    fetchUsers();
+    toast.success("Base de dados atualizada com sucesso!");
+  }, []);
+
+  //Load users
+  async function fetchUsers() {
+    try {
+      const response = await axios.get(finalUrl, {
+        headers: {
+          auth: getToken(),
+        },
+      });
+
+      const usersData = response.data;
+      setUsers(usersData);
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      const message = error.response.data.detail
+        ? error.response.data.detail
+        : "Algo deu errado.";
+      toast.error(message);
+
+      console.log(error);
+    }
+  }
+
+  //
+  function handleEditModal(row) {
+    console.log(row);
+    setOpenEditModal(true);
+    setRowState(row);
+    console.log(rowState);
+  }
+
+  // Delete user from database
+  async function handleDeleteModal(row) {
+    setRowState(row);
+    setOpenDeleteModal(true);
+  }
+
+  // Handle createModal
+  function handleCreateModal() {
+    setOpenCreateModal(true);
+  }
+
+  //Set the table props
   const columns = [
     {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      filteredValue: null,
+
       sorter: (a, b) => a.id - b.id,
     },
     {
       title: "Username",
       dataIndex: "username",
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record) => {
+        return String(record.username)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
       sorter: (a, b) => {
         return a.username.localeCompare(b.username);
       },
@@ -59,11 +117,13 @@ function UsersTable() {
     {
       title: "E-mail",
       dataIndex: "email",
+      filteredValue: null,
     },
     {
       title: "Roles",
       key: "tags",
       dataIndex: "roles",
+      filteredValue: null,
       render: (roles) => (
         <>
           {roles.map((role) => (
@@ -79,6 +139,7 @@ function UsersTable() {
       title: "Data da criação",
       key: "created_date",
       dataIndex: "created_date",
+      filteredValue: null,
       sorter: (a, b) => {
         const dateA = new Date(a.created_date);
         const dateB = new Date(b.created_date);
@@ -101,14 +162,10 @@ function UsersTable() {
           >
             Delete
           </a>
-          <a
-            onClick={() => {
-              handleEdit(row);
-            }}
-          >
+          <a>
             <Space
               onClick={() => {
-                handleEdit(row);
+                handleEditModal(row);
               }}
             >
               Editar
@@ -130,7 +187,7 @@ function UsersTable() {
   const tableProps = {
     bordered,
     loading,
-    size,
+    size: "extra-small",
     title: showTitle ? defaultTitle : undefined,
     showHeader,
     rowSelection,
@@ -138,83 +195,31 @@ function UsersTable() {
     tableLayout,
   };
 
-  //Edit users
-  function handleEdit(row) {
-    const { roles } = row;
-    const selectedRoles = roles.map((item, index) => {
-      return [item];
-    });
-    console.log(selectedRoles);
-    setRowState(row);
-    setOpenEditModal(rowState);
-    console.log(roles);
-  }
-
-  async function fetchUsers() {
-    try {
-      const response = await axios.get(finalUrl, {
-        headers: {
-          auth: getToken(),
-        },
-      });
-      const usersData = response.data;
-      setUsers(usersData);
-      setLoading(false);
-      toast.success("Base de dados atualizada com sucesso!");
-    } catch (error) {
-      toast.error(error);
-      setLoading(false);
-    }
-  }
-
-  // Delete user from database
-  async function handleDeleteModal(row) {
-    setRowState(row);
-    setOpenDeleteModal(true);
-  }
-
-  //Reload usersTable
-  function ReloadUsersTable() {
-    isSet = !isSet;
-  }
-
-  // On load
-  useEffect(() => {
-    async function callFetchUsers() {
-      await fetchUsers();
-  async function handleUsers() {
-    try {
-      const usersData = await fetchUsers();
-      setUsers(usersData);
-      setLoading(false);
-      toast.success("Usuários carregados com sucesso");
-    } catch (error) {
-      toast.error("Ops, ocorreu algum erro. Tente novamente.");
-    }
-  }
-  useEffect(() => {
-    handleUsers();
-  }, []);
-
   return (
     <>
+      {openCreateModal && users != undefined && users.length > 0 ? (
+        <CreateUserModal
+          fetchUsers={fetchUsers}
+          openCreateModal={openCreateModal}
+          setOpenCreateModal={setOpenCreateModal}
+        />
+      ) : null}
       {openEditModal && users != undefined && users.length > 0 ? (
         <EditUserModal
           fetchUsers={fetchUsers}
-          ReloadUsersTable={ReloadUsersTable()}
-          row={rowState}
+          rowState={rowState}
           openEditModal={openEditModal}
           setOpenEditModal={setOpenEditModal}
         />
       ) : null}
-
-      <DeleteUserModal
-        fetchUsers={fetchUsers}
-        row={rowState}
-        openDeleteModal={openDeleteModal}
-        setOpenDeleteModal={setOpenDeleteModal}
-      />
-
+      {openDeleteModal && users != undefined && users.length > 0 ? (
+        <DeleteUserModal
+          fetchUsers={fetchUsers}
+          row={rowState}
+          openDeleteModal={openDeleteModal}
+          setOpenDeleteModal={setOpenDeleteModal}
+        />
+      ) : null}
       <Form
         layout="inline"
         className="components-table-demo-control-bar"
@@ -222,19 +227,29 @@ function UsersTable() {
           marginBottom: 16,
         }}
       ></Form>
-      {users != undefined && users.length > 0 ? (
-        <Table
-          {...tableProps}
-          pagination={{
-            position: [top, bottom],
-          }}
-          columns={tableColumns}
-          dataSource={users.length > 0 ? users : []}
-          style={{ width: "100%" }}
-        />
-      ) : null}
+      <Input.Search
+        placeholder="Nome de usuário"
+        style={{
+          width: "20%",
+          display: "flex",
+          alignSelf: "flex-end",
+          marginBottom: "6px",
+        }}
+        onChange={(e) => {
+          setSearchValue(e.target.value);
+        }}
+      />
+      <Table
+        {...tableProps}
+        pagination={{
+          position: [top, bottom],
+        }}
+        columns={tableColumns}
+        dataSource={users.length > 0 ? users : []}
+        style={{ width: "100%" }}
+      />
     </>
   );
 }
 
-export default UsersTable;
+export default Index;

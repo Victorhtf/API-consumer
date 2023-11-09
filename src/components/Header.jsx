@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { BiLogOut } from "react-icons/bi";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { CgProfile } from "react-icons/cg";
+import SettingsModal from "./Header/SettingsModal";
+import { useState } from "react";
 
 const Box = styled.div`
   width: 100%;
@@ -20,15 +20,22 @@ const Box = styled.div`
   }
 
   .icon {
-    padding: 10px;
+    padding: 6px;
     color: white;
     font-size: 22px;
     justify-content: center;
     align-items: center;
     display: flex;
+    border-radius: 50%;
     cursor: pointer;
+    align-self: center;
+    justify-self: center;
 
-    :hover {
+    &:hover {
+      box-shadow: 0 0 10px 1px rgba(78, 195, 238, 0.7);
+      background: linear-gradient(118deg, #4ec3ee, rgba(78, 195, 238, 0.7));
+      scale: 1.05;
+      transition: 0.25s ease;
     }
   }
 
@@ -49,22 +56,14 @@ const Box = styled.div`
 `;
 
 function Header() {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    navigate("/");
-    toast.error("Usuário desconectado.", {
-      position: "top-center",
-      autoClose: 3000,
-      closeOnClick: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
-  };
+  const [openSettingsModal, setOpenSettingsModal] = useState(null);
 
   return (
     <Box>
+      <SettingsModal
+        openSettingsModal={openSettingsModal}
+        setOpenSettingsModal={setOpenSettingsModal}
+      />
       <div className="logout">
         <div className="text">
           <p>Seja bem vindo</p>
@@ -72,11 +71,11 @@ function Header() {
         </div>
         <div
           onClick={() => {
-            handleLogout();
+            setOpenSettingsModal(true);
           }}
           className="icon"
         >
-          <BiLogOut />
+          <CgProfile className="self-center" />
         </div>
       </div>
     </Box>

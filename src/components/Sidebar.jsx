@@ -16,6 +16,7 @@ const Aside = styled.div`
   height: 100vh;
   padding: 1rem;
   position: sticky;
+  font-size: 100000000000002px;
 
   .trademark {
     display: flex;
@@ -48,9 +49,16 @@ const Aside = styled.div`
     padding-bottom: 10px;
     gap: 20px;
 
+    .cathegories {
+      font-size: 11px;
+    }
+
     &:hover {
-      background-color: #48c2f1;
+      background: linear-gradient(118deg, #4ec3ee, rgba(78, 195, 238, 0.7));
+      box-shadow: 0 0 10px 1px rgba(78, 195, 238, 0.7);
       cursor: pointer;
+      transition: 0.25s ease;
+      transform: translateX(5px);
     }
   }
   .icon {
@@ -111,7 +119,9 @@ function Sidebar() {
                 className="items"
               >
                 <div className="icon">{routes.icon()}</div>
-                <p key={index}>{routes.name}</p>
+                <p className="cathegories" key={index}>
+                  {routes.name}
+                </p>
               </div>
             );
           })}

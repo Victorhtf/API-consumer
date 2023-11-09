@@ -77,23 +77,14 @@ const ModalFade = styled.div`
     color: var(--primary-text-color);
     cursor: pointer;
   }
-
-  .cancel-btn {
-    background-color: var(--btn-2bg-color);
-    border: var(--btn-border-color);
-    padding: 7px 14px 7px 14px;
-    border-radius: var(--btn-border-radius);
-    font-size: var(--btn-font-size);
-    color: var(--secondary-text-color);
-    font-size: var(--btn-font-size);
-    cursor: pointer;
-  }
 `;
 
 const DeleteUserModal = (props) => {
   const { openDeleteModal, setOpenDeleteModal, row, fetchUsers } = props;
 
+  // Delete user from database
   async function handleDelete(row) {
+    // setOpenDeleteModal(true);
     const token = getToken();
 
     try {
@@ -105,6 +96,8 @@ const DeleteUserModal = (props) => {
 
       toast.success(`Usuário "${row.username}" deletado com sucesso`);
 
+      setOpenDeleteModal(false);
+
       fetchUsers();
     } catch (error) {
       toast.error("Ops, ocorreu algum erro. Tente novamente");
@@ -114,9 +107,12 @@ const DeleteUserModal = (props) => {
   if (!openDeleteModal) return null;
   return (
     <ModalFade
-      onClick={() => {
-        setOpenDeleteModal(false);
+      onClick={(e) => {
+        if (e.target.classList.contains("modal-container")) {
+          setOpenDeleteModal(false);
+        }
       }}
+      className="modal-container"
     >
       <div className="modal-card">
         <div className="top-label">

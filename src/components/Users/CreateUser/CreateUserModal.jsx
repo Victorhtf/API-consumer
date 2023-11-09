@@ -17,11 +17,11 @@ import { toast } from "react-toastify";
 
 import { getToken } from "../../../auth/authentications";
 
-import fetchUsers from "../ListUsers/fetchUsers";
-
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 1000;
@@ -107,7 +107,7 @@ const ModalFade = styled.div`
   }
 `;
 
-const CreateUserModal = (props) => {
+function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
   const roles = [
     "SYS_ADMIN",
     "ADMIN",
@@ -121,13 +121,9 @@ const CreateUserModal = (props) => {
     "CALENDAR_EVENTS_MANAGER",
   ];
 
-<<<<<<< HEAD:src/components/Users/CreateUser/CreateUserModal.jsx
   //Set up the submit function
-  async function handleSubmit(values, props, fetchUsers) {
+  async function handleSubmit(values, props) {
     const { resetForm } = props;
-=======
-  async function handleSubmit(values, { resetForm }) {
->>>>>>> refs/remotes/origin/dev:src/components/Users/CreateUserModal/CreateUserModal.jsx
     try {
       const token = getToken();
 
@@ -141,11 +137,6 @@ const CreateUserModal = (props) => {
         role_names: roles,
       };
 
-<<<<<<< HEAD:src/components/Users/CreateUser/CreateUserModal.jsx
-=======
-      console.log(body);
-
->>>>>>> refs/remotes/origin/dev:src/components/Users/CreateUserModal/CreateUserModal.jsx
       await axios.post(userRoutes.create, body, {
         headers: {
           auth: token,
@@ -154,13 +145,11 @@ const CreateUserModal = (props) => {
 
       setOpenCreateModal(false);
 
-      fetchUsers();
-
       toast.success(`Usuário '${values.username}' adicionado com sucesso!`);
 
       resetForm();
 
-      // resetForm();
+      fetchUsers();
     } catch (error) {
       console.debug(error);
       toast.error("Ops, algo deu errado. Por favor, tente novamente");
@@ -175,18 +164,22 @@ const CreateUserModal = (props) => {
       roles: [],
     },
 
-    onSubmit: (values, { resetForm }) => {
-      handleSubmit(values, { resetForm });
-    },
+    onSubmit: handleSubmit,
     resetForm: () => {
       formik.resetForm();
     },
   });
 
-  const { openCreateModal, setOpenCreateModal } = props;
   if (!openCreateModal) return null;
   return (
-    <ModalFade>
+    <ModalFade
+      onClick={(e) => {
+        if (e.target.classList.contains("modal-container")) {
+          setOpenCreateModal(false);
+        }
+      }}
+      className="modal-container"
+    >
       <div className="modal-card">
         <div className="top-label">
           <h2>Criar usuário</h2>
@@ -263,7 +256,11 @@ const CreateUserModal = (props) => {
                 <button onClick={formik.handleReset} className="btn-reset-form">
                   Limpar
                 </button>
-                <button type="submit" className="btn-submit-form">
+                <button
+                  disabled={formik.isSubmitting}
+                  type="submit"
+                  className="blue-btn"
+                >
                   Criar usuário
                 </button>
               </div>
@@ -273,6 +270,6 @@ const CreateUserModal = (props) => {
       </div>
     </ModalFade>
   );
-};
+}
 
 export default CreateUserModal;

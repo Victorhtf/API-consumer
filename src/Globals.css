@@ -3,19 +3,20 @@
   padding: 0px;
   box-sizing: border-box;
   font-family: "Inter", sans-serif;
+  letter-spacing: 0.01rem;
 }
 
-
+p {
+  font-size: 13px
+}
 
 :root {
-  /* Font size */
-  --h1-font-size: 30px;
   --h2-font-size: 25px;
   --h3-font-size: 20px;
   --h4-font-size: 15px;
   --h5-font-size: 10px;
   --h6-font-size: 5px;
-  --paragraph-text-size: 12px;
+  
 
   /* Font color */
   --primary-text-color: #ffffff;
@@ -23,20 +24,26 @@
 
   /* Card */
   --card-bg-color: #fff;
+    /* Button */
+    --btn-border-radius: 6px;
+    --btn-bg-color: #1874fc;
+    --btn-2bg-color: #ffffff;
+    --btn-font-size: 15px;
+    --btn-border-color: ;
+    --font-size: 300;
 
-  /* Button */
-  --btn-border-radius: 6px;
-  --btn-bg-color: #1874fc;
-  --btn-2bg-color: #ffffff;
-  --btn-font-size: 15px;
-  --btn-border-color: 1px #e0dcdc solid;
-  --font-size: 300;
+
+
+    --btn-border-radius: 6px;
+    --btn-font-size: 15px;
+  
+  
 
 
   /* Cancel button */
   --btn-cancel-color: #fff;
   --btn-cancel-bg-color: #df0133;
-  --btn-cancel-border: 1px solid #a52d37;
+  --btn-cancel-border: ;
 
   /* Input */
   --input-border-radius: 6px;
@@ -54,12 +61,39 @@ body {
 
 
 .delete-btn{
-  background-color: var(--btn-cancel-bg-color);
-  border: var(--btn-cancel-border);
+  background-color: #df0133;
+  border: 1px solid #a52d37;
   padding: 7px 14px 7px 14px;
   border-radius: var(--btn-border-radius);
   font-size: var(--btn-font-size);
-  color: var(--btn-cancel-color);
+  color: #fff;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #ffffff;
+  border: 1px solid #5e5f68;
+  padding: 7px 14px 7px 14px;
+  border-radius: var(--btn-border-radius);
+  font-size: var(--btn-font-size);
+  color: var(--secondary-text-color);
+  font-size: var(--btn-font-size);
+  cursor: pointer;
+
+
+}
+
+
+
+.highlight {
+  font-size: 14px;
+  padding: 1px 4px 1px 4px;
+  margin: 0px -10px;
+  background-color: #ffffff;
+  border: 1px #e0dcdc solid;
+  border-radius: var(--btn-border-radius);
+  color: var(--secondary-text-color);
   font-size: var(--btn-font-size);
   cursor: pointer;
 }
@@ -67,10 +101,15 @@ body {
 .top-label {
   width: 100%;
   display: flex;
-  margin-bottom: 10px;
   justify-content: space-between;
   top: 0;
   left: 0;
+}
+
+.self-center {
+  display: flex;
+  justify-self: center;
+  align-self: center;
 }
 
 
@@ -79,14 +118,23 @@ body {
 }
 
 
-.highlight {
-  font-size: 14px;
-  padding: 1px 4px 1px 4px;
-  margin: 0px -10px;
-  background-color: var(--btn-2bg-color);
-  border: var(--btn-border-color);
-  border-radius: var(--btn-border-radius);
-  color: var(--secondary-text-color);
-  font-size: var(--btn-font-size);
+
+.ant-table table { font-size: 11.7px; }
+
+.ant-tag {font-size: 11px;} 
+
+.blue-btn {
+  background:  #1874fc;
+  color: white;
+  align-self: center;
+  border: none;
+  padding: 10px 15px 10px 15px;
+  border-radius: 6px;
   cursor: pointer;
+  height: 32px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-size: 12px;
+  text-transform: uppercase;
 }
