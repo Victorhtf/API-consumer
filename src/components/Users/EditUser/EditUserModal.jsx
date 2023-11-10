@@ -125,17 +125,15 @@ function EditUserModal({
     "CALENDAR_EVENTS_DETAILS_READER",
     "CALENDAR_EVENTS_MANAGER",
   ];
-  const { id, username, email, roles } = rowState;
-  if (roles !== undefined) {
-    const selectedRoles = roles.map((role) => role.name);
-  }
+  // const { id, username, email, roles } = rowState;
+  // if (roles !== undefined) {
+  //   const selectedRoles = roles.map((role) => role.name);
+  // }
 
   //Set up the submit function
   async function handleEdit(values, { setSubmitting, resetForm }) {
-    console.log(id);
-    const { username, email, roles, password } = values;
+    const { username, email, roles } = values;
     try {
-      console.log(id, username, email, roles);
       setSubmitting(true);
 
       const token = getToken();
@@ -148,10 +146,9 @@ function EditUserModal({
         email: email,
         role_names: roles,
       };
-      console.log("ok");
 
       const response = await axios.patch(
-        `${userRoutes.updateById}${id}`,
+        `${userRoutes.updateById}${rowState.id}`,
         body,
         {
           headers: {
@@ -160,8 +157,6 @@ function EditUserModal({
         }
       );
 
-      console.log(response);
-      console.log(body);
       setSubmitting(false);
 
       setOpenEditModal(false);
@@ -178,10 +173,10 @@ function EditUserModal({
 
   const formik = useFormik({
     initialValues: {
-      username: username,
+      username: rowState.username,
       password: "",
-      email: email,
-      roles: roles,
+      email: rowState.email,
+      roles: [],
     },
     onSubmit: handleEdit,
     resetForm: () => {
@@ -262,7 +257,7 @@ function EditUserModal({
                       onChange={formik.handleChange}
                     >
                       {rolesList.map((item, index) => (
-                        <MenuItem key={item} value={index}>
+                        <MenuItem key={index} value={item}>
                           {item}
                         </MenuItem>
                       ))}

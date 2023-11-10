@@ -42,10 +42,22 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
+  const rolesList = [
+    "SYS_ADMIN",
+    "ADMIN",
+    "PHYSICAL_WORLD_READER",
+    "PHYSICAL_WORLD_MANAGER",
+    "META_WORLD_READER",
+    "META_WORLD_MANAGER",
+    "PHYSICAL_NOTIFICATIONS_READER",
+    "PHYSICAL_NOTIFICATIONS_MANAGER",
+    "CALENDAR_EVENTS_DETAILS_READER",
+    "CALENDAR_EVENTS_MANAGER",
+  ];
+
   //Load table
   useEffect(() => {
     fetchUsers();
-    toast.success("Base de dados atualizada com sucesso!");
   }, []);
 
   //Load users
@@ -61,6 +73,8 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       setUsers(usersData);
 
       setLoading(false);
+
+      toast.success("Base de dados atualizada com sucesso!");
     } catch (error) {
       setLoading(false);
       const message = error.response.data.detail
@@ -74,10 +88,8 @@ function Index({ openCreateModal, setOpenCreateModal }) {
 
   //
   function handleEditModal(row) {
-    console.log(row);
     setOpenEditModal(true);
     setRowState(row);
-    console.log(rowState);
   }
 
   // Delete user from database
@@ -124,6 +136,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       key: "tags",
       dataIndex: "roles",
       filteredValue: null,
+
       render: (roles) => (
         <>
           {roles.map((role) => (
@@ -133,8 +146,17 @@ function Index({ openCreateModal, setOpenCreateModal }) {
           ))}
         </>
       ),
-      onFilter: (value, record) => record.roles.indexOf(value) === 0,
+      filters: rolesList.map((item) => ({
+        text: String(item),
+        value: String(item),
+      })),
+      onFilter: (value, record) => {
+        return record.roles.includes(value);
+      },
     },
+    // return String(record.username)
+    // .toLowerCase()
+    // .includes(value.toLowerCase());
     {
       title: "Data da criação",
       key: "created_date",

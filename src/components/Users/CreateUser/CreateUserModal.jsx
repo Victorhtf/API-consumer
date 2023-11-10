@@ -235,6 +235,7 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
                   <FormControl size="small" fullWidth>
                     <InputLabel id="roles">Papéis</InputLabel>
                     <Select
+                      maxMenuHeight="200"
                       multiple
                       fullWidth
                       id="roles"
