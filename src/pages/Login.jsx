@@ -11,6 +11,8 @@ import { useState } from "react";
 import Loading from "../components/Loading/Loading";
 import { toast } from "react-toastify";
 
+import { routes } from "../env";
+
 //Set up the requisition route.
 const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
 // const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
@@ -125,10 +127,10 @@ const ButtonBox = styled.div`
 
 function Login() {
   const navigate = useNavigate();
-  async function handleMyInformation(token) {
-    const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user/me`;
+  const loginRoutes = routes.login;
 
-    const response = await axios.get(finalUrl, {
+  async function handleMyInformation(token) {
+    const response = await axios.get(loginRoutes.me, {
       headers: {
         auth: token,
       },
@@ -155,10 +157,9 @@ function Login() {
   async function handleLogin(values) {
     !removeLoading ? setRemoveLoading(true) : setRemoveLoading(false);
 
-    const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/auth/login`;
     try {
       const response = await axios.post(
-        finalUrl,
+        loginRoutes.auth,
         {},
         {
           auth: {

@@ -30,12 +30,12 @@ const Box = styled.div`
     cursor: pointer;
     align-self: center;
     justify-self: center;
+    background: linear-gradient(118deg, #4ec3ee, rgba(78, 195, 238, 0.7));
+    transition: 0.25s ease;
 
     &:hover {
       box-shadow: 0 0 10px 1px rgba(78, 195, 238, 0.7);
-      background: linear-gradient(118deg, #4ec3ee, rgba(78, 195, 238, 0.7));
       scale: 1.05;
-      transition: 0.25s ease;
     }
   }
 

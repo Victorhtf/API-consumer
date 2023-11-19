@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import BaseLayout from "../../../pages/BaseLayout.jsx";
-import CreateUserModal from "../CreateUser/CreateUserModal.jsx";
-import "../../../Globals.css";
+import BaseLayout from "../../pages/BaseLayout.jsx";
+import CreateCustomerModal from "./CreateCustomerGroupModal.jsx";
+import "../../Globals.css";
 import { useState } from "react";
-import Index from "../Index.jsx";
+import Index from "./Index.jsx";
 
 const Box = styled.div`
   width: 100%;
@@ -20,7 +20,7 @@ const Box = styled.div`
   }
 `;
 
-function ListUsers() {
+function CustomerGroupPage() {
   const [openCreateModal, setOpenCreateModal] = useState(false);
 
   return (
@@ -28,14 +28,14 @@ function ListUsers() {
       <BaseLayout>
         <Box>
           <div className="top-label">
-            <h1> Listar usuários </h1>
+            <h1> Listar customers groups </h1>
             <button
               className="blue-btn"
               onClick={() => {
                 setOpenCreateModal(true);
               }}
             >
-              Adicionar usuário
+              Adicionar customer group
             </button>
           </div>
           <Index
@@ -48,4 +48,4 @@ function ListUsers() {
   );
 }
 
-export default ListUsers;
+export default CustomerGroupPage;

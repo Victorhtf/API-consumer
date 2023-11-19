@@ -7,23 +7,20 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Components
-import CreateUserModal from "./CreateUserModal.jsx";
-import DeleteUserModal from "./DeleteUserModal";
-import EditUserModal from "./EditUserModal";
-//User configs
-import { intradataConfig } from "../../env";
-import { getToken } from "../../auth/authentications";
+import CreateCustomerModal from "./CreateCustomerModal";
+import EditCustomerModal from "./EditCustomerModal";
+import DeleteCustomerModal from "./DeleteCustomerModal";
 
-//Set up the requisition
-const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
-const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
+//User configs
+import { routes } from "../../env";
+import { getToken } from "../../auth/authentications";
 
 function Index({ openCreateModal, setOpenCreateModal }) {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
-  const [users, setUsers] = useState([]);
+  const [customer, setCustomer] = useState([]);
   const bordered = false;
   const [size, setSize] = useState("large");
   const showTitle = false;
@@ -36,40 +33,28 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [openModalDeleteUsers, setOpenModalDeleteUsers] = useState(false);
-  const [openModalEditUsers, setOpenModalEditUsers] = useState(false);
+  const [openModalDeleteCustomer, setOpenModalDeleteCustomer] = useState(false);
+  const [openModalEditCustomer, setOpenModalEditCustomer] = useState(false);
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
-  const rolesList = [
-    "SYS_ADMIN",
-    "ADMIN",
-    "PHYSICAL_WORLD_READER",
-    "PHYSICAL_WORLD_MANAGER",
-    "META_WORLD_READER",
-    "META_WORLD_MANAGER",
-    "PHYSICAL_NOTIFICATIONS_READER",
-    "PHYSICAL_NOTIFICATIONS_MANAGER",
-    "CALENDAR_EVENTS_DETAILS_READER",
-    "CALENDAR_EVENTS_MANAGER",
-  ];
-
+  const customerRoutes = routes.customer;
   //Load table
   useEffect(() => {
-    fetchUsers();
+    fetchCustomers();
   }, []);
 
-  //Load users
-  async function fetchUsers() {
+  //Load customer
+  async function fetchCustomers() {
     try {
-      const response = await axios.get(finalUrl, {
+      const response = await axios.get(customerRoutes.listAll, {
         headers: {
           auth: getToken(),
         },
       });
 
-      const usersData = response.data;
-      setUsers(usersData);
+      const customerData = response.data;
+      setCustomer(customerData);
 
       setLoading(false);
 
@@ -79,25 +64,26 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       const message = error.response.data.detail
         ? error.response.data.detail
         : "Algo deu errado.";
-      toast.error(message);
 
       console.log(error);
+
+      toast.error(message);
     }
   }
 
-  //
+  //Handle EditCustomer
   function handleEditModal(row) {
     setOpenEditModal(true);
     setRowState(row);
   }
 
-  // Delete user from database
+  // Handle DeleteCustomer
   async function handleDeleteModal(row) {
     setRowState(row);
     setOpenDeleteModal(true);
   }
 
-  // Handle createModal
+  // Handle CreateCustomer
   function handleCreateModal() {
     setOpenCreateModal(true);
   }
@@ -105,57 +91,46 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   //Set the table props
   const columns = [
     {
-      title: "ID",
+      title: "Customer ID",
       dataIndex: "id",
       key: "id",
       filteredValue: null,
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: "Username",
-      dataIndex: "username",
+      title: "Nome",
+      dataIndex: "display_name",
       filteredValue: searchValue !== null ? [searchValue] : null,
       onFilter: (value, record) => {
-        return String(record.username)
+        return String(record.display_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       sorter: (a, b) => {
-        return a.username.localeCompare(b.username);
+        return a.display_name.localeCompare(b.display_name);
       },
     },
     {
-      title: "E-mail",
-      dataIndex: "email",
+      title: "Nome fantasia",
+      key: "fantasy_name",
+      dataIndex: "fantasy_name",
       filteredValue: null,
     },
     {
-      title: "Roles",
-      key: "tags",
-      dataIndex: "roles",
+      title: "Grupo de cliente",
+      key: "customer_group",
+      dataIndex: "customer_group",
       filteredValue: null,
-      render: (roles) => {
-        console.log(roles)(
+      render: (value) => {
+        return (
           <>
-            {roles.map((role) => (
-              <Tag color="red" key={role}>
-                {role.name.toUpperCase()}
-              </Tag>
-            ))}
+            <Tag color="red" key={value}>
+              {value.display_name.toUpperCase()}
+            </Tag>
           </>
         );
       },
-      filters: rolesList.map((item) => ({
-        text: String(item),
-        value: String(item),
-      })),
-      onFilter: (value, record) => {
-        return record.roles.includes(value);
-      },
     },
-    // return String(record.username)
-    // .toLowerCase()
-    // .includes(value.toLowerCase());
     {
       title: "Data da criação",
       key: "created_date",
@@ -217,24 +192,24 @@ function Index({ openCreateModal, setOpenCreateModal }) {
 
   return (
     <>
-      {openCreateModal && users != undefined && users.length > 0 ? (
-        <CreateUserModal
-          fetchUsers={fetchUsers}
+      {openCreateModal && customer != undefined && customer.length > 0 ? (
+        <CreateCustomerModal
+          fetchCustomers={fetchCustomers}
           openCreateModal={openCreateModal}
           setOpenCreateModal={setOpenCreateModal}
         />
       ) : null}
-      {openEditModal && users != undefined && users.length > 0 ? (
-        <EditUserModal
-          fetchUsers={fetchUsers}
+      {openEditModal && customer != undefined && customer.length > 0 ? (
+        <EditCustomerModal
+          fetchCustomers={fetchCustomers}
           rowState={rowState}
           openEditModal={openEditModal}
           setOpenEditModal={setOpenEditModal}
         />
       ) : null}
-      {openDeleteModal && users != undefined && users.length > 0 ? (
-        <DeleteUserModal
-          fetchUsers={fetchUsers}
+      {openDeleteModal && customer != undefined && customer.length > 0 ? (
+        <DeleteCustomerModal
+          fetchCustomers={fetchCustomers}
           row={rowState}
           openDeleteModal={openDeleteModal}
           setOpenDeleteModal={setOpenDeleteModal}
@@ -248,7 +223,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         }}
       ></Form>
       <Input.Search
-        placeholder="Nome de usuário"
+        placeholder="Nome"
         style={{
           width: "20%",
           display: "flex",
@@ -265,7 +240,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
           position: [top, bottom],
         }}
         columns={tableColumns}
-        dataSource={users.length > 0 ? users : []}
+        dataSource={customer.length > 0 ? customer : []}
         style={{ width: "100%" }}
       />
     </>

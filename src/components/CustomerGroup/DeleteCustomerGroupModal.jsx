@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { routes } from "../../../env";
-import { getToken } from "../../../auth/authentications";
+import { routes } from "../../env";
+import { getToken } from "../../auth/authentications";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -79,8 +79,11 @@ const ModalFade = styled.div`
   }
 `;
 
-const DeleteUserModal = (props) => {
-  const { openDeleteModal, setOpenDeleteModal, row, fetchUsers } = props;
+const DeleteCustomerGroupModal = (props) => {
+  const { openDeleteModal, setOpenDeleteModal, row, fetchCustomerGroup } =
+    props;
+
+  const customerGroupsRoutes = routes.customerGroup;
 
   // Delete user from database
   async function handleDelete(row) {
@@ -88,19 +91,21 @@ const DeleteUserModal = (props) => {
     const token = getToken();
 
     try {
-      await axios.delete(`${routes.user.deleteById}/${row.id}`, {
+      await axios.delete(`${customerGroupsRoutes.delete}/${row.id}`, {
         headers: {
           auth: token,
         },
       });
 
-      toast.success(`Usuário "${row.username}" deletado com sucesso`);
+      toast.success(
+        `Grupo de clientes "${row.display_name}" deletado com sucesso`
+      );
 
       setOpenDeleteModal(false);
 
-      fetchUsers();
+      fetchCustomerGroup();
     } catch (error) {
-      toast.error("Ops, ocorreu algum erro. Tente novamente");
+      toast.error("Esta rota não foi encontrada.");
     }
   }
 
@@ -116,11 +121,11 @@ const DeleteUserModal = (props) => {
     >
       <div className="modal-card">
         <div className="top-label">
-          <h2>Deletar usuário</h2>
+          <h2>Deletar grupo de cliente</h2>
         </div>
         <div className="warn-text">
-          Tem certeza que deseja deletar o usuário
-          <p className="highlight">{row.username}</p>?
+          Tem certeza que deseja deletar o grupo de cliente
+          <p className="highlight">{row.display_name}</p>?
         </div>
         <div className="buttons">
           <button
@@ -145,4 +150,4 @@ const DeleteUserModal = (props) => {
   );
 };
 
-export default DeleteUserModal;
+export default DeleteCustomerGroupModal;

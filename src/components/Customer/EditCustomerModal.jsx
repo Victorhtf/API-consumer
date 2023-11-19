@@ -7,15 +7,15 @@ import {
 } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
-import "../../../Globals.css";
+import "../../Globals.css";
 import { useFormik } from "formik";
 import axios from "axios";
 
-import { routes } from "../../../env";
+import { routes } from "../../env";
 
 import { toast } from "react-toastify";
 
-import { getToken } from "../../../auth/authentications";
+import { getToken } from "../../auth/authentications";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -107,8 +107,13 @@ const ModalFade = styled.div`
   }
 `;
 
-function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
-  const roles = [
+function EditCustomerModal({
+  openEditModal,
+  setOpenEditModal,
+  fetchUsers,
+  rowState,
+}) {
+  const rolesList = [
     "SYS_ADMIN",
     "ADMIN",
     "PHYSICAL_WORLD_READER",
@@ -120,74 +125,83 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
     "CALENDAR_EVENTS_DETAILS_READER",
     "CALENDAR_EVENTS_MANAGER",
   ];
+  // const { id, username, email, roles } = rowState;
+  // if (roles !== undefined) {
+  //   const selectedRoles = roles.map((role) => role.name);
+  // }
 
   //Set up the submit function
-  async function handleSubmit(values, props) {
-    const { resetForm } = props;
+  async function handleEdit(values, { setSubmitting, resetForm }) {
+    const { username, email, roles } = values;
     try {
+      setSubmitting(true);
+
       const token = getToken();
 
-      const { username, email, roles, password } = values;
       const userRoutes = routes.user;
 
       const body = {
         username: username,
-        password: password,
+        // password: password, //No momento o backend não consegue alterar a senha.
         email: email,
         role_names: roles,
       };
 
-      await axios.post(userRoutes.create, body, {
-        headers: {
-          auth: token,
-        },
-      });
+      const response = await axios.patch(
+        `${userRoutes.updateById}${rowState.id}`,
+        body,
+        {
+          headers: {
+            auth: token,
+          },
+        }
+      );
 
-      setOpenCreateModal(false);
+      setSubmitting(false);
 
-      toast.success(`Usuário '${values.username}' adicionado com sucesso!`);
+      setOpenEditModal(false);
+
+      toast.success(`Usuário '${values.username}' atualizado com sucesso!`);
 
       resetForm();
 
       fetchUsers();
     } catch (error) {
-      console.debug(error);
       toast.error("Ops, algo deu errado. Por favor, tente novamente");
     }
   }
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      username: rowState.username,
       password: "",
-      email: "",
+      email: rowState.email,
       roles: [],
     },
-
-    onSubmit: handleSubmit,
+    onSubmit: handleEdit,
     resetForm: () => {
       formik.resetForm();
     },
   });
 
-  if (!openCreateModal) return null;
+  if (!openEditModal) return null;
   return (
     <ModalFade
       onClick={(e) => {
         if (e.target.classList.contains("modal-container")) {
-          setOpenCreateModal(false);
+          setOpenEditModal(false);
         }
       }}
       className="modal-container"
     >
       <div className="modal-card">
         <div className="top-label">
-          <h2>Criar usuário</h2>
+          <h2>Editar usuário</h2>
           <AiOutlineCloseCircle
             style={{ color: "#171717" }}
             className="close-icon"
             onClick={() => {
-              setOpenCreateModal(false);
+              setOpenEditModal(false);
             }}
           />
         </div>
@@ -207,7 +221,7 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
                     onChange={formik.handleChange}
                   />
                 </div>
-                <div className="form-group">
+                {/* <div className="form-group">
                   <TextField
                     fullWidth
                     size="small"
@@ -218,7 +232,7 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
                     value={formik.values.password}
                     onChange={formik.handleChange}
                   />
-                </div>
+                </div> */}
                 <div className="form-group">
                   <TextField
                     fullWidth
@@ -235,16 +249,14 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
                   <FormControl size="small" fullWidth>
                     <InputLabel id="roles">Papéis</InputLabel>
                     <Select
-                      maxMenuHeight="200"
                       multiple
-                      fullWidth
                       id="roles"
                       name="roles"
                       label="roles"
                       value={formik.values.roles}
                       onChange={formik.handleChange}
                     >
-                      {roles.map((item, index) => (
+                      {rolesList.map((item, index) => (
                         <MenuItem key={index} value={item}>
                           {item}
                         </MenuItem>
@@ -260,9 +272,9 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
                 <button
                   disabled={formik.isSubmitting}
                   type="submit"
-                  className="blue-btn"
+                  className="btn-submit-form"
                 >
-                  Criar usuário
+                  Editar usuário
                 </button>
               </div>
             </div>
@@ -273,4 +285,4 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
   );
 }
 
-export default CreateUserModal;
+export default EditCustomerModal;

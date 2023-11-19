@@ -75,16 +75,26 @@ const Aside = styled.div`
 function Sidebar() {
   const routes = [
     { route: "users", name: "Usuários", icon: FaUsers },
-    { route: "permissions", name: "Permissões", icon: BsFillShieldLockFill },
-    { route: "cameras", name: "Câmeras", icon: BiSolidCameraHome },
-    { route: "ambients", name: "Ambientes", icon: VscServerEnvironment },
     {
-      route: "business_units",
-      name: "Unidades de negócio",
+      route: "customer-groups",
+      name: "Grupos de clientes",
       icon: BsFillBuildingsFill,
     },
-    { route: "customer", name: "Customer", icon: RiCustomerService2Fill },
-    { route: "test", name: "Experimentar", icon: BiTestTube },
+    // { route: "permissions", name: "Permissões", icon: BsFillShieldLockFill },
+    // { route: "cameras", name: "Câmeras", icon: BiSolidCameraHome },
+    { route: "customer", name: "Clientes", icon: RiCustomerService2Fill },
+    { route: "ambients", name: "Ambientes", icon: VscServerEnvironment },
+    {
+      route: "userxambients",
+      name: "User X Ambientes",
+      icon: BsFillShieldLockFill,
+    },
+    // {
+    //   route: "business_units",
+    //   name: "Unidades de negócio",
+    //   icon: BsFillBuildingsFill,
+    // },
+    // { route: "test", name: "Experimentar", icon: BiTestTube },
   ];
 
   const navigate = useNavigate();

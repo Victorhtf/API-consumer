@@ -7,15 +7,15 @@ import {
 } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
-import "../../../Globals.css";
+import "../../Globals.css";
 import { useFormik } from "formik";
 import axios from "axios";
 
-import { routes } from "../../../env";
+import { routes } from "../../env";
 
 import { toast } from "react-toastify";
 
-import { getToken } from "../../../auth/authentications";
+import { getToken } from "../../auth/authentications";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -107,7 +107,7 @@ const ModalFade = styled.div`
   }
 `;
 
-function EditUserModal({
+function EditCustomerModal({
   openEditModal,
   setOpenEditModal,
   fetchUsers,
@@ -285,4 +285,4 @@ function EditUserModal({
   );
 }
 
-export default EditUserModal;
+export default EditCustomerModal;

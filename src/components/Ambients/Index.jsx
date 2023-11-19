@@ -7,23 +7,20 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Components
-import CreateUserModal from "./CreateUserModal.jsx";
-import DeleteUserModal from "./DeleteUserModal";
-import EditUserModal from "./EditUserModal";
+import CreateAmbientModal from "./CreateAmbientModal";
+import EditAmbientModal from "./EditAmbientModal";
+import DeleteAmbientModal from "./DeleteAmbientModal";
+
 //User configs
-import { intradataConfig } from "../../env";
+import { routes } from "../../env";
 import { getToken } from "../../auth/authentications";
 
-//Set up the requisition
-const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
-const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
-
-function Index({ openCreateModal, setOpenCreateModal }) {
+function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
-  const [users, setUsers] = useState([]);
+  const [ambient, setAmbient] = useState([]);
   const bordered = false;
   const [size, setSize] = useState("large");
   const showTitle = false;
@@ -36,40 +33,30 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [openModalDeleteUsers, setOpenModalDeleteUsers] = useState(false);
-  const [openModalEditUsers, setOpenModalEditUsers] = useState(false);
+  const [openModalDeleteAmbient, setOpenModalDeleteAmbient] = useState(false);
+  const [openModalEditAmbient, setOpenModalEditAmbient] = useState(false);
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
-  const rolesList = [
-    "SYS_ADMIN",
-    "ADMIN",
-    "PHYSICAL_WORLD_READER",
-    "PHYSICAL_WORLD_MANAGER",
-    "META_WORLD_READER",
-    "META_WORLD_MANAGER",
-    "PHYSICAL_NOTIFICATIONS_READER",
-    "PHYSICAL_NOTIFICATIONS_MANAGER",
-    "CALENDAR_EVENTS_DETAILS_READER",
-    "CALENDAR_EVENTS_MANAGER",
-  ];
+  const ambientRoutes = routes.ambient;
 
-  //Load table
+  // Load table
   useEffect(() => {
-    fetchUsers();
+    fetchAmbients();
   }, []);
 
-  //Load users
-  async function fetchUsers() {
+  //Load Ambient
+  async function fetchAmbients() {
     try {
-      const response = await axios.get(finalUrl, {
+      const { data: response } = await axios.get(ambientRoutes.listAll, {
         headers: {
           auth: getToken(),
         },
       });
 
-      const usersData = response.data;
-      setUsers(usersData);
+      const ambientData = response;
+
+      setAmbient(ambientData);
 
       setLoading(false);
 
@@ -79,25 +66,26 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       const message = error.response.data.detail
         ? error.response.data.detail
         : "Algo deu errado.";
-      toast.error(message);
 
       console.log(error);
+
+      toast.error(message);
     }
   }
 
-  //
+  //Handle EditAmbient
   function handleEditModal(row) {
     setOpenEditModal(true);
     setRowState(row);
   }
 
-  // Delete user from database
+  // Handle DeleteAmbient
   async function handleDeleteModal(row) {
     setRowState(row);
     setOpenDeleteModal(true);
   }
 
-  // Handle createModal
+  // Handle CreateAmbient
   function handleCreateModal() {
     setOpenCreateModal(true);
   }
@@ -106,56 +94,47 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   const columns = [
     {
       title: "ID",
-      dataIndex: "id",
       key: "id",
+      dataIndex: "id",
       filteredValue: null,
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: "Username",
-      dataIndex: "username",
+      title: "ID externo",
+      key: "external_id",
+      dataIndex: "external_id",
+      filteredValue: null,
+      sorter: (a, b) => a.id - b.id,
+    },
+    {
+      title: "Nome",
+      key: "display_name",
+      dataIndex: "display_name",
       filteredValue: searchValue !== null ? [searchValue] : null,
       onFilter: (value, record) => {
-        return String(record.username)
+        return String(record.display_name)
           .toLowerCase()
           .includes(value.toLowerCase());
       },
       sorter: (a, b) => {
-        return a.username.localeCompare(b.username);
+        return a.display_name.localeCompare(b.display_name);
       },
     },
     {
-      title: "E-mail",
-      dataIndex: "email",
+      title: "Customers",
+      key: "customer",
+      dataIndex: "customer",
       filteredValue: null,
-    },
-    {
-      title: "Roles",
-      key: "tags",
-      dataIndex: "roles",
-      filteredValue: null,
-      render: (roles) => {
-        console.log(roles)(
+      render: (value) => {
+        return (
           <>
-            {roles.map((role) => (
-              <Tag color="red" key={role}>
-                {role.name.toUpperCase()}
-              </Tag>
-            ))}
+            <Tag color="red" key={value}>
+              {value.display_name.toUpperCase()}
+            </Tag>
           </>
         );
       },
-      filters: rolesList.map((item) => ({
-        text: String(item),
-        value: String(item),
-      })),
-      onFilter: (value, record) => {
-        return record.roles.includes(value);
-      },
     },
-    // return String(record.username)
-    // .toLowerCase()
-    // .includes(value.toLowerCase());
     {
       title: "Data da criação",
       key: "created_date",
@@ -164,6 +143,20 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       sorter: (a, b) => {
         const dateA = new Date(a.created_date);
         const dateB = new Date(b.created_date);
+        return dateA - dateB;
+      },
+      render: (date) => {
+        return new Date(date).toLocaleDateString("pt-BR");
+      },
+    },
+    {
+      title: "Data da atualização",
+      key: "updated_date",
+      dataIndex: "updated_date",
+      filteredValue: null,
+      sorter: (a, b) => {
+        const dateA = new Date(a.updated_date);
+        const dateB = new Date(b.updated_date);
         return dateA - dateB;
       },
       render: (date) => {
@@ -201,10 +194,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     ...item,
     ellipsis,
   }));
-  if (xScroll === "fixed") {
-    tableColumns[0].fixed = true;
-    tableColumns[tableColumns.length - 1].fixed = "right";
-  }
+
   const tableProps = {
     bordered,
     loading,
@@ -217,24 +207,24 @@ function Index({ openCreateModal, setOpenCreateModal }) {
 
   return (
     <>
-      {openCreateModal && users != undefined && users.length > 0 ? (
-        <CreateUserModal
-          fetchUsers={fetchUsers}
+      {openCreateModal && ambient != undefined && ambient.length > 0 ? (
+        <CreateAmbientModal
+          fetchAmbients={fetchAmbients}
           openCreateModal={openCreateModal}
           setOpenCreateModal={setOpenCreateModal}
         />
       ) : null}
-      {openEditModal && users != undefined && users.length > 0 ? (
-        <EditUserModal
-          fetchUsers={fetchUsers}
+      {openEditModal && ambient != undefined && ambient.length > 0 ? (
+        <EditAmbientModal
+          fetchAmbients={fetchAmbients}
           rowState={rowState}
           openEditModal={openEditModal}
           setOpenEditModal={setOpenEditModal}
         />
       ) : null}
-      {openDeleteModal && users != undefined && users.length > 0 ? (
-        <DeleteUserModal
-          fetchUsers={fetchUsers}
+      {openDeleteModal && ambient != undefined && ambient.length > 0 ? (
+        <DeleteAmbientModal
+          fetchAmbients={fetchAmbients}
           row={rowState}
           openDeleteModal={openDeleteModal}
           setOpenDeleteModal={setOpenDeleteModal}
@@ -248,7 +238,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         }}
       ></Form>
       <Input.Search
-        placeholder="Nome de usuário"
+        placeholder="Ambiente"
         style={{
           width: "20%",
           display: "flex",
@@ -265,7 +255,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
           position: [top, bottom],
         }}
         columns={tableColumns}
-        dataSource={users.length > 0 ? users : []}
+        dataSource={ambient.length > 0 ? ambient : []}
         style={{ width: "100%" }}
       />
     </>
