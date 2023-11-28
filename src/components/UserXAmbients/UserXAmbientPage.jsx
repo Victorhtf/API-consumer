@@ -20,7 +20,8 @@ const Box = styled.div`
 `;
 
 function UserXAmbientPage() {
-  const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal] =
+    useState(false);
 
   return (
     <>
@@ -31,15 +32,15 @@ function UserXAmbientPage() {
             <button
               className="blue-btn"
               onClick={() => {
-                setOpenCreateModal(true);
+                setOpenLinkUserXAmbientsModal(true);
               }}
             >
-              Adicionar ambient
+              Criar vínculo
             </button>
           </div>
           <Index
-            openCreateModal={openCreateModal}
-            setOpenCreateModal={setOpenCreateModal}
+            openLinkUserXAmbientsModal={openLinkUserXAmbientsModal}
+            setOpenLinkUserXAmbientsModal={setOpenLinkUserXAmbientsModal}
           />
         </Box>
       </BaseLayout>

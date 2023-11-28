@@ -1,7 +1,5 @@
-/* eslint-disable react/prop-types */
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
-// import React, { Children } from "react";
 import "../Globals.css";
 
 const ModalFade = styled.div`
@@ -49,17 +47,6 @@ const ModalFade = styled.div`
     color: var(--primary-text-color);
     cursor: pointer;
   }
-
-  .btn-reset-form {
-    background-color: var(--btn-2bg-color);
-    border: var(--btn-border-color);
-    padding: 7px 14px 7px 14px;
-    border-radius: var(--btn-border-radius);
-    font-size: var(--btn-font-size);
-    color: var(--secondary-text-color);
-    font-size: var(--btn-font-size);
-    cursor: pointer;
-  }
 `;
 
 function Modal(props) {
@@ -80,7 +67,7 @@ function Modal(props) {
         </div>
         <div className="form-box">{children}</div>
         {/* <div className="buttons">
-          <button className="btn-reset-form">Limpar</button>
+          <button className="cancel-btn">Limpar</button>
           <button className="btn-submit-form">Submit</button>
         </div> */}
       </div>

@@ -29,12 +29,8 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
   const [top, setTop] = useState("none");
   const [bottom, setBottom] = useState("bottomRight");
   const [ellipsis, setEllipsis] = useState(false);
-  const [yScroll, setYScroll] = useState(false);
-  const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [openModalDeleteAmbient, setOpenModalDeleteAmbient] = useState(false);
-  const [openModalEditAmbient, setOpenModalEditAmbient] = useState(false);
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -90,7 +86,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
     setOpenCreateModal(true);
   }
 
-  //Set the table props
+  //Set the column props
   const columns = [
     {
       title: "ID",
@@ -121,7 +117,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       },
     },
     {
-      title: "Customers",
+      title: "Cliente",
       key: "customer",
       dataIndex: "customer",
       filteredValue: null,
@@ -207,7 +203,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
 
   return (
     <>
-      {openCreateModal && ambient != undefined && ambient.length > 0 ? (
+      {openCreateModal ? (
         <CreateAmbientModal
           fetchAmbients={fetchAmbients}
           openCreateModal={openCreateModal}

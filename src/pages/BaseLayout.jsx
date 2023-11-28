@@ -1,4 +1,3 @@
-// import MainContent from "../components/MainContent";
 import styled from "styled-components";
 import Sidebar from "../components/Sidebar.jsx";
 import Header from "../components/Header.jsx";

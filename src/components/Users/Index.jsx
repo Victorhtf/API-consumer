@@ -85,24 +85,17 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     }
   }
 
-  //
   function handleEditModal(row) {
     setOpenEditModal(true);
     setRowState(row);
   }
 
-  // Delete user from database
   async function handleDeleteModal(row) {
     setRowState(row);
     setOpenDeleteModal(true);
   }
 
-  // Handle createModal
-  function handleCreateModal() {
-    setOpenCreateModal(true);
-  }
-
-  //Set the table props
+  //Set the column props
   const columns = [
     {
       title: "ID",
@@ -112,9 +105,10 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: "Username",
+      title: "Nome de usuário",
       dataIndex: "username",
       filteredValue: searchValue !== null ? [searchValue] : null,
+
       onFilter: (value, record) => {
         return String(record.username)
           .toLowerCase()
@@ -130,32 +124,31 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       filteredValue: null,
     },
     {
-      title: "Roles",
+      title: "Papéis",
       key: "tags",
       dataIndex: "roles",
-      filteredValue: null,
-      render: (roles) => {
-        console.log(roles)(
-          <>
-            {roles.map((role) => (
-              <Tag color="red" key={role}>
-                {role.name.toUpperCase()}
-              </Tag>
-            ))}
-          </>
-        );
-      },
-      filters: rolesList.map((item) => ({
-        text: String(item),
-        value: String(item),
-      })),
+      filters: rolesList.map((item, index) => {
+        return {
+          text: item,
+          value: index,
+        };
+      }),
       onFilter: (value, record) => {
-        return record.roles.includes(value);
+        console.log(
+          String(record.roles).toLowerCase().includes(value.toLowerCase())
+        );
+        return String(record.roles).toLowerCase().includes(value.toLowerCase());
       },
+      render: (roles) => (
+        <>
+          {roles.map((role) => (
+            <Tag color="red" key={role}>
+              {role.name.toUpperCase()}
+            </Tag>
+          ))}
+        </>
+      ),
     },
-    // return String(record.username)
-    // .toLowerCase()
-    // .includes(value.toLowerCase());
     {
       title: "Data da criação",
       key: "created_date",

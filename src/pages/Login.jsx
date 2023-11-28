@@ -1,4 +1,3 @@
-// import { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Formik } from "formik";
@@ -12,10 +11,6 @@ import Loading from "../components/Loading/Loading";
 import { toast } from "react-toastify";
 
 import { routes } from "../env";
-
-//Set up the requisition route.
-const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
-// const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
 
 const Box = styled.div`
   display: flex;

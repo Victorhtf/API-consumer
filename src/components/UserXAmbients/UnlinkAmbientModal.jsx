@@ -79,53 +79,61 @@ const ModalFade = styled.div`
   }
 `;
 
-const DeleteCustomerModal = (props) => {
-  const { openDeleteModal, setOpenDeleteModal, row, fetchUsers } = props;
+const UnlinkAmbientModal = (props) => {
+  const { openUnlinkModal, setOpenUnlinkModal, row, fetchAmbients } = props;
 
-  // Delete user from database
-  async function handleDelete(row) {
-    // setOpenDeleteModal(true);
-    const token = getToken();
+  // Unlink user x ambient
+  async function handleUnlink(row) {
+    const usersRoutes = routes.user;
+
+    const body = {
+      user_id: row.user_id,
+    };
+    console.log(row, body);
 
     try {
-      await axios.delete(`${routes.user.deleteById}/${row.id}`, {
-        headers: {
-          auth: token,
-        },
-      });
+      const { data: response } = await axios.patch(
+        usersRoutes.unlinkAmbient,
+        body,
+        {
+          headers: {
+            auth: getToken(),
+          },
+        }
+      );
 
-      toast.success(`Usuário "${row.username}" deletado com sucesso`);
-
-      setOpenDeleteModal(false);
-
-      fetchUsers();
+      console.log("ok");
+      fetchAmbients();
     } catch (error) {
-      toast.error("Ops, ocorreu algum erro. Tente novamente");
+      const message = error.response.data.detail
+        ? error.response.data.detail
+        : "Algo deu errado.";
+      console.log(message);
     }
   }
 
-  if (!openDeleteModal) return null;
+  if (!openUnlinkModal) return null;
   return (
     <ModalFade
       onClick={(e) => {
         if (e.target.classList.contains("modal-container")) {
-          setOpenDeleteModal(false);
+          setOpenUnlinkModal(false);
         }
       }}
       className="modal-container"
     >
       <div className="modal-card">
         <div className="top-label">
-          <h2>Deletar usuário</h2>
+          <h2>Desvincular ambiente</h2>
         </div>
         <div className="warn-text">
-          Tem certeza que deseja deletar o usuário
+          Tem certeza que deseja desvincular os ambientes do usuário
           <p className="highlight">{row.username}</p>?
         </div>
         <div className="buttons">
           <button
             onClick={() => {
-              setOpenDeleteModal(false);
+              setOpenUnlinkModal(false);
             }}
             className="cancel-btn"
           >
@@ -133,11 +141,11 @@ const DeleteCustomerModal = (props) => {
           </button>
           <button
             onClick={() => {
-              handleDelete(row);
+              handleUnlink(row);
             }}
             className="delete-btn"
           >
-            Deletar
+            Desvincular
           </button>
         </div>
       </div>
@@ -145,4 +153,4 @@ const DeleteCustomerModal = (props) => {
   );
 };
 
-export default DeleteCustomerModal;
+export default UnlinkAmbientModal;

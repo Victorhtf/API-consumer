@@ -88,7 +88,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     setOpenCreateModal(true);
   }
 
-  //Set the table props
+  //Set the column props
   const columns = [
     {
       title: "Customer ID",
@@ -114,7 +114,15 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       title: "Nome fantasia",
       key: "fantasy_name",
       dataIndex: "fantasy_name",
-      filteredValue: null,
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record) => {
+        return String(record.fantasy_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.fantasy_name.localeCompare(b.fantasy_name);
+      },
     },
     {
       title: "Grupo de cliente",
@@ -192,7 +200,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
 
   return (
     <>
-      {openCreateModal && customer != undefined && customer.length > 0 ? (
+      {openCreateModal ? (
         <CreateCustomerModal
           fetchCustomers={fetchCustomers}
           openCreateModal={openCreateModal}
@@ -223,7 +231,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         }}
       ></Form>
       <Input.Search
-        placeholder="Nome"
+        placeholder="Cliente"
         style={{
           width: "20%",
           display: "flex",

@@ -28,14 +28,14 @@ function CustomerGroupPage() {
       <BaseLayout>
         <Box>
           <div className="top-label">
-            <h1> Listar customers groups </h1>
+            <h1> Listar grupo de cliente </h1>
             <button
               className="blue-btn"
               onClick={() => {
                 setOpenCreateModal(true);
               }}
             >
-              Adicionar customer group
+              Adicionar grupo de cliente
             </button>
           </div>
           <Index

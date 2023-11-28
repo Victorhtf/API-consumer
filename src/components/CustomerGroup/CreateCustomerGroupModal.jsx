@@ -94,17 +94,6 @@ const ModalFade = styled.div`
     color: var(--primary-text-color);
     cursor: pointer;
   }
-
-  .btn-reset-form {
-    background-color: var(--btn-2bg-color);
-    border: var(--btn-border-color);
-    padding: 7px 14px 7px 14px;
-    border-radius: var(--btn-border-radius);
-    font-size: var(--btn-font-size);
-    color: var(--secondary-text-color);
-    font-size: var(--btn-font-size);
-    cursor: pointer;
-  }
 `;
 
 function CreateCustomerGroupModal({
@@ -169,7 +158,7 @@ function CreateCustomerGroupModal({
     >
       <div className="modal-card">
         <div className="top-label">
-          <h2>Criar customer group</h2>
+          <h2>Criar grupo de cliente</h2>
           <AiOutlineCloseCircle
             style={{ color: "#171717" }}
             className="close-icon"
@@ -209,7 +198,7 @@ function CreateCustomerGroupModal({
               </div>
               <div className="form-group"></div>
               <div className="buttons">
-                <button onClick={formik.handleReset} className="btn-reset-form">
+                <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
                 <button
@@ -217,7 +206,7 @@ function CreateCustomerGroupModal({
                   type="submit"
                   className="blue-btn"
                 >
-                  Criar usuário
+                  Criar grupo de cliente
                 </button>
               </div>
             </div>

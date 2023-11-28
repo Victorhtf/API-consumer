@@ -94,17 +94,6 @@ const ModalFade = styled.div`
     color: var(--primary-text-color);
     cursor: pointer;
   }
-
-  .btn-reset-form {
-    background-color: var(--btn-2bg-color);
-    border: var(--btn-border-color);
-    padding: 7px 14px 7px 14px;
-    border-radius: var(--btn-border-radius);
-    font-size: var(--btn-font-size);
-    color: var(--secondary-text-color);
-    font-size: var(--btn-font-size);
-    cursor: pointer;
-  }
 `;
 
 function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
@@ -169,6 +158,16 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
       formik.resetForm();
     },
   });
+
+  const item_height = 48;
+  const item_padding_top = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: item_height * 4.5 + item_padding_top,
+      },
+    },
+  };
 
   if (!openCreateModal) return null;
   return (
@@ -235,9 +234,9 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
                   <FormControl size="small" fullWidth>
                     <InputLabel id="roles">Papéis</InputLabel>
                     <Select
-                      maxMenuHeight="200"
                       multiple
                       fullWidth
+                      MenuProps={MenuProps}
                       id="roles"
                       name="roles"
                       label="roles"
@@ -254,7 +253,7 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
                 </div>
               </div>
               <div className="buttons">
-                <button onClick={formik.handleReset} className="btn-reset-form">
+                <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
                 <button

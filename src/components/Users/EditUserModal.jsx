@@ -10,7 +10,7 @@ import styled from "styled-components";
 import "../../Globals.css";
 import { useFormik } from "formik";
 import axios from "axios";
-
+import "../../Globals.css";
 import { routes } from "../../env";
 
 import { toast } from "react-toastify";
@@ -95,7 +95,7 @@ const ModalFade = styled.div`
     cursor: pointer;
   }
 
-  .btn-reset-form {
+  .cancel-btn {
     background-color: var(--btn-2bg-color);
     border: var(--btn-border-color);
     padding: 7px 14px 7px 14px;
@@ -176,13 +176,23 @@ function EditUserModal({
       username: rowState.username,
       password: "",
       email: rowState.email,
-      roles: [],
+      roles: rowState.roles.map((item) => item.name),
     },
     onSubmit: handleEdit,
     resetForm: () => {
       formik.resetForm();
     },
   });
+
+  const item_height = 48;
+  const item_padding_top = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: item_height * 4.5 + item_padding_top,
+      },
+    },
+  };
 
   if (!openEditModal) return null;
   return (
@@ -221,18 +231,6 @@ function EditUserModal({
                     onChange={formik.handleChange}
                   />
                 </div>
-                {/* <div className="form-group">
-                  <TextField
-                    fullWidth
-                    size="small"
-                    id="password"
-                    label="Senha"
-                    variant="outlined"
-                    name="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                  />
-                </div> */}
                 <div className="form-group">
                   <TextField
                     fullWidth
@@ -250,12 +248,14 @@ function EditUserModal({
                     <InputLabel id="roles">Papéis</InputLabel>
                     <Select
                       multiple
+                      MenuProps={MenuProps}
                       id="roles"
                       name="roles"
                       label="roles"
                       value={formik.values.roles}
                       onChange={formik.handleChange}
                     >
+                      {console.log(rowState.roles)}
                       {rolesList.map((item, index) => (
                         <MenuItem key={index} value={item}>
                           {item}
@@ -266,7 +266,7 @@ function EditUserModal({
                 </div>
               </div>
               <div className="buttons">
-                <button onClick={formik.handleReset} className="btn-reset-form">
+                <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
                 <button

@@ -27,14 +27,14 @@ function CustomerPage() {
       <BaseLayout>
         <Box>
           <div className="top-label">
-            <h1> Listar customers </h1>
+            <h1> Listar clientes </h1>
             <button
               className="blue-btn"
               onClick={() => {
                 setOpenCreateModal(true);
               }}
             >
-              Adicionar customer
+              Adicionar cliente
             </button>
           </div>
           <Index

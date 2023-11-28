@@ -94,17 +94,6 @@ const ModalFade = styled.div`
     color: var(--primary-text-color);
     cursor: pointer;
   }
-
-  .btn-reset-form {
-    background-color: var(--btn-2bg-color);
-    border: var(--btn-border-color);
-    padding: 7px 14px 7px 14px;
-    border-radius: var(--btn-border-radius);
-    font-size: var(--btn-font-size);
-    color: var(--secondary-text-color);
-    font-size: var(--btn-font-size);
-    cursor: pointer;
-  }
 `;
 
 function EditCustomerModal({
@@ -125,10 +114,6 @@ function EditCustomerModal({
     "CALENDAR_EVENTS_DETAILS_READER",
     "CALENDAR_EVENTS_MANAGER",
   ];
-  // const { id, username, email, roles } = rowState;
-  // if (roles !== undefined) {
-  //   const selectedRoles = roles.map((role) => role.name);
-  // }
 
   //Set up the submit function
   async function handleEdit(values, { setSubmitting, resetForm }) {
@@ -221,21 +206,8 @@ function EditCustomerModal({
                     onChange={formik.handleChange}
                   />
                 </div>
-                {/* <div className="form-group">
-                  <TextField
-                    fullWidth
-                    size="small"
-                    id="password"
-                    label="Senha"
-                    variant="outlined"
-                    name="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                  />
-                </div> */}
                 <div className="form-group">
                   <TextField
-                    fullWidth
                     size="small"
                     id="email"
                     label="E-mail"
@@ -266,7 +238,7 @@ function EditCustomerModal({
                 </div>
               </div>
               <div className="buttons">
-                <button onClick={formik.handleReset} className="btn-reset-form">
+                <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
                 <button

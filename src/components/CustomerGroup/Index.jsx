@@ -84,12 +84,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     setOpenDeleteModal(true);
   }
 
-  // Handle createModal
-  function handleCreateModal() {
-    setOpenCreateModal(true);
-  }
-
-  //Set the table props
+  //Set the column props
   const columns = [
     {
       title: "CG ID",
@@ -115,7 +110,15 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     {
       title: "Nome fantasia",
       dataIndex: "fantasy_name",
-      filteredValue: null,
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record) => {
+        return String(record.fantasy_name)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.fantasy_name.localeCompare(b.fantasy_name);
+      },
     },
     {
       title: "Data da criação",
@@ -192,9 +195,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
 
   return (
     <>
-      {openCreateModal &&
-      customerGroups != undefined &&
-      customerGroups.length > 0 ? (
+      {openCreateModal ? (
         <CreateCustomerGroupModal
           fetchCustomerGroup={fetchCustomerGroup}
           openCreateModal={openCreateModal}

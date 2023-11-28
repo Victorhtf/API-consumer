@@ -1,9 +1,12 @@
+import React from "react";
 import {
   MenuItem,
   Select,
   FormControl,
   InputLabel,
+  CircularProgress,
   TextField,
+  Autocomplete,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
@@ -17,6 +20,7 @@ import { routes } from "../../env";
 import { toast } from "react-toastify";
 
 import { getToken } from "../../auth/authentications";
+import { AutoComplete } from "antd";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -95,17 +99,6 @@ const ModalFade = styled.div`
     color: var(--primary-text-color);
     cursor: pointer;
   }
-
-  .btn-reset-form {
-    background-color: var(--btn-2bg-color);
-    border: var(--btn-border-color);
-    padding: 7px 14px 7px 14px;
-    border-radius: var(--btn-border-radius);
-    font-size: var(--btn-font-size);
-    color: var(--secondary-text-color);
-    font-size: var(--btn-font-size);
-    cursor: pointer;
-  }
 `;
 
 function CreateAmbientModal({
@@ -114,10 +107,39 @@ function CreateAmbientModal({
   fetchAmbients,
 }) {
   const [customerList, setCustomerList] = useState([]);
+  const [citiesList, setCitiesList] = useState([]);
+  const [citiesListAux, setCitiesListAux] = useState([]);
+  const [lastEntry, setLastEntry] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [filteredCities, setFilteredCities] = useState([]);
+  const arrayTeste = [
+    "Ribeirão Preto",
+    "Cravinhos",
+    "Sertãozinho",
+    "Franca",
+    "Batatais",
+    "Brodowski",
+    "Jaboticabal",
+    "Serrana",
+    "Santa Rosa de Viterbo",
+    "Pontal",
+    "Dumont",
+    "Pitangueiras",
+    "Monte Alto",
+    "Cajuru",
+    "Cássia dos Coqueiros",
+    "Santo Antônio da Alegria",
+    "Luís Antônio",
+    "Altinópolis",
+    "Santa Cruz da Esperança",
+    "Santa Rita do Passa Quatro",
+    // Adicione mais cidades conforme necessário
+  ];
 
   //Handle customerList
-  async function handleAmbientList() {
+  async function handleCustomerList() {
     const customerRoutes = routes.customer;
+
     try {
       const { data: response } = await axios.get(customerRoutes.listAll, {
         headers: {
@@ -128,8 +150,34 @@ function CreateAmbientModal({
       const customerData = response;
 
       setCustomerList(customerData);
+    } catch (error) {
+      setCustomerList([]);
+      console.log(error);
+    }
+  }
 
-      toast.success("Base de dados atualizada com sucesso!");
+  //Handle cityList
+  async function handleCityList() {
+    const ambientRoutes = routes.ambient;
+
+    const body = {
+      search: lastEntry,
+    };
+    try {
+      const { data: response } = await axios.post(
+        ambientRoutes.listCities,
+        body,
+        {
+          headers: {
+            auth: getToken(),
+          },
+        }
+      );
+
+      const cityData = response;
+
+      setFilteredCities(cityData);
+      console.log(filteredCities);
     } catch (error) {
       setCustomerList([]);
       console.log(error);
@@ -138,13 +186,22 @@ function CreateAmbientModal({
 
   useEffect(() => {
     if (openCreateModal) {
-      handleAmbientList();
+      handleCustomerList();
     }
   }, [openCreateModal]);
 
   useEffect(() => {
-    console.log(customerList);
-  }, [customerList]);
+    const delayDebounceFunction = setTimeout(() => {
+      setCitiesList(citiesListAux.length === 0 ? undefined : citiesListAux);
+    }, 1000);
+    return () => clearTimeout(delayDebounceFunction);
+  }, [citiesListAux]);
+
+  useEffect(() => {
+    if (citiesList !== undefined) {
+      handleCityList(lastEntry);
+    }
+  }, [citiesList]);
 
   //Set up the submit function
   async function handleSubmit(values, props) {
@@ -223,7 +280,7 @@ function CreateAmbientModal({
     >
       <div className="modal-card">
         <div className="top-label">
-          <h2>Criar Ambient</h2>
+          <h2>Criar ambiente</h2>
           <AiOutlineCloseCircle
             style={{ color: "#171717" }}
             className="close-icon"
@@ -267,13 +324,13 @@ function CreateAmbientModal({
                     <Select
                       maxMenuHeight="200"
                       fullWidth
+                      required
                       id="customer_id"
                       name="customer_id"
                       label="customer_id"
                       value={formik.values.id}
                       onChange={formik.handleChange}
                     >
-                      {console.log(customerList)}
                       {customerList.map((customerList, index) => (
                         <MenuItem key={index} value={customerList.id}>
                           {customerList.display_name}
@@ -319,20 +376,63 @@ function CreateAmbientModal({
                   />
                 </div>
                 <div className="form-group">
-                  <TextField
-                    maxMenuHeight="200"
-                    size="small"
+                  <Autocomplete
+                    filterOptions={(x) => x}
                     fullWidth
+                    options={filteredCities.map((city) =>
+                      city.city
+                        ? filteredCities !== undefined &&
+                          filteredCities.length > 0
+                        : []
+                    )}
+                    id="city_id"
+                    loading={loading}
+                    renderInput={(params) => {
+                      if (params.inputProps.value !== null) {
+                        setCitiesListAux(params.inputProps.value);
+                        setLastEntry(params.inputProps.value);
+                      }
+
+                      return (
+                        <TextField
+                          {...params}
+                          label="Cidade"
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <React.Fragment>
+                                {loading ? (
+                                  <CircularProgress color="inherit" size={15} />
+                                ) : null}
+                                {params.InputProps.endAdornment}
+                              </React.Fragment>
+                            ),
+                          }}
+                        />
+                      );
+                    }}
+                  />
+                </div>
+
+                {/* <div className="form-group">
+                  <Select
+                    // maxMenuHeight="200"
+                    size="small"
+                    // fullWidth
                     id="city_id"
                     label="Cidade"
                     name="city_id"
                     value={formik.values.city_id}
-                    onChange={formik.handleChange}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+                      setLastEntry(e.target.value);
+                      setCitiesListAux(e.target.value);
+                    }}
                   />
-                </div>
+                </div> */}
               </div>
               <div className="buttons">
-                <button onClick={formik.handleReset} className="btn-reset-form">
+                <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
                 <button

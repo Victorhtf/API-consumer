@@ -34,7 +34,7 @@ function AmbientPage() {
                 setOpenCreateModal(true);
               }}
             >
-              Adicionar ambient
+              Adicionar ambiente
             </button>
           </div>
           <Index

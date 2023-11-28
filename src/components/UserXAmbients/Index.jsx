@@ -7,14 +7,18 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Components
-import DeleteAmbientModal from "./DeleteAmbientModal";
+import UnlinkAmbientModal from "./UnlinkAmbientModal.jsx";
 import LinkUserXAmbientsModal from "./LinkUserXAmbientsModal";
 
 //User configs
 import { routes } from "../../env";
 import { getToken } from "../../auth/authentications";
 
-function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
+function Index({
+  openLinkUserXAmbientsModal,
+  setOpenLinkUserXAmbientsModal,
+  fetchAmbients,
+}) {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
@@ -32,9 +36,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
   const [rowState, setRowState] = useState(null);
   const [tableState, setTableState] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [openModalDeleteAmbient, setOpenModalDeleteAmbient] = useState(false);
-  const [openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal] =
-    useState(false);
+  const [openUnlinkModal, setOpenUnlinkModal] = useState(false);
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [ambientsList, setAmbientsList] = useState([]);
@@ -45,6 +47,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
   // Get the UserList
   async function handleUserList() {
     const usersRoutes = routes.user;
+
     try {
       const { data: response } = await axios.get(usersRoutes.listAll, {
         headers: {
@@ -90,16 +93,20 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
     handleAmbientsList();
     handleUserList();
     fetchUserXAmbient();
+    console.log(userxambient);
   }, []);
 
   //Load Ambient
   async function fetchUserXAmbient() {
     try {
-      const { data: response } = await axios.get(userXAmbientRoutes.listAll, {
-        headers: {
-          auth: getToken(),
-        },
-      });
+      const { data: response } = await axios.get(
+        userXAmbientRoutes.listAllArray,
+        {
+          headers: {
+            auth: getToken(),
+          },
+        }
+      );
 
       const userXAmbient = response;
 
@@ -120,91 +127,42 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
     }
   }
 
-  //Handle LinkUserXAmbientModal
-  function handleLinkUserXAmbientModal(row) {
-    setOpenLinkUserXAmbientsModal(true);
-    setRowState(row);
-  }
-
-  // //Handle EditAmbient
-  // function handleEditModal(row) {
-  //   setOpenEditModal(true);
-  //   setRowState(row);
-  // }
-
   // Handle DeleteAmbient
-  async function handleDeleteModal(row) {
+  async function handleUnlinkModal(row) {
     setRowState(row);
-    setOpenDeleteModal(true);
+    setOpenUnlinkModal(true);
   }
 
-  // Handle CreateAmbient
-  function handleCreateModal() {
-    setOpenCreateModal(true);
-  }
-
-  //Set the table props
+  //Set the column props
   const columns = [
     {
-      title: "ID de usuário",
-      key: "user_id",
-      dataIndex: "user_id",
-      filteredValue: null,
-    },
-    {
       title: "Nome de usuário",
       key: "username",
       dataIndex: "username",
-      //   filters: userxambient.map((item) => ({
-      //     text: String(item.username),
-      //     value: String(item.username),
-      //   })),
-      //   onFilter: (value, record) => {
-      //     return record.userxambient.includes(value);
-      //   },
-      // },
-    },
-    {
-      title: "ID de ambiente",
-      key: "ambient_id",
-      dataIndex: "ambient_id",
-      filteredValue: null,
-    },
-    {
-      title: "Nome de usuário",
-      key: "username",
-      dataIndex: "username",
-      filteredValue: null,
-      render: (userxambient) => {
-        <>
-          {userxambient.map((ambient) => (
-            <Tag color="red" key={ambient}>
-              {ambient.ambient_name}
-            </Tag>
-          ))}
-        </>;
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record) => {
+        return String(record.username)
+          .toLowerCase()
+          .includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.username.localeCompare(b.username);
       },
     },
-    // filters: rolesList.map((item) => ({
-    //   text: String(item),
-    //   value: String(item),
-    // })),
-    // onFilter: (value, record) => {
-    //   return record.roles.includes(value);
-    // },
-    // },
-    // {
-    //   title: "Nome de ambiente",
-    //   key: "ambient_name",
-    //   dataIndex: "ambient_name",
-    //   filters: userxambient.map((item) => ({
-    //     text: String(item.display_name),
-    //     value: String(item.display_name),
-    //   })),
-    //   onFilter: (value, record) => {
-    //     return record.username.includes(value.user_name);
-    //   },
-    // },
+    {
+      title: "Ambiente vinculado",
+      key: "ambients",
+      dataIndex: "ambients",
+      render: (ambients) => (
+        <>
+          {ambients.map((ambient) => (
+            <Tag color="red" key={ambient.id}>
+              {ambient.display_name}
+            </Tag>
+          ))}
+        </>
+      ),
+    },
     {
       title: "Ações",
       key: "ações",
@@ -213,19 +171,10 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         <Space size="middle">
           <a
             onClick={() => {
-              handleDeleteModal(row);
+              handleUnlinkModal(row);
             }}
           >
-            Delete
-          </a>
-          <a>
-            <Space
-              onClick={() => {
-                handleLinkUserXAmbientModal(row);
-              }}
-            >
-              Editar
-            </Space>
+            Desvincular
           </a>
         </Space>
       ),
@@ -249,35 +198,22 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
 
   return (
     <>
-      {/* {setOpenModalEditAmbient &&
-      userxambient != undefined &&
-      userxambient.length > 0 ? (
-        <CreateAmbientModal
-          fetchUserXAmbient={fetchUserXAmbient}
-          openCreateModal={openCreateModal}
-          setOpenCreateModal={setOpenCreateModal}
-        />
-      ) : null} */}
-      {openLinkUserXAmbientsModal &&
-      userxambient != undefined &&
-      userxambient.length > 0 ? (
+      {openLinkUserXAmbientsModal ? (
         <LinkUserXAmbientsModal
           fetchUserXAmbient={fetchUserXAmbient}
           tableState={userxambient}
           openLinkUserXAmbientsModal={openLinkUserXAmbientsModal}
           setOpenLinkUserXAmbientsModal={setOpenLinkUserXAmbientsModal}
-          usersList={usersList}
-          ambientsList={ambientsList}
         />
       ) : null}
-      {openDeleteModal &&
+      {openUnlinkModal &&
       userxambient != undefined &&
       userxambient.length > 0 ? (
-        <DeleteAmbientModal
+        <UnlinkAmbientModal
           fetchUserXAmbient={fetchUserXAmbient}
           row={rowState}
-          openDeleteModal={openDeleteModal}
-          setOpenDeleteModal={setOpenDeleteModal}
+          openUnlinkModal={openUnlinkModal}
+          setOpenUnlinkModal={setOpenUnlinkModal}
         />
       ) : null}
       <Form
@@ -288,7 +224,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         }}
       ></Form>
       <Input.Search
-        placeholder="Ambient ID"
+        placeholder="Username"
         style={{
           width: "20%",
           display: "flex",

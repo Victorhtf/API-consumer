@@ -16,7 +16,7 @@ const Aside = styled.div`
   height: 100vh;
   padding: 1rem;
   position: sticky;
-  font-size: 100000000000002px;
+  font-size: 10px;
 
   .trademark {
     display: flex;
@@ -44,13 +44,14 @@ const Aside = styled.div`
     margin-bottom: 10px;
     display: flex;
     align-items: center;
-    padding-left: 20px;
+    padding-left: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
     gap: 20px;
 
     .cathegories {
-      font-size: 11px;
+      font-size: 13px;
+      letter-spacing: 0.05rem;
     }
 
     &:hover {
@@ -80,8 +81,7 @@ function Sidebar() {
       name: "Grupos de clientes",
       icon: BsFillBuildingsFill,
     },
-    // { route: "permissions", name: "Permissões", icon: BsFillShieldLockFill },
-    // { route: "cameras", name: "Câmeras", icon: BiSolidCameraHome },
+
     { route: "customer", name: "Clientes", icon: RiCustomerService2Fill },
     { route: "ambients", name: "Ambientes", icon: VscServerEnvironment },
     {
@@ -89,12 +89,6 @@ function Sidebar() {
       name: "User X Ambientes",
       icon: BsFillShieldLockFill,
     },
-    // {
-    //   route: "business_units",
-    //   name: "Unidades de negócio",
-    //   icon: BsFillBuildingsFill,
-    // },
-    // { route: "test", name: "Experimentar", icon: BiTestTube },
   ];
 
   const navigate = useNavigate();

@@ -35,10 +35,12 @@ export const routes = {
   },
   ambient: {
     listAll: baseUrl + "/admin/ambient", //GET
+    listCities: baseUrl + "/client/cities/listCities", //GET
     create: baseUrl + "/admin/ambient", //POST
     listById: baseUrl + "/admin/ambient/", //GET
   },
   userxambient: {
     listAll: baseUrl + "/admin/userXAmbient", //GET
+    listAllArray: baseUrl + "/admin/userXAmbient/array", //GET
   },
 };

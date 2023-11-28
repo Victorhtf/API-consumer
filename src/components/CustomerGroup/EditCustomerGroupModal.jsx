@@ -94,17 +94,6 @@ const ModalFade = styled.div`
     color: var(--primary-text-color);
     cursor: pointer;
   }
-
-  .btn-reset-form {
-    background-color: var(--btn-2bg-color);
-    border: var(--btn-border-color);
-    padding: 7px 14px 7px 14px;
-    border-radius: var(--btn-border-radius);
-    font-size: var(--btn-font-size);
-    color: var(--secondary-text-color);
-    font-size: var(--btn-font-size);
-    cursor: pointer;
-  }
 `;
 
 function EditCustomerGroupModal({
@@ -125,10 +114,6 @@ function EditCustomerGroupModal({
     "CALENDAR_EVENTS_DETAILS_READER",
     "CALENDAR_EVENTS_MANAGER",
   ];
-  // const { id, username, email, roles } = rowState;
-  // if (roles !== undefined) {
-  //   const selectedRoles = roles.map((role) => role.name);
-  // }
 
   //Set up the submit function
   async function handleEdit(values, { setSubmitting, resetForm }) {
@@ -142,7 +127,6 @@ function EditCustomerGroupModal({
 
       const body = {
         username: username,
-        // password: password, //No momento o backend não consegue alterar a senha.
         email: email,
         role_names: roles,
       };
@@ -196,7 +180,7 @@ function EditCustomerGroupModal({
     >
       <div className="modal-card">
         <div className="top-label">
-          <h2>Editar usuário</h2>
+          <h2>Editar grupo de cliente</h2>
           <AiOutlineCloseCircle
             style={{ color: "#171717" }}
             className="close-icon"
@@ -213,60 +197,29 @@ function EditCustomerGroupModal({
                   <TextField
                     fullWidth
                     size="small"
-                    id="username"
-                    label="Nome de usuário"
+                    id="display_name"
+                    label="Nome"
                     variant="outlined"
-                    name="username"
-                    value={formik.values.username}
-                    onChange={formik.handleChange}
-                  />
-                </div>
-                {/* <div className="form-group">
-                  <TextField
-                    fullWidth
-                    size="small"
-                    id="password"
-                    label="Senha"
-                    variant="outlined"
-                    name="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                  />
-                </div> */}
-                <div className="form-group">
-                  <TextField
-                    fullWidth
-                    size="small"
-                    id="email"
-                    label="E-mail"
-                    variant="outlined"
-                    name="email"
-                    value={formik.values.email}
+                    name="display_name"
+                    value={formik.values.display_name}
                     onChange={formik.handleChange}
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="small" fullWidth>
-                    <InputLabel id="roles">Papéis</InputLabel>
-                    <Select
-                      multiple
-                      id="roles"
-                      name="roles"
-                      label="roles"
-                      value={formik.values.roles}
-                      onChange={formik.handleChange}
-                    >
-                      {rolesList.map((item, index) => (
-                        <MenuItem key={index} value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    id="fantasy_name"
+                    label="Nome fantasia"
+                    variant="outlined"
+                    name="fantasy_name"
+                    value={formik.values.fantasy_name}
+                    onChange={formik.handleChange}
+                  />
                 </div>
               </div>
               <div className="buttons">
-                <button onClick={formik.handleReset} className="btn-reset-form">
+                <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
                 <button
@@ -274,7 +227,7 @@ function EditCustomerGroupModal({
                   type="submit"
                   className="btn-submit-form"
                 >
-                  Editar usuário
+                  Editar grupo de cliente
                 </button>
               </div>
             </div>

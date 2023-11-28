@@ -16,7 +16,7 @@ import { routes } from "../../env";
 import { toast } from "react-toastify";
 
 import { getToken } from "../../auth/authentications";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -32,7 +32,7 @@ const ModalFade = styled.div`
   transition: 1s;
 
   .modal-card {
-    width: 400px;
+    width: auto;
     height: auto;
     border-radius: 7px;
     background-color: white;
@@ -95,99 +95,121 @@ const ModalFade = styled.div`
     color: var(--primary-text-color);
     cursor: pointer;
   }
-
-  .btn-reset-form {
-    background-color: var(--btn-2bg-color);
-    border: var(--btn-border-color);
-    padding: 7px 14px 7px 14px;
-    border-radius: var(--btn-border-radius);
-    font-size: var(--btn-font-size);
-    color: var(--secondary-text-color);
-    font-size: var(--btn-font-size);
-    cursor: pointer;
-  }
 `;
 
 function LinkUserXAmbientsModal({
+  row,
   openLinkUserXAmbientsModal,
   setOpenLinkUserXAmbientsModal,
   fetchUserXAmbient,
-  // tableState,
-  usersList,
-  ambientsList,
 }) {
-  const tableState = [
-    {
-      user_id: 1,
-      username: "admin",
-      ambient_id: 1,
-      ambient_name: "TESTE AMBIENTE - EXTERNAL ID",
-    },
-    {
-      user_id: 12,
-      username: "Americanas - ADM",
-      ambient_id: null,
-      ambient_name: null,
-    },
-    {
-      user_id: 13,
-      username: "Bild - ADM",
-      ambient_id: null,
-      ambient_name: null,
-    },
-    {
-      user_id: 14,
-      username: "Somativa_admin",
-      ambient_id: null,
-      ambient_name: null,
-    },
-  ];
+  const [usersList, setUsersList] = useState([]);
+  const [ambientsList, setAmbientsList] = useState([]);
+  const [data, setData] = useState(false);
+
+  // Get the UserList
+  async function handleUserList() {
+    const usersRoutes = routes.user;
+    try {
+      const { data: response } = await axios.get(usersRoutes.listAll, {
+        headers: {
+          auth: getToken(),
+        },
+      });
+
+      const usersData = response;
+
+      setUsersList(usersData);
+    } catch (error) {
+      const message = error.response.data.detail
+        ? error.response.data.detail
+        : "Algo deu errado.";
+      console.log(message);
+    }
+  }
+
+  //Handle data
+  function handleData() {
+    handleAmbientsList();
+    handleUserList();
+  }
+
+  //Get the AmbientsList
+  async function handleAmbientsList() {
+    const ambientRoutes = routes.ambient;
+    try {
+      const { data: response } = await axios.get(ambientRoutes.listAll, {
+        headers: {
+          auth: getToken(),
+        },
+      });
+
+      const ambientData = response;
+
+      setAmbientsList(ambientData);
+    } catch (error) {
+      const message = error.response.data.detail
+        ? error.response.data.detail
+        : "Algo deu errado.";
+      console.log(message);
+    }
+  }
+
+  useEffect(() => {
+    setData(true);
+    if (!data) {
+      handleData();
+    }
+  }, [data]);
+
+  useEffect(() => {
+    console.log(ambientsList);
+    console.log(usersList);
+  }, [ambientsList || usersList]);
+
   //Set up the submit function
   async function handleSubmitLinkUserXAmbient(
     values,
     { setSubmitting, resetForm }
   ) {
-    const linkUserXAmbientRoutes = routes.user;
-    const { user_id, ambient_id } = values;
-    console.log("ok");
-    // try {
-    //   setSubmitting(true);
+    try {
+      setSubmitting(true);
+      const token = getToken();
 
-    //   const token = getToken();
+      const userRoutes = routes.user;
+      const { ambient_id, user_id } = values;
 
-    //   const body = {
-    //     user_id: user_id,
-    //     ambient_id: ambient_id,
-    //   };
+      const body = {
+        ambient_ids: ambient_id,
+        user_id: user_id,
+      };
 
-    //   const response = await axios.patch(
-    //     linkUserXAmbientRoutes.linkAmbient,
-    //     body,
-    //     {
-    //       headers: {
-    //         auth: token,
-    //       },
-    //     }
-    //   );
+      console.log(body);
 
-    //   setSubmitting(false);
+      axios.post(userRoutes.linkAmbient, body, {
+        headers: {
+          auth: token,
+        },
+      });
 
-    //   setOpenLinkUserXAmbientsModal(false);
+      setSubmitting(false);
 
-    //   toast.success(`Vinculo atualizado com sucesso!`);
+      setOpenLinkUserXAmbientsModal(false);
 
-    //   resetForm();
+      toast.success(`Vinculo atualizado com sucesso!`);
 
-    //   fetchUserXAmbient();
-    // } catch (error) {
-    //   toast.error("Ops, algo deu errado. Por favor, tente novamente");
-    // }
+      resetForm();
+
+      fetchUserXAmbient();
+    } catch (error) {
+      toast.error("Ops, algo deu errado. Por favor, tente novamente");
+    }
   }
 
   const formik = useFormik({
     initialValues: {
-      user_id: [],
-      ambient_id: "rowState.ambient_id",
+      user_id: undefined,
+      ambient_id: [],
     },
     onSubmit: handleSubmitLinkUserXAmbient,
     resetForm: () => {
@@ -221,27 +243,51 @@ function LinkUserXAmbientsModal({
             <div className="content">
               <div className="form">
                 <div className="form-group">
-                  <FormControl size="small" fullWidth>
-                    <InputLabel id="user_id">User ID</InputLabel>
+                  <FormControl>
+                    <InputLabel id="user_id">Usuário</InputLabel>
                     <Select
-                      multiple
+                      sx={{ display: "flex", width: "200px" }}
+                      size="small"
                       id="user_id"
                       name="user_id"
-                      label="user_id"
+                      variant="outlined"
+                      label="Usuário"
                       value={formik.values.user_id}
                       onChange={formik.handleChange}
                     >
-                      {tableState.map((content, content_index) => (
-                        <MenuItem key={content_index} value={content.user_id}>
-                          {content.username}
-                        </MenuItem>
-                      ))}
+                      {usersList.map((users) => {
+                        return (
+                          <MenuItem value={users.id}>{users.username}</MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                  <FormControl sx={{ m: 1, width: 300 }}>
+                    <InputLabel id="ambient">Ambiente</InputLabel>
+                    <Select
+                      multiple
+                      sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                      size="small"
+                      id="ambient_id"
+                      variant="outlined"
+                      name="ambient_id"
+                      label="Ambiente"
+                      value={formik.values.ambient_id}
+                      onChange={formik.handleChange}
+                    >
+                      {ambientsList.map((ambient) => {
+                        return (
+                          <MenuItem value={ambient.id}>
+                            {ambient.display_name}
+                          </MenuItem>
+                        );
+                      })}
                     </Select>
                   </FormControl>
                 </div>
               </div>
               <div className="buttons">
-                <button onClick={formik.handleReset} className="btn-reset-form">
+                <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
                 <button

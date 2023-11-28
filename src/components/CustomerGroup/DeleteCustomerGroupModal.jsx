@@ -87,7 +87,6 @@ const DeleteCustomerGroupModal = (props) => {
 
   // Delete user from database
   async function handleDelete(row) {
-    // setOpenDeleteModal(true);
     const token = getToken();
 
     try {

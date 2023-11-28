@@ -57,6 +57,7 @@ const Box = styled.div`
 
 function Header() {
   const [openSettingsModal, setOpenSettingsModal] = useState(null);
+  const username = sessionStorage.getItem("name").replace(/["']/g, "");
 
   return (
     <Box>
@@ -67,7 +68,7 @@ function Header() {
       <div className="logout">
         <div className="text">
           <p>Seja bem vindo</p>
-          <p className="name">Victor</p>
+          <p className="name">{username}</p>
         </div>
         <div
           onClick={() => {
