@@ -57,8 +57,6 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       setCustomer(customerData);
 
       setLoading(false);
-
-      toast.success("Base de dados atualizada com sucesso!");
     } catch (error) {
       setLoading(false);
       const message = error.response.data.detail
@@ -71,24 +69,20 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     }
   }
 
-  //Handle EditCustomer
   function handleEditModal(row) {
     setOpenEditModal(true);
     setRowState(row);
   }
 
-  // Handle DeleteCustomer
   async function handleDeleteModal(row) {
     setRowState(row);
     setOpenDeleteModal(true);
   }
 
-  // Handle CreateCustomer
   function handleCreateModal() {
     setOpenCreateModal(true);
   }
 
-  //Set the column props
   const columns = [
     {
       title: "Customer ID",
@@ -132,7 +126,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       render: (value) => {
         return (
           <>
-            <Tag color="red" key={value}>
+            <Tag color="blue" key={value}>
               {value.display_name.toUpperCase()}
             </Tag>
           </>
@@ -249,7 +243,8 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         }}
         columns={tableColumns}
         dataSource={customer.length > 0 ? customer : []}
-        style={{ width: "100%" }}
+        style={{ width: "100%", height: "100%" }}
+        scroll={{ y: 395 }}
       />
     </>
   );

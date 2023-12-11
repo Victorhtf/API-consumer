@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { routes } from "../../env";
 import { getToken } from "../../auth/authentications";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { routes } from "../../env";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -85,12 +85,11 @@ const DeleteCustomerGroupModal = (props) => {
 
   const customerGroupsRoutes = routes.customerGroup;
 
-  // Delete user from database
   async function handleDelete(row) {
     const token = getToken();
 
     try {
-      await axios.delete(`${customerGroupsRoutes.delete}/${row.id}`, {
+      const res = await axios.delete(customerGroupsRoutes.deleteById + row.id, {
         headers: {
           auth: token,
         },
@@ -104,7 +103,7 @@ const DeleteCustomerGroupModal = (props) => {
 
       fetchCustomerGroup();
     } catch (error) {
-      toast.error("Esta rota não foi encontrada.");
+      toast.error("Ops, ocorreu algum erro. Tente novamente.");
     }
   }
 

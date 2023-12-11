@@ -80,35 +80,26 @@ const ModalFade = styled.div`
 `;
 
 const UnlinkAmbientModal = (props) => {
-  const { openUnlinkModal, setOpenUnlinkModal, row, fetchAmbients } = props;
+  const { openUnlinkModal, setOpenUnlinkModal, row, fetchUserXAmbient } = props;
 
-  // Unlink user x ambient
   async function handleUnlink(row) {
     const usersRoutes = routes.user;
 
     const body = {
-      user_id: row.user_id,
+      user_id: row.id,
     };
-    console.log(row, body);
 
     try {
-      const { data: response } = await axios.patch(
-        usersRoutes.unlinkAmbient,
-        body,
-        {
-          headers: {
-            auth: getToken(),
-          },
-        }
-      );
+      await axios.post(usersRoutes.unlinkAmbient, body, {
+        headers: {
+          auth: getToken(),
+        },
+      });
+      fetchUserXAmbient();
 
-      console.log("ok");
-      fetchAmbients();
+      setOpenUnlinkModal(false);
     } catch (error) {
-      const message = error.response.data.detail
-        ? error.response.data.detail
-        : "Algo deu errado.";
-      console.log(message);
+      toast.error("Ops, algo deu errado. Tente novamente");
     }
   }
 

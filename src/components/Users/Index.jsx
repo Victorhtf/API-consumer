@@ -72,8 +72,6 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       setUsers(usersData);
 
       setLoading(false);
-
-      toast.success("Base de dados atualizada com sucesso!");
     } catch (error) {
       setLoading(false);
       const message = error.response.data.detail
@@ -93,6 +91,18 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   async function handleDeleteModal(row) {
     setRowState(row);
     setOpenDeleteModal(true);
+  }
+
+  const scroll = {};
+  if (yScroll) {
+    scroll.y = 240;
+  }
+  if (xScroll) {
+    scroll.x = "100vw";
+  }
+  if (xScroll === "fixed") {
+    tableColumns[0].fixed = true;
+    tableColumns[tableColumns.length - 1].fixed = "right";
   }
 
   //Set the column props
@@ -142,7 +152,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       render: (roles) => (
         <>
           {roles.map((role) => (
-            <Tag color="red" key={role}>
+            <Tag color="blue" key={role}>
               {role.name.toUpperCase()}
             </Tag>
           ))}
@@ -201,10 +211,10 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   const tableProps = {
     bordered,
     loading,
+    scroll,
     size: "extra-small",
     title: showTitle ? defaultTitle : undefined,
     showHeader,
-    scroll,
     tableLayout,
   };
 
@@ -259,7 +269,8 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         }}
         columns={tableColumns}
         dataSource={users.length > 0 ? users : []}
-        style={{ width: "100%" }}
+        style={{ width: "100%", height: "100%" }}
+        scroll={{ y: 395 }}
       />
     </>
   );

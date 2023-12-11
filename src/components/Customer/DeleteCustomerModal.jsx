@@ -80,28 +80,27 @@ const ModalFade = styled.div`
 `;
 
 const DeleteCustomerModal = (props) => {
-  const { openDeleteModal, setOpenDeleteModal, row, fetchUsers } = props;
-  const customerRoutes = routes.customer;
+  const { openDeleteModal, setOpenDeleteModal, row, fetchCustomers } = props;
 
-  // Delete user from database
   async function handleDelete(row) {
-    // setOpenDeleteModal(true);
+    const customerRoutes = routes.customer;
+
     const token = getToken();
 
     try {
-      await axios.delete(`${customerRoutes.delete}/${row.id}`, {
+      await axios.delete(customerRoutes.deleteById + row.id, {
         headers: {
           auth: token,
         },
       });
 
-      toast.success(`Usuário "${row.display_name}" deletado com sucesso`);
+      toast.success(`Cliente "${row.display_name}" deletado com sucesso`);
 
       setOpenDeleteModal(false);
 
-      fetchUsers();
+      fetchCustomers();
     } catch (error) {
-      toast.error("Esta rota não foi encontrada.");
+      toast.error("Ops, algo deu errado. Tente novamente.");
     }
   }
 
@@ -117,7 +116,7 @@ const DeleteCustomerModal = (props) => {
     >
       <div className="modal-card">
         <div className="top-label">
-          <h2>Deletar usuário</h2>
+          <h2>Deletar cliente</h2>
         </div>
         <div className="warn-text">
           Tem certeza que deseja deletar o cliente

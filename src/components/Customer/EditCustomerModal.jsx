@@ -17,6 +17,8 @@ import { toast } from "react-toastify";
 
 import { getToken } from "../../auth/authentications";
 
+import { useState, useEffect } from "react";
+
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
   position: absolute;
@@ -99,58 +101,71 @@ const ModalFade = styled.div`
 function EditCustomerModal({
   openEditModal,
   setOpenEditModal,
-  fetchUsers,
+  fetchCustomers,
   rowState,
 }) {
-  const rolesList = [
-    "SYS_ADMIN",
-    "ADMIN",
-    "PHYSICAL_WORLD_READER",
-    "PHYSICAL_WORLD_MANAGER",
-    "META_WORLD_READER",
-    "META_WORLD_MANAGER",
-    "PHYSICAL_NOTIFICATIONS_READER",
-    "PHYSICAL_NOTIFICATIONS_MANAGER",
-    "CALENDAR_EVENTS_DETAILS_READER",
-    "CALENDAR_EVENTS_MANAGER",
-  ];
+  const [groupList, setGroupList] = useState([]);
+
+  const array = ["Display name"];
+
+  useEffect(() => {
+    if (openEditModal) {
+      handleCustomerGroup();
+    }
+  }, [openEditModal]);
+
+  //Get the customer groups list
+  async function handleCustomerGroup() {
+    const customerGroupRoutes = routes.customerGroup;
+    try {
+      const { data: response } = await axios.get(customerGroupRoutes.listAll, {
+        headers: {
+          auth: getToken(),
+        },
+      });
+
+      const customerGroupData = response;
+
+      setGroupList(customerGroupData);
+    } catch (error) {
+      toast.error(
+        "Ops, algo deu errado. Recarregue a página e tente novamente."
+      );
+    }
+  }
 
   //Set up the submit function
   async function handleEdit(values, { setSubmitting, resetForm }) {
-    const { username, email, roles } = values;
+    const { display_name, fantasy_name, customer_group } = values;
+
     try {
       setSubmitting(true);
 
       const token = getToken();
 
-      const userRoutes = routes.user;
+      const customerRoutes = routes.customer;
 
       const body = {
-        username: username,
-        // password: password, //No momento o backend não consegue alterar a senha.
-        email: email,
-        role_names: roles,
+        display_name: display_name,
+        fantasy_name: fantasy_name,
+        customer_group: customer_group,
       };
 
-      const response = await axios.patch(
-        `${userRoutes.updateById}${rowState.id}`,
-        body,
-        {
-          headers: {
-            auth: token,
-          },
-        }
-      );
+      await axios.patch(customerRoutes.updateById + rowState.id, body, {
+        headers: {
+          auth: token,
+        },
+      });
 
       setSubmitting(false);
 
       setOpenEditModal(false);
 
-      toast.success(`Client '${values.display_name}' atualizado com sucesso!`);
+      toast.success(`Cliente '${values.display_name}' atualizado com sucesso!`);
 
       resetForm();
 
-      fetchUsers();
+      fetchCustomers();
     } catch (error) {
       toast.error("Ops, algo deu errado. Por favor, tente novamente");
     }
@@ -158,16 +173,17 @@ function EditCustomerModal({
 
   const formik = useFormik({
     initialValues: {
-      username: rowState.username,
-      password: "",
-      email: rowState.email,
-      roles: [],
+      display_name: rowState.display_name,
+      fantasy_name: rowState.fantasy_name,
+      customer_group: rowState.customer_group.id,
     },
     onSubmit: handleEdit,
     resetForm: () => {
       formik.resetForm();
     },
   });
+
+  console.log(formik.values);
 
   if (!openEditModal) return null;
   return (
@@ -181,7 +197,7 @@ function EditCustomerModal({
     >
       <div className="modal-card">
         <div className="top-label">
-          <h2>Editar Client</h2>
+          <h2>Editar cliente</h2>
           <AiOutlineCloseCircle
             style={{ color: "#171717" }}
             className="close-icon"
@@ -220,21 +236,21 @@ function EditCustomerModal({
                 </div>
                 <div className="form-group">
                   <FormControl size="small" fullWidth>
-                    <InputLabel id="customer_groups">
+                    <InputLabel id="customer_group">
                       Grupos de cliente
                     </InputLabel>
                     <Select
                       maxMenuHeight="200"
                       fullWidth
-                      id="customer_groups"
-                      name="customer_groups"
-                      label="customer_groups"
-                      value={formik.values.customer_groups}
+                      id="customer_group"
+                      name="customer_group"
+                      label="customer_group"
+                      value={formik.values.customer_group}
                       onChange={formik.handleChange}
                     >
-                      {groupList.map((groupList, index) => (
-                        <MenuItem key={index} value={groupList.id}>
-                          {groupList.display_name}
+                      {groupList.map((item, index) => (
+                        <MenuItem key={index} value={item.id}>
+                          {item.display_name}
                         </MenuItem>
                       ))}
                     </Select>

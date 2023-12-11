@@ -86,7 +86,7 @@ function Sidebar() {
     { route: "ambients", name: "Ambientes", icon: VscServerEnvironment },
     {
       route: "userxambients",
-      name: "User X Ambientes",
+      name: "Usuário X Ambientes",
       icon: BsFillShieldLockFill,
     },
   ];

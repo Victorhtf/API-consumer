@@ -36,12 +36,10 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
 
   const ambientRoutes = routes.ambient;
 
-  // Load table
   useEffect(() => {
     fetchAmbients();
   }, []);
 
-  //Load Ambient
   async function fetchAmbients() {
     try {
       const { data: response } = await axios.get(ambientRoutes.listAll, {
@@ -55,8 +53,6 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       setAmbient(ambientData);
 
       setLoading(false);
-
-      toast.success("Base de dados atualizada com sucesso!");
     } catch (error) {
       setLoading(false);
       const message = error.response.data.detail
@@ -69,19 +65,16 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
     }
   }
 
-  //Handle EditAmbient
   function handleEditModal(row) {
     setOpenEditModal(true);
     setRowState(row);
   }
 
-  // Handle DeleteAmbient
   async function handleDeleteModal(row) {
     setRowState(row);
     setOpenDeleteModal(true);
   }
 
-  // Handle CreateAmbient
   function handleCreateModal() {
     setOpenCreateModal(true);
   }
@@ -95,13 +88,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       filteredValue: null,
       sorter: (a, b) => a.id - b.id,
     },
-    {
-      title: "ID externo",
-      key: "external_id",
-      dataIndex: "external_id",
-      filteredValue: null,
-      sorter: (a, b) => a.id - b.id,
-    },
+
     {
       title: "Nome",
       key: "display_name",
@@ -116,6 +103,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         return a.display_name.localeCompare(b.display_name);
       },
     },
+
     {
       title: "Cliente",
       key: "customer",
@@ -124,10 +112,24 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       render: (value) => {
         return (
           <>
-            <Tag color="red" key={value}>
+            <Tag color="blue" key={value}>
               {value.display_name.toUpperCase()}
             </Tag>
           </>
+        );
+      },
+    },
+    {
+      title: "ID externo",
+      key: "external_id",
+      dataIndex: "external_id",
+      filteredValue: null,
+      sorter: (a, b) => a.id - b.id,
+      render: (external_id) => {
+        return external_id.length > 0 ? (
+          <div>{external_id}</div>
+        ) : (
+          <div> Sem ID externo</div>
         );
       },
     },
@@ -252,7 +254,8 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         }}
         columns={tableColumns}
         dataSource={ambient.length > 0 ? ambient : []}
-        style={{ width: "100%" }}
+        style={{ width: "100%", height: "100%" }}
+        scroll={{ y: 395 }}
       />
     </>
   );

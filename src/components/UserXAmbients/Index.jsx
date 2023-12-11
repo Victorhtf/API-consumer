@@ -44,7 +44,6 @@ function Index({
 
   const userXAmbientRoutes = routes.userxambient;
 
-  // Get the UserList
   async function handleUserList() {
     const usersRoutes = routes.user;
 
@@ -75,8 +74,6 @@ function Index({
           auth: getToken(),
         },
       });
-      console.log("fetchAmbiente");
-
       const ambientData = response;
 
       setAmbientsList(ambientData);
@@ -88,15 +85,12 @@ function Index({
     }
   }
 
-  // Load table
   useEffect(() => {
     handleAmbientsList();
     handleUserList();
     fetchUserXAmbient();
-    console.log(userxambient);
   }, []);
 
-  //Load Ambient
   async function fetchUserXAmbient() {
     try {
       const { data: response } = await axios.get(
@@ -114,7 +108,7 @@ function Index({
 
       setLoading(false);
 
-      toast.success("Base de dados atualizada com sucesso!");
+      toast.success("Ambiente desvinculado com sucesso!");
     } catch (error) {
       setLoading(false);
       const message = error.response.data.detail
@@ -127,13 +121,11 @@ function Index({
     }
   }
 
-  // Handle DeleteAmbient
   async function handleUnlinkModal(row) {
     setRowState(row);
     setOpenUnlinkModal(true);
   }
 
-  //Set the column props
   const columns = [
     {
       title: "Nome de usuário",
@@ -153,15 +145,19 @@ function Index({
       title: "Ambiente vinculado",
       key: "ambients",
       dataIndex: "ambients",
-      render: (ambients) => (
-        <>
-          {ambients.map((ambient) => (
-            <Tag color="red" key={ambient.id}>
-              {ambient.display_name}
-            </Tag>
-          ))}
-        </>
-      ),
+      render: (ambients) => {
+        return ambients.length > 0 ? (
+          <div>
+            {ambients.map((ambient) => (
+              <Tag color="blue" key={ambient.id}>
+                {ambient.display_name.toUpperCase()}
+              </Tag>
+            ))}
+          </div>
+        ) : (
+          <Tag color="red">SEM AMBIENTES VINCULADOS</Tag>
+        );
+      },
     },
     {
       title: "Ações",
@@ -224,7 +220,7 @@ function Index({
         }}
       ></Form>
       <Input.Search
-        placeholder="Username"
+        placeholder="Nome de usuário"
         style={{
           width: "20%",
           display: "flex",
@@ -242,7 +238,8 @@ function Index({
         }}
         columns={tableColumns}
         dataSource={userxambient.length > 0 ? userxambient : []}
-        style={{ width: "100%" }}
+        style={{ width: "100%", height: "100%" }}
+        scroll={{ y: 395 }}
       />
     </>
   );

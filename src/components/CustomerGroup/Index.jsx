@@ -78,13 +78,11 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     setRowState(row);
   }
 
-  // Delete user from database
   async function handleDeleteModal(row) {
     setRowState(row);
     setOpenDeleteModal(true);
   }
 
-  //Set the column props
   const columns = [
     {
       title: "CG ID",
@@ -248,7 +246,8 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         }}
         columns={tableColumns}
         dataSource={customerGroups.length > 0 ? customerGroups : []}
-        style={{ width: "100%" }}
+        style={{ width: "100%", height: "100%" }}
+        scroll={{ y: 395 }}
       />
     </>
   );

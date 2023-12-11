@@ -119,8 +119,6 @@ function CreateCustomerModal({
       setGroupList(customerGroupData);
 
       setLoading(false);
-
-      toast.success("Base de dados atualizada com sucesso!");
     } catch (error) {
       const message = error.response.data.detail
         ? error.response.data.detail
@@ -158,7 +156,7 @@ function CreateCustomerModal({
 
       setOpenCreateModal(false);
 
-      toast.success(`Cliente '${values.username}' adicionado com sucesso!`);
+      toast.success(`Cliente '${values.display_name}' adicionado com sucesso!`);
 
       resetForm();
 

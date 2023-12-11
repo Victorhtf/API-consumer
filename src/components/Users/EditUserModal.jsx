@@ -125,14 +125,10 @@ function EditUserModal({
     "CALENDAR_EVENTS_DETAILS_READER",
     "CALENDAR_EVENTS_MANAGER",
   ];
-  // const { id, username, email, roles } = rowState;
-  // if (roles !== undefined) {
-  //   const selectedRoles = roles.map((role) => role.name);
-  // }
 
   //Set up the submit function
   async function handleEdit(values, { setSubmitting, resetForm }) {
-    const { username, email, roles } = values;
+    const { username, password, email, roles } = values;
     try {
       setSubmitting(true);
 
@@ -142,7 +138,7 @@ function EditUserModal({
 
       const body = {
         username: username,
-        // password: password, //No momento o backend não consegue alterar a senha.
+        password: password,
         email: email,
         role_names: roles,
       };
@@ -235,6 +231,18 @@ function EditUserModal({
                   <TextField
                     fullWidth
                     size="small"
+                    id="password"
+                    label="Senha"
+                    variant="outlined"
+                    name="password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    fullWidth
+                    size="small"
                     id="email"
                     label="E-mail"
                     variant="outlined"
@@ -255,7 +263,6 @@ function EditUserModal({
                       value={formik.values.roles}
                       onChange={formik.handleChange}
                     >
-                      {console.log(rowState.roles)}
                       {rolesList.map((item, index) => (
                         <MenuItem key={index} value={item}>
                           {item}

@@ -148,7 +148,6 @@ function Login() {
     }
   }
 
-  // Login authentication
   async function handleLogin(values) {
     !removeLoading ? setRemoveLoading(true) : setRemoveLoading(false);
 
@@ -176,7 +175,7 @@ function Login() {
 
       const userPermissions = sessionStorage.getItem("permissions");
 
-      if (userPermissions === '["ALL"]') {
+      if (userPermissions.includes("ALL")) {
         navigate("/crud");
         toast.success("Usuário autenticado", {
           position: "top-center",
@@ -196,7 +195,6 @@ function Login() {
     }
   }
 
-  // Set the schema to validate form
   const ValidateSchema = Yup.object().shape({
     username: Yup.string().required("Username is required."),
     password: Yup.string().required("Password is required."),

@@ -3,13 +3,17 @@ import {
   Select,
   FormControl,
   InputLabel,
+  CircularProgress,
   TextField,
+  Autocomplete,
 } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
 import "../../Globals.css";
 import { useFormik } from "formik";
 import axios from "axios";
+
+import { useState, useEffect } from "react";
 
 import { routes } from "../../env";
 
@@ -102,22 +106,92 @@ function EditCustomerModal({
   fetchUsers,
   rowState,
 }) {
-  const rolesList = [
-    "SYS_ADMIN",
-    "ADMIN",
-    "PHYSICAL_WORLD_READER",
-    "PHYSICAL_WORLD_MANAGER",
-    "META_WORLD_READER",
-    "META_WORLD_MANAGER",
-    "PHYSICAL_NOTIFICATIONS_READER",
-    "PHYSICAL_NOTIFICATIONS_MANAGER",
-    "CALENDAR_EVENTS_DETAILS_READER",
-    "CALENDAR_EVENTS_MANAGER",
-  ];
+  const [loading, setLoading] = useState(false);
+  const [customerList, setCustomerList] = useState([]);
+  const [citiesList, setCitiesList] = useState([]);
+  const [citiesListAux, setCitiesListAux] = useState([]);
+  const [filteredCities, setFilteredCities] = useState([]);
+
+  //Handle customerList
+  async function handleCustomerList() {
+    const customerRoutes = routes.customer;
+
+    try {
+      const { data: response } = await axios.get(customerRoutes.listAll, {
+        headers: {
+          auth: getToken(),
+        },
+      });
+
+      const customerData = response;
+
+      setCustomerList(customerData);
+    } catch (error) {
+      setCustomerList([]);
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    if (openEditModal) {
+      handleCustomerList();
+    }
+  }, [openEditModal]);
+
+  useEffect(() => {
+    const delayDebounceFunction = setTimeout(() => {
+      setCitiesList(citiesListAux.length === 0 ? undefined : citiesListAux);
+    }, 1000);
+    return () => clearTimeout(delayDebounceFunction);
+  }, [citiesListAux]);
+
+  useEffect(() => {
+    if (citiesList !== undefined) {
+      handleCityList(citiesList);
+    }
+  }, [citiesList]);
+
+  //Handle cityList
+  async function handleCityList(citiesList) {
+    const ambientRoutes = routes.ambient;
+
+    const body = {
+      search: citiesList,
+    };
+    try {
+      const { data: response } = await axios.post(
+        ambientRoutes.listCities,
+        body,
+        {
+          headers: {
+            auth: getToken(),
+          },
+        }
+      );
+
+      const cityData = response;
+
+      setFilteredCities(cityData);
+
+      setLoading(false);
+    } catch (error) {
+      setCustomerList([]);
+      console.log(error);
+    }
+  }
 
   //Set up the submit function
   async function handleEdit(values, { setSubmitting, resetForm }) {
-    const { username, email, roles } = values;
+    const {
+      external_id,
+      display_name,
+      customer_id,
+      address,
+      address_complement,
+      postal_code,
+      city_id,
+    } = values;
+
     try {
       setSubmitting(true);
 
@@ -126,10 +200,15 @@ function EditCustomerModal({
       const userRoutes = routes.user;
 
       const body = {
-        username: username,
-        // password: password, //No momento o backend não consegue alterar a senha.
-        email: email,
-        role_names: roles,
+        external_id: external_id,
+        display_name: display_name,
+        customer_id: customer_id,
+        address_registration: {
+          address: address,
+          address_complement: address_complement,
+          postal_code: postal_code,
+          city_id: city_id.id,
+        },
       };
 
       const response = await axios.patch(
@@ -146,7 +225,7 @@ function EditCustomerModal({
 
       setOpenEditModal(false);
 
-      toast.success(`Usuário '${values.username}' atualizado com sucesso!`);
+      toast.success(`ambiente '${values.external_id}' atualizado com sucesso!`);
 
       resetForm();
 
@@ -158,10 +237,13 @@ function EditCustomerModal({
 
   const formik = useFormik({
     initialValues: {
-      username: rowState.username,
-      password: "",
-      email: rowState.email,
-      roles: [],
+      external_id: rowState.external_id,
+      display_name: rowState.display_name,
+      customer_id: rowState.customer_id,
+      address: rowState.address,
+      address_complement: rowState.address_complement,
+      postal_code: rowState.address_complement,
+      city_id: rowState.city_id,
     },
     onSubmit: handleEdit,
     resetForm: () => {
@@ -181,7 +263,7 @@ function EditCustomerModal({
     >
       <div className="modal-card">
         <div className="top-label">
-          <h2>Editar usuário</h2>
+          <h2>Editar ambiente</h2>
           <AiOutlineCloseCircle
             style={{ color: "#171717" }}
             className="close-icon"
@@ -198,43 +280,116 @@ function EditCustomerModal({
                   <TextField
                     fullWidth
                     size="small"
-                    id="username"
-                    label="Nome de usuário"
+                    id="external_id"
+                    label="External ID"
                     variant="outlined"
-                    name="username"
-                    value={formik.values.username}
+                    name="external_id"
+                    value={formik.values.external_id}
                     onChange={formik.handleChange}
                   />
                 </div>
                 <div className="form-group">
                   <TextField
+                    fullWidth
+                    required
                     size="small"
-                    id="email"
-                    label="E-mail"
+                    id="display_name"
+                    label="Nome"
                     variant="outlined"
-                    name="email"
-                    value={formik.values.email}
+                    name="display_name"
+                    value={formik.values.display_name}
                     onChange={formik.handleChange}
                   />
                 </div>
                 <div className="form-group">
                   <FormControl size="small" fullWidth>
-                    <InputLabel id="roles">Papéis</InputLabel>
+                    <InputLabel id="customer_groups">ID de cliente</InputLabel>
                     <Select
-                      multiple
-                      id="roles"
-                      name="roles"
-                      label="roles"
-                      value={formik.values.roles}
+                      defaultValue=""
+                      maxMenuHeight="200"
+                      fullWidth
+                      required
+                      id="customer_id"
+                      name="customer_id"
+                      label="customer_id"
+                      value={formik.values.id}
                       onChange={formik.handleChange}
                     >
-                      {rolesList.map((item, index) => (
-                        <MenuItem key={index} value={item}>
-                          {item}
+                      {customerList.map((customerList, index) => (
+                        <MenuItem key={index} value={customerList.id}>
+                          {customerList.display_name}
                         </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
+                </div>
+                <div className="form-group">
+                  <TextField
+                    fullWidth
+                    size="small"
+                    id="address"
+                    label="Endereço"
+                    variant="outlined"
+                    name="address"
+                    value={formik.values.address}
+                    onChange={formik.handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    fullWidth
+                    size="small"
+                    id="address_complement"
+                    label="Complemento"
+                    variant="outlined"
+                    name="address_complement"
+                    value={formik.values.address_complement}
+                    onChange={formik.handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <TextField
+                    fullWidth
+                    size="small"
+                    id="postal_code"
+                    label="CEP"
+                    variant="outlined"
+                    name="postal_code"
+                    value={formik.values.postal_code}
+                    onChange={formik.handleChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <Autocomplete
+                    isOptionEqualToValue={(option, value) =>
+                      option.city_id === value.city_id
+                    }
+                    size="small"
+                    filterOptions={(x) => x}
+                    fullWidth
+                    options={filteredCities}
+                    getOptionLabel={(option) =>
+                      option.city + " - " + option.state.state
+                    }
+                    id="city_id"
+                    loading={loading}
+                    loadingText="Carregando..."
+                    onChange={(event, value) =>
+                      formik.setFieldValue("city_id", value)
+                    }
+                    renderInput={(params) => {
+                      setCitiesListAux(params.inputProps.value);
+
+                      return (
+                        <TextField
+                          {...params}
+                          label="Cidade"
+                          variant="outlined"
+                          fullWidth
+                        />
+                      );
+                    }}
+                  />
                 </div>
               </div>
               <div className="buttons">
@@ -246,7 +401,7 @@ function EditCustomerModal({
                   type="submit"
                   className="btn-submit-form"
                 >
-                  Editar usuário
+                  Editar ambiente
                 </button>
               </div>
             </div>

@@ -107,7 +107,6 @@ function LinkUserXAmbientsModal({
   const [ambientsList, setAmbientsList] = useState([]);
   const [data, setData] = useState(false);
 
-  // Get the UserList
   async function handleUserList() {
     const usersRoutes = routes.user;
     try {
@@ -162,10 +161,10 @@ function LinkUserXAmbientsModal({
     }
   }, [data]);
 
-  useEffect(() => {
-    console.log(ambientsList);
-    console.log(usersList);
-  }, [ambientsList || usersList]);
+  // useEffect(() => {
+  //   console.log(ambientsList);
+  //   console.log(usersList);
+  // }, [ambientsList || usersList]);
 
   //Set up the submit function
   async function handleSubmitLinkUserXAmbient(
@@ -183,8 +182,6 @@ function LinkUserXAmbientsModal({
         ambient_ids: ambient_id,
         user_id: user_id,
       };
-
-      console.log(body);
 
       axios.post(userRoutes.linkAmbient, body, {
         headers: {

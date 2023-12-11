@@ -27,17 +27,23 @@ export const routes = {
     listAll: baseUrl + "/admin/customer", //GET
     listMy: baseUrl + "admin/customer/myCustomers", //GET
     listById: baseUrl + "admin/customer/", //GET
+    deleteById: baseUrl + "/admin/customer/",
+    updateById: baseUrl + "/admin/customer/" //PATCH
   },
   customerGroup: {
     create: baseUrl + "/admin/customerGroup", //POST
     listAll: baseUrl + "/admin/customerGroup", //GET
     listById: baseUrl + "/admin/customerGroup/", //GET
+    deleteById: baseUrl + "/admin/customerGroup/", //DELETE
+    updateById: baseUrl + "/admin/customerGroup/" //PATCH
   },
   ambient: {
     listAll: baseUrl + "/admin/ambient", //GET
     listCities: baseUrl + "/client/cities/listCities", //GET
     create: baseUrl + "/admin/ambient", //POST
     listById: baseUrl + "/admin/ambient/", //GET
+    deleteById: baseUrl + "/admin/ambient/", //DELETE
+    updateById: baseUrl + "/admin/ambient/" //PATCH
   },
   userxambient: {
     listAll: baseUrl + "/admin/userXAmbient", //GET

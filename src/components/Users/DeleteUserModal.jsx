@@ -82,9 +82,7 @@ const ModalFade = styled.div`
 const DeleteUserModal = (props) => {
   const { openDeleteModal, setOpenDeleteModal, row, fetchUsers } = props;
 
-  // Delete user from database
   async function handleDelete(row) {
-    // setOpenDeleteModal(true);
     const token = getToken();
 
     try {

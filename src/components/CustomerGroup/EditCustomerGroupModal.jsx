@@ -117,35 +117,30 @@ function EditCustomerGroupModal({
 
   //Set up the submit function
   async function handleEdit(values, { setSubmitting, resetForm }) {
-    const { username, email, roles } = values;
+    const { display_name, fantasy_name } = values;
     try {
       setSubmitting(true);
 
       const token = getToken();
 
-      const userRoutes = routes.user;
+      const customerGroupRoutes = routes.customerGroup;
 
       const body = {
-        username: username,
-        email: email,
-        role_names: roles,
+        display_name: display_name,
+        fantasy_name: fantasy_name,
       };
 
-      const response = await axios.patch(
-        `${userRoutes.updateById}${rowState.id}`,
-        body,
-        {
-          headers: {
-            auth: token,
-          },
-        }
-      );
+      await axios.patch(customerGroupRoutes.updateById + rowState.id, body, {
+        headers: {
+          auth: token,
+        },
+      });
 
       setSubmitting(false);
 
       setOpenEditModal(false);
 
-      toast.success(`Usuário '${values.username}' atualizado com sucesso!`);
+      toast.success(`Cliente '${values.username}' atualizado com sucesso!`);
 
       resetForm();
 
@@ -157,10 +152,8 @@ function EditCustomerGroupModal({
 
   const formik = useFormik({
     initialValues: {
-      username: rowState.username,
-      password: "",
-      email: rowState.email,
-      roles: [],
+      display_name: rowState.display_name,
+      fantasy_name: rowState.fantasy_name,
     },
     onSubmit: handleEdit,
     resetForm: () => {

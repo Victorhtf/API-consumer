@@ -66,10 +66,6 @@ function Modal(props) {
           />
         </div>
         <div className="form-box">{children}</div>
-        {/* <div className="buttons">
-          <button className="cancel-btn">Limpar</button>
-          <button className="btn-submit-form">Submit</button>
-        </div> */}
       </div>
     </ModalFade>
   );

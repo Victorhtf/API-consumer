@@ -80,24 +80,25 @@ const ModalFade = styled.div`
 `;
 
 const DeleteCustomerModal = (props) => {
-  const { openDeleteModal, setOpenDeleteModal, row, fetchUsers } = props;
+  const { openDeleteModal, setOpenDeleteModal, row, fetchAmbients } = props;
 
-  // Delete user from database
   async function handleDelete(row) {
+    const ambientRoutes = routes.ambient;
+
     const token = getToken();
 
     try {
-      await axios.delete(`${routes.user.deleteById}/${row.id}`, {
+      await axios.delete(ambientRoutes.deleteById + row.id, {
         headers: {
           auth: token,
         },
       });
 
-      toast.success(`Usuário "${row.username}" deletado com sucesso`);
+      toast.success(`Ambiente "${row.display_name}" deletado com sucesso`);
 
       setOpenDeleteModal(false);
 
-      fetchUsers();
+      fetchAmbients();
     } catch (error) {
       toast.error("Ops, ocorreu algum erro. Tente novamente");
     }
@@ -115,11 +116,11 @@ const DeleteCustomerModal = (props) => {
     >
       <div className="modal-card">
         <div className="top-label">
-          <h2>Deletar usuário</h2>
+          <h2>Deletar ambiente</h2>
         </div>
         <div className="warn-text">
-          Tem certeza que deseja deletar o usuário
-          <p className="highlight">{row.username}</p>?
+          Tem certeza que deseja deletar o ambiente
+          <p className="highlight">{row.display_name}</p>?
         </div>
         <div className="buttons">
           <button
