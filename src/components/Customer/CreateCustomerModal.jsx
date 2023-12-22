@@ -1,10 +1,4 @@
-import {
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  TextField,
-} from "@mui/material";
+import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
 import { useState, useEffect } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
@@ -97,11 +91,7 @@ const ModalFade = styled.div`
   }
 `;
 
-function CreateCustomerModal({
-  openCreateModal,
-  setOpenCreateModal,
-  fetchCustomers,
-}) {
+function CreateCustomerModal({ openCreateModal, setOpenCreateModal, fetchCustomers }) {
   const [groupList, setGroupList] = useState([]);
 
   //Get the customer groups list
@@ -119,12 +109,7 @@ function CreateCustomerModal({
       setGroupList(customerGroupData);
 
       setLoading(false);
-    } catch (error) {
-      const message = error.response.data.detail
-        ? error.response.data.detail
-        : "Algo deu errado.";
-      console.log(message);
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {
@@ -156,7 +141,7 @@ function CreateCustomerModal({
 
       setOpenCreateModal(false);
 
-      toast.success(`Cliente '${values.display_name}' adicionado com sucesso!`);
+      toast.success(`Cliente '${values.display_name}' adicionado com sucesso!`, { position: "bottom-right" });
 
       resetForm();
 
@@ -231,9 +216,7 @@ function CreateCustomerModal({
                 </div>
                 <div className="form-group">
                   <FormControl size="small" fullWidth>
-                    <InputLabel id="customer_groups">
-                      Grupos de cliente
-                    </InputLabel>
+                    <InputLabel id="customer_groups">Grupos de cliente</InputLabel>
                     <Select
                       maxMenuHeight="200"
                       fullWidth
@@ -256,11 +239,7 @@ function CreateCustomerModal({
                 <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
-                <button
-                  disabled={formik.isSubmitting}
-                  type="submit"
-                  className="blue-btn"
-                >
+                <button disabled={formik.isSubmitting} type="submit" className="blue-btn">
                   Criar cliente
                 </button>
               </div>

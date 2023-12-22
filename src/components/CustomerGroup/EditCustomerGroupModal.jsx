@@ -140,7 +140,9 @@ function EditCustomerGroupModal({
 
       setOpenEditModal(false);
 
-      toast.success(`Cliente '${values.username}' atualizado com sucesso!`);
+      toast.success(`Cliente '${values.username}' atualizado com sucesso!`, {
+        position: "bottom-right",
+      });
 
       resetForm();
 

@@ -57,15 +57,14 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       setCustomer(customerData);
 
       setLoading(false);
+
+      toast.info("Base de dados atualizada!", {
+        position: "bottom-right",
+      });
     } catch (error) {
       setLoading(false);
-      const message = error.response.data.detail
-        ? error.response.data.detail
-        : "Algo deu errado.";
 
-      console.log(error);
-
-      toast.error(message);
+      toast.error("Ops, algo deu errado. Tente novamente.");
     }
   }
 
@@ -88,17 +87,17 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       title: "Customer ID",
       dataIndex: "id",
       key: "id",
+      width: 120,
       filteredValue: null,
       sorter: (a, b) => a.id - b.id,
     },
     {
       title: "Nome",
       dataIndex: "display_name",
+      render: (display_name) => (display_name && display_name.length > 0 ? display_name : "N/A"),
       filteredValue: searchValue !== null ? [searchValue] : null,
       onFilter: (value, record) => {
-        return String(record.display_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return String(record.display_name).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
         return a.display_name.localeCompare(b.display_name);
@@ -110,9 +109,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       dataIndex: "fantasy_name",
       filteredValue: searchValue !== null ? [searchValue] : null,
       onFilter: (value, record) => {
-        return String(record.fantasy_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return String(record.fantasy_name).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
         return a.fantasy_name.localeCompare(b.fantasy_name);
@@ -123,15 +120,16 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       key: "customer_group",
       dataIndex: "customer_group",
       filteredValue: null,
-      render: (value) => {
-        return (
+      render: (value) =>
+        value && value.display_name.length > 0 ? (
           <>
             <Tag color="blue" key={value}>
               {value.display_name.toUpperCase()}
             </Tag>
           </>
-        );
-      },
+        ) : (
+          "N/A"
+        ),
     },
     {
       title: "Data da criação",
@@ -150,6 +148,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     {
       title: "Ações",
       key: "ações",
+      width: 120,
 
       render: (row) => (
         <Space size="middle">
@@ -195,27 +194,13 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   return (
     <>
       {openCreateModal ? (
-        <CreateCustomerModal
-          fetchCustomers={fetchCustomers}
-          openCreateModal={openCreateModal}
-          setOpenCreateModal={setOpenCreateModal}
-        />
+        <CreateCustomerModal fetchCustomers={fetchCustomers} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
       ) : null}
       {openEditModal && customer != undefined && customer.length > 0 ? (
-        <EditCustomerModal
-          fetchCustomers={fetchCustomers}
-          rowState={rowState}
-          openEditModal={openEditModal}
-          setOpenEditModal={setOpenEditModal}
-        />
+        <EditCustomerModal fetchCustomers={fetchCustomers} rowState={rowState} openEditModal={openEditModal} setOpenEditModal={setOpenEditModal} />
       ) : null}
       {openDeleteModal && customer != undefined && customer.length > 0 ? (
-        <DeleteCustomerModal
-          fetchCustomers={fetchCustomers}
-          row={rowState}
-          openDeleteModal={openDeleteModal}
-          setOpenDeleteModal={setOpenDeleteModal}
-        />
+        <DeleteCustomerModal fetchCustomers={fetchCustomers} row={rowState} openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal} />
       ) : null}
       <Form
         layout="inline"

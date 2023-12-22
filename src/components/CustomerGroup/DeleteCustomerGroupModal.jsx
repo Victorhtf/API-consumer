@@ -96,7 +96,8 @@ const DeleteCustomerGroupModal = (props) => {
       });
 
       toast.success(
-        `Grupo de clientes "${row.display_name}" deletado com sucesso`
+        `Grupo de clientes "${row.display_name}" deletado com sucesso`,
+        { position: "bottom-right" }
       );
 
       setOpenDeleteModal(false);

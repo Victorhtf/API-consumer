@@ -61,10 +61,7 @@ function Header() {
 
   return (
     <Box>
-      <SettingsModal
-        openSettingsModal={openSettingsModal}
-        setOpenSettingsModal={setOpenSettingsModal}
-      />
+      <SettingsModal openSettingsModal={openSettingsModal} setOpenSettingsModal={setOpenSettingsModal} />
       <div className="logout">
         <div className="text">
           <p>Seja bem vindo</p>

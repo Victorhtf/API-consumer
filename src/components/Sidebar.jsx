@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { BsFillShieldLockFill, BsFillBuildingsFill } from "react-icons/bs";
-import { FaUsers } from "react-icons/fa";
-import { BiSolidCameraHome, BiTestTube } from "react-icons/bi";
-import { VscServerEnvironment } from "react-icons/vsc";
-import { RiCustomerService2Fill } from "react-icons/ri";
+import { RiLinkM } from "react-icons/ri";
 import img1logo from "../assets/logo/logo-primary.png";
 import img2logo from "../assets/logo/logo-text.png";
+import { MdGroups } from "react-icons/md";
+import { LuUserSquare } from "react-icons/lu";
+import { HiOutlineBuildingStorefront } from "react-icons/hi2";
+import { AiOutlineEnvironment } from "react-icons/ai";
 
 const Aside = styled.div`
   background-color: #182136;
@@ -75,19 +75,19 @@ const Aside = styled.div`
 
 function Sidebar() {
   const routes = [
-    { route: "users", name: "Usuários", icon: FaUsers },
+    { route: "users", name: "Usuários", icon: LuUserSquare },
     {
       route: "customer-groups",
       name: "Grupos de clientes",
-      icon: BsFillBuildingsFill,
+      icon: MdGroups,
     },
 
-    { route: "customer", name: "Clientes", icon: RiCustomerService2Fill },
-    { route: "ambients", name: "Ambientes", icon: VscServerEnvironment },
+    { route: "customer", name: "Clientes", icon: HiOutlineBuildingStorefront },
+    { route: "ambients", name: "Ambientes", icon: AiOutlineEnvironment },
     {
       route: "userxambients",
-      name: "Usuário X Ambientes",
-      icon: BsFillShieldLockFill,
+      name: "Vínculos",
+      icon: RiLinkM,
     },
   ];
 

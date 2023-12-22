@@ -42,10 +42,14 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
 
   async function fetchAmbients() {
     try {
-      const { data: response } = await axios.get(ambientRoutes.listAll, {
+      const { data: response } = await axios.get(ambientRoutes.listAllWithAddress, {
         headers: {
           auth: getToken(),
         },
+        // const { data: response } = await axios.get(ambientRoutes.listAll, {
+        //     headers: {
+        //         auth: getToken(),
+        //     },
       });
 
       const ambientData = response;
@@ -53,15 +57,14 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       setAmbient(ambientData);
 
       setLoading(false);
+
+      toast.info("Base de dados atualizada!", {
+        position: "bottom-right",
+      });
     } catch (error) {
       setLoading(false);
-      const message = error.response.data.detail
-        ? error.response.data.detail
-        : "Algo deu errado.";
 
-      console.log(error);
-
-      toast.error(message);
+      toast.error("Ops, algo deu errado. Tente novamente.");
     }
   }
 
@@ -75,62 +78,85 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
     setOpenDeleteModal(true);
   }
 
-  function handleCreateModal() {
-    setOpenCreateModal(true);
-  }
-
   //Set the column props
   const columns = [
     {
       title: "ID",
       key: "id",
       dataIndex: "id",
+      width: 60,
       filteredValue: null,
       sorter: (a, b) => a.id - b.id,
     },
-
     {
       title: "Nome",
       key: "display_name",
       dataIndex: "display_name",
       filteredValue: searchValue !== null ? [searchValue] : null,
       onFilter: (value, record) => {
-        return String(record.display_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return String(record.display_name).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
         return a.display_name.localeCompare(b.display_name);
       },
     },
-
     {
       title: "Cliente",
       key: "customer",
       dataIndex: "customer",
       filteredValue: null,
       render: (value) => {
-        return (
+        return value.display_name && value.display_name ? (
           <>
             <Tag color="blue" key={value}>
               {value.display_name.toUpperCase()}
             </Tag>
           </>
-        );
+        ) : null;
       },
     },
     {
-      title: "ID externo",
+      title: "Endereço",
+      key: "address",
+      dataIndex: "address",
+      filteredValue: null,
+      render: (value) => {
+        if (value != undefined && value.length > 0) {
+          const addressBase = value[0];
+          const address =
+            addressBase.address +
+            (addressBase.address_complement && addressBase.address_complement.length > 0 ? " - " + addressBase.address_complement : "") +
+            (addressBase.postal_code && addressBase.postal_code.length > 0 ? " - " + addressBase.postal_code : "");
+          return address;
+        } else {
+          return null;
+        }
+      },
+    },
+    {
+      title: "Cidade",
+      key: "address",
+      dataIndex: "address",
+      filteredValue: null,
+      render: (value) => {
+        if (value != undefined && value.length > 0) {
+          const addressBase = value[0];
+          return addressBase.city.city + " - " + addressBase.city.state.state;
+        } else {
+          return null;
+        }
+      },
+    },
+
+    {
+      title: "ID",
       key: "external_id",
       dataIndex: "external_id",
       filteredValue: null,
+      width: 70,
       sorter: (a, b) => a.id - b.id,
       render: (external_id) => {
-        return external_id.length > 0 ? (
-          <div>{external_id}</div>
-        ) : (
-          <div> Sem ID externo</div>
-        );
+        return external_id.length > 0 ? <div>{external_id}</div> : <div>N/A</div>;
       },
     },
     {
@@ -138,6 +164,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       key: "created_date",
       dataIndex: "created_date",
       filteredValue: null,
+      width: 100,
       sorter: (a, b) => {
         const dateA = new Date(a.created_date);
         const dateB = new Date(b.created_date);
@@ -152,6 +179,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       key: "updated_date",
       dataIndex: "updated_date",
       filteredValue: null,
+      width: 100,
       sorter: (a, b) => {
         const dateA = new Date(a.updated_date);
         const dateB = new Date(b.updated_date);
@@ -164,6 +192,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
     {
       title: "Ações",
       key: "ações",
+      width: 120,
 
       render: (row) => (
         <Space size="middle">
@@ -205,28 +234,12 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
 
   return (
     <>
-      {openCreateModal ? (
-        <CreateAmbientModal
-          fetchAmbients={fetchAmbients}
-          openCreateModal={openCreateModal}
-          setOpenCreateModal={setOpenCreateModal}
-        />
-      ) : null}
+      {openCreateModal ? <CreateAmbientModal fetchAmbients={fetchAmbients} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} /> : null}
       {openEditModal && ambient != undefined && ambient.length > 0 ? (
-        <EditAmbientModal
-          fetchAmbients={fetchAmbients}
-          rowState={rowState}
-          openEditModal={openEditModal}
-          setOpenEditModal={setOpenEditModal}
-        />
+        <EditAmbientModal fetchAmbients={fetchAmbients} rowState={rowState} openEditModal={openEditModal} setOpenEditModal={setOpenEditModal} />
       ) : null}
       {openDeleteModal && ambient != undefined && ambient.length > 0 ? (
-        <DeleteAmbientModal
-          fetchAmbients={fetchAmbients}
-          row={rowState}
-          openDeleteModal={openDeleteModal}
-          setOpenDeleteModal={setOpenDeleteModal}
-        />
+        <DeleteAmbientModal fetchAmbients={fetchAmbients} row={rowState} openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal} />
       ) : null}
       <Form
         layout="inline"

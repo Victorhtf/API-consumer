@@ -1,18 +1,10 @@
 import React from "react";
-import {
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  CircularProgress,
-  TextField,
-  Autocomplete,
-} from "@mui/material";
+import { MenuItem, Select, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
 import { useState, useEffect } from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
 import "../../Globals.css";
-import { useFormik } from "formik";
+import { useFormik, validateYupSchema } from "formik";
 import axios from "axios";
 
 import { routes } from "../../env";
@@ -21,6 +13,8 @@ import { toast } from "react-toastify";
 
 import { getToken } from "../../auth/authentications";
 import { AutoComplete } from "antd";
+
+import * as Yup from "yup";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -101,11 +95,7 @@ const ModalFade = styled.div`
   }
 `;
 
-function CreateAmbientModal({
-  openCreateModal,
-  setOpenCreateModal,
-  fetchAmbients,
-}) {
+function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
   const [loading, setLoading] = useState(false);
   const [customerList, setCustomerList] = useState([]);
   const [citiesList, setCitiesList] = useState([]);
@@ -128,7 +118,6 @@ function CreateAmbientModal({
       setCustomerList(customerData);
     } catch (error) {
       setCustomerList([]);
-      console.log(error);
     }
   }
 
@@ -159,15 +148,11 @@ function CreateAmbientModal({
       search: citiesList,
     };
     try {
-      const { data: response } = await axios.post(
-        ambientRoutes.listCities,
-        body,
-        {
-          headers: {
-            auth: getToken(),
-          },
-        }
-      );
+      const { data: response } = await axios.post(ambientRoutes.listCities, body, {
+        headers: {
+          auth: getToken(),
+        },
+      });
 
       const cityData = response;
 
@@ -176,7 +161,6 @@ function CreateAmbientModal({
       setLoading(false);
     } catch (error) {
       setCustomerList([]);
-      console.log(error);
     }
   }
 
@@ -187,15 +171,7 @@ function CreateAmbientModal({
     try {
       const token = getToken();
 
-      const {
-        external_id,
-        display_name,
-        customer_id,
-        address,
-        address_complement,
-        postal_code,
-        city_id,
-      } = values;
+      const { external_id, display_name, customer_id, address, address_complement, postal_code, city_id } = values;
 
       const body = {
         external_id: external_id,
@@ -217,9 +193,7 @@ function CreateAmbientModal({
 
       setOpenCreateModal(false);
 
-      toast.success(
-        `Ambiente '${values.display_name}' adicionado com sucesso!`
-      );
+      toast.success(`Ambiente '${values.display_name}' adicionado com sucesso!`);
 
       resetForm();
 
@@ -229,6 +203,10 @@ function CreateAmbientModal({
       toast.error("Ops, algo deu errado. Por favor, tente novamente");
     }
   }
+
+  const validateSchema = Yup.object().shape({
+    external_id: Yup.number(),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -240,7 +218,6 @@ function CreateAmbientModal({
       postal_code: "",
       city_id: "",
     },
-
     onSubmit: handleSubmit,
     resetForm: () => {
       formik.resetForm();
@@ -298,7 +275,7 @@ function CreateAmbientModal({
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="small" fullWidth>
+                  <FormControl size="small" required fullWidth>
                     <InputLabel id="customer_groups">ID de cliente</InputLabel>
                     <Select
                       defaultValue=""
@@ -308,7 +285,7 @@ function CreateAmbientModal({
                       id="customer_id"
                       name="customer_id"
                       label="customer_id"
-                      value={formik.values.id}
+                      value={formik.values.customer.id}
                       onChange={formik.handleChange}
                     >
                       {customerList.map((customerList, index) => (
@@ -322,6 +299,7 @@ function CreateAmbientModal({
                 <div className="form-group">
                   <TextField
                     fullWidth
+                    required
                     size="small"
                     id="address"
                     label="Endereço"
@@ -343,8 +321,10 @@ function CreateAmbientModal({
                     onChange={formik.handleChange}
                   />
                 </div>
+
                 <div className="form-group">
                   <TextField
+                    required
                     fullWidth
                     size="small"
                     id="postal_code"
@@ -356,47 +336,32 @@ function CreateAmbientModal({
                   />
                 </div>
                 <div className="form-group">
-                  <Autocomplete
-                    isOptionEqualToValue={(option, value) =>
-                      option.city_id === value.city_id
-                    }
-                    size="small"
-                    filterOptions={(x) => x}
-                    fullWidth
-                    options={filteredCities}
-                    getOptionLabel={(option) =>
-                      option.city + " - " + option.state.state
-                    }
-                    id="city_id"
-                    loading={loading}
-                    loadingText="Carregando..."
-                    onChange={(event, value) =>
-                      formik.setFieldValue("city_id", value)
-                    }
-                    renderInput={(params) => {
-                      setCitiesListAux(params.inputProps.value);
+                  <FormControl size="small" fullWidth>
+                    <Autocomplete
+                      isOptionEqualToValue={(option, value) => option.city_id === value.city_id}
+                      size="small"
+                      filterOptions={(x) => x}
+                      fullWidth
+                      options={filteredCities}
+                      getOptionLabel={(option) => option.city + " - " + option.state.state}
+                      id="city_id"
+                      loading={loading}
+                      loadingText="Carregando..."
+                      onChange={(event, value) => formik.setFieldValue("city_id", value)}
+                      renderInput={(params) => {
+                        setCitiesListAux(params.inputProps.value);
 
-                      return (
-                        <TextField
-                          {...params}
-                          label="Cidade"
-                          variant="outlined"
-                          fullWidth
-                        />
-                      );
-                    }}
-                  />
+                        return <TextField {...params} label="Cidade" variant="outlined" fullWidth />;
+                      }}
+                    />
+                  </FormControl>
                 </div>
               </div>
               <div className="buttons">
                 <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
-                <button
-                  disabled={formik.isSubmitting}
-                  type="submit"
-                  className="blue-btn"
-                >
+                <button disabled={formik.isSubmitting} type="submit" className="blue-btn">
                   Criar ambiente
                 </button>
               </div>

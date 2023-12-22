@@ -53,7 +53,17 @@ function SettingsModal({ openSettingsModal, setOpenSettingsModal }) {
   const navigate = useNavigate();
 
   function handleLogout() {
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("roles");
+    sessionStorage.removeItem("meta_integrations");
+    sessionStorage.removeItem("name");
+    sessionStorage.removeItem("id");
+    sessionStorage.removeItem("permissions");
+
+    // setAuthenticated(false);
+
     navigate("/");
+
     toast.error("Usuário desconectado.", {
       position: "top-center",
       autoClose: 3000,

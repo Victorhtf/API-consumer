@@ -1,10 +1,4 @@
-import {
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  TextField,
-} from "@mui/material";
+import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
 import "../../Globals.css";
@@ -107,12 +101,7 @@ const ModalFade = styled.div`
   }
 `;
 
-function EditUserModal({
-  openEditModal,
-  setOpenEditModal,
-  fetchUsers,
-  rowState,
-}) {
+function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }) {
   const rolesList = [
     "SYS_ADMIN",
     "ADMIN",
@@ -143,21 +132,19 @@ function EditUserModal({
         role_names: roles,
       };
 
-      const response = await axios.patch(
-        `${userRoutes.updateById}${rowState.id}`,
-        body,
-        {
-          headers: {
-            auth: token,
-          },
-        }
-      );
+      const response = await axios.patch(`${userRoutes.updateById}${rowState.id}`, body, {
+        headers: {
+          auth: token,
+        },
+      });
 
       setSubmitting(false);
 
       setOpenEditModal(false);
 
-      toast.success(`Usuário '${values.username}' atualizado com sucesso!`);
+      toast.success(`Usuário '${values.username}' atualizado com sucesso!`, {
+        position: "bottom-right",
+      });
 
       resetForm();
 
@@ -254,15 +241,7 @@ function EditUserModal({
                 <div className="form-group">
                   <FormControl size="small" fullWidth>
                     <InputLabel id="roles">Papéis</InputLabel>
-                    <Select
-                      multiple
-                      MenuProps={MenuProps}
-                      id="roles"
-                      name="roles"
-                      label="roles"
-                      value={formik.values.roles}
-                      onChange={formik.handleChange}
-                    >
+                    <Select multiple MenuProps={MenuProps} id="roles" name="roles" label="roles" value={formik.values.roles} onChange={formik.handleChange}>
                       {rolesList.map((item, index) => (
                         <MenuItem key={index} value={item}>
                           {item}
@@ -276,11 +255,7 @@ function EditUserModal({
                 <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
-                <button
-                  disabled={formik.isSubmitting}
-                  type="submit"
-                  className="btn-submit-form"
-                >
+                <button disabled={formik.isSubmitting} type="submit" className="btn-submit-form">
                   Editar usuário
                 </button>
               </div>

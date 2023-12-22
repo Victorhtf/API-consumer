@@ -4,7 +4,6 @@
   box-sizing: border-box;
   font-family: "Montserrat", Helvetica, Arial, serif;
   letter-spacing: 0.01rem;
-
 }
 
 p {
@@ -17,7 +16,6 @@ p {
   --h4-font-size: 15px;
   --h5-font-size: 10px;
   --h6-font-size: 5px;
-  
 
   /* Font color */
   --primary-text-color: #ffffff;
@@ -33,18 +31,12 @@ p {
     --btn-border-color: ;
     --font-size: 300;
 
-
-
     --btn-border-radius: 6px;
     --btn-font-size: 15px;
-  
-  
-
 
   /* Cancel button */
   --btn-cancel-color: #fff;
   --btn-cancel-bg-color: #df0133;
-  --btn-cancel-border: ;
 
   /* Input */
   --input-border-radius: 6px;

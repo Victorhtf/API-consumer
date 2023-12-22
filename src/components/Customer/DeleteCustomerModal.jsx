@@ -94,7 +94,9 @@ const DeleteCustomerModal = (props) => {
         },
       });
 
-      toast.success(`Cliente "${row.display_name}" deletado com sucesso`);
+      toast.success(`Cliente "${row.display_name}" deletado com sucesso`, {
+        position: "bottom-right",
+      });
 
       setOpenDeleteModal(false);
 

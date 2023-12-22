@@ -72,14 +72,13 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       setUsers(usersData);
 
       setLoading(false);
+
+      toast.info("Base de dados atualizada!", {
+        position: "bottom-right",
+      });
     } catch (error) {
       setLoading(false);
-      const message = error.response.data.detail
-        ? error.response.data.detail
-        : "Algo deu errado.";
-      toast.error(message);
-
-      console.log(error);
+      toast.error("message");
     }
   }
 
@@ -111,6 +110,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      width: 60,
       filteredValue: null,
       sorter: (a, b) => a.id - b.id,
     },
@@ -120,9 +120,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       filteredValue: searchValue !== null ? [searchValue] : null,
 
       onFilter: (value, record) => {
-        return String(record.username)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return String(record.username).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
         return a.username.localeCompare(b.username);
@@ -144,15 +142,12 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         };
       }),
       onFilter: (value, record) => {
-        console.log(
-          String(record.roles).toLowerCase().includes(value.toLowerCase())
-        );
         return String(record.roles).toLowerCase().includes(value.toLowerCase());
       },
       render: (roles) => (
         <>
           {roles.map((role) => (
-            <Tag color="blue" key={role}>
+            <Tag style={{ marginBottom: "2px" }} color="blue" key={role}>
               {role.name.toUpperCase()}
             </Tag>
           ))}
@@ -176,6 +171,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     {
       title: "Ações",
       key: "ações",
+      width: 120,
 
       render: (row) => (
         <Space size="middle">
@@ -221,27 +217,13 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   return (
     <>
       {openCreateModal && users != undefined && users.length > 0 ? (
-        <CreateUserModal
-          fetchUsers={fetchUsers}
-          openCreateModal={openCreateModal}
-          setOpenCreateModal={setOpenCreateModal}
-        />
+        <CreateUserModal fetchUsers={fetchUsers} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
       ) : null}
       {openEditModal && users != undefined && users.length > 0 ? (
-        <EditUserModal
-          fetchUsers={fetchUsers}
-          rowState={rowState}
-          openEditModal={openEditModal}
-          setOpenEditModal={setOpenEditModal}
-        />
+        <EditUserModal fetchUsers={fetchUsers} rowState={rowState} openEditModal={openEditModal} setOpenEditModal={setOpenEditModal} />
       ) : null}
       {openDeleteModal && users != undefined && users.length > 0 ? (
-        <DeleteUserModal
-          fetchUsers={fetchUsers}
-          row={rowState}
-          openDeleteModal={openDeleteModal}
-          setOpenDeleteModal={setOpenDeleteModal}
-        />
+        <DeleteUserModal fetchUsers={fetchUsers} row={rowState} openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal} />
       ) : null}
       <Form
         layout="inline"

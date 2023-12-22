@@ -1,10 +1,4 @@
-import {
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  TextField,
-} from "@mui/material";
+import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
 import "../../Globals.css";
@@ -98,15 +92,8 @@ const ModalFade = styled.div`
   }
 `;
 
-function EditCustomerModal({
-  openEditModal,
-  setOpenEditModal,
-  fetchCustomers,
-  rowState,
-}) {
+function EditCustomerModal({ openEditModal, setOpenEditModal, fetchCustomers, rowState }) {
   const [groupList, setGroupList] = useState([]);
-
-  const array = ["Display name"];
 
   useEffect(() => {
     if (openEditModal) {
@@ -128,9 +115,7 @@ function EditCustomerModal({
 
       setGroupList(customerGroupData);
     } catch (error) {
-      toast.error(
-        "Ops, algo deu errado. Recarregue a página e tente novamente."
-      );
+      toast.error("Ops, algo deu errado. Recarregue a página e tente novamente.");
     }
   }
 
@@ -161,7 +146,7 @@ function EditCustomerModal({
 
       setOpenEditModal(false);
 
-      toast.success(`Cliente '${values.display_name}' atualizado com sucesso!`);
+      toast.success(`Cliente '${values.display_name}' atualizado com sucesso!`, { position: "bottom-right" });
 
       resetForm();
 
@@ -182,8 +167,6 @@ function EditCustomerModal({
       formik.resetForm();
     },
   });
-
-  console.log(formik.values);
 
   if (!openEditModal) return null;
   return (
@@ -236,9 +219,7 @@ function EditCustomerModal({
                 </div>
                 <div className="form-group">
                   <FormControl size="small" fullWidth>
-                    <InputLabel id="customer_group">
-                      Grupos de cliente
-                    </InputLabel>
+                    <InputLabel id="customer_group">Grupos de cliente</InputLabel>
                     <Select
                       maxMenuHeight="200"
                       fullWidth
@@ -261,11 +242,7 @@ function EditCustomerModal({
                 <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
-                <button
-                  disabled={formik.isSubmitting}
-                  type="submit"
-                  className="btn-submit-form"
-                >
+                <button disabled={formik.isSubmitting} type="submit" className="btn-submit-form">
                   Editar Client
                 </button>
               </div>

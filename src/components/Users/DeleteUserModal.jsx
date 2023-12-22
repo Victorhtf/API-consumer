@@ -92,7 +92,9 @@ const DeleteUserModal = (props) => {
         },
       });
 
-      toast.success(`Usuário "${row.username}" deletado com sucesso`);
+      toast.success(`Usuário "${row.username}" deletado com sucesso`, {
+        position: "bottom-right",
+      });
 
       setOpenDeleteModal(false);
 

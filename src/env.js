@@ -28,14 +28,14 @@ export const routes = {
     listMy: baseUrl + "admin/customer/myCustomers", //GET
     listById: baseUrl + "admin/customer/", //GET
     deleteById: baseUrl + "/admin/customer/",
-    updateById: baseUrl + "/admin/customer/" //PATCH
+    updateById: baseUrl + "/admin/customer/", //PATCH
   },
   customerGroup: {
     create: baseUrl + "/admin/customerGroup", //POST
     listAll: baseUrl + "/admin/customerGroup", //GET
     listById: baseUrl + "/admin/customerGroup/", //GET
     deleteById: baseUrl + "/admin/customerGroup/", //DELETE
-    updateById: baseUrl + "/admin/customerGroup/" //PATCH
+    updateById: baseUrl + "/admin/customerGroup/", //PATCH
   },
   ambient: {
     listAll: baseUrl + "/admin/ambient", //GET
@@ -43,7 +43,8 @@ export const routes = {
     create: baseUrl + "/admin/ambient", //POST
     listById: baseUrl + "/admin/ambient/", //GET
     deleteById: baseUrl + "/admin/ambient/", //DELETE
-    updateById: baseUrl + "/admin/ambient/" //PATCH
+    updateById: baseUrl + "/admin/ambient/", //PATCH
+    listAllWithAddress: baseUrl + "/admin/ambient/ambientsAddress", //
   },
   userxambient: {
     listAll: baseUrl + "/admin/userXAmbient", //GET

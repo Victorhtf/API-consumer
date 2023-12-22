@@ -1,10 +1,4 @@
-import {
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  TextField,
-} from "@mui/material";
+import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
 import "../../Globals.css";
@@ -97,12 +91,7 @@ const ModalFade = styled.div`
   }
 `;
 
-function LinkUserXAmbientsModal({
-  row,
-  openLinkUserXAmbientsModal,
-  setOpenLinkUserXAmbientsModal,
-  fetchUserXAmbient,
-}) {
+function LinkUserXAmbientsModal({ row, openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetchUserXAmbient }) {
   const [usersList, setUsersList] = useState([]);
   const [ambientsList, setAmbientsList] = useState([]);
   const [data, setData] = useState(false);
@@ -119,12 +108,7 @@ function LinkUserXAmbientsModal({
       const usersData = response;
 
       setUsersList(usersData);
-    } catch (error) {
-      const message = error.response.data.detail
-        ? error.response.data.detail
-        : "Algo deu errado.";
-      console.log(message);
-    }
+    } catch (error) {}
   }
 
   //Handle data
@@ -146,12 +130,7 @@ function LinkUserXAmbientsModal({
       const ambientData = response;
 
       setAmbientsList(ambientData);
-    } catch (error) {
-      const message = error.response.data.detail
-        ? error.response.data.detail
-        : "Algo deu errado.";
-      console.log(message);
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {
@@ -161,16 +140,8 @@ function LinkUserXAmbientsModal({
     }
   }, [data]);
 
-  // useEffect(() => {
-  //   console.log(ambientsList);
-  //   console.log(usersList);
-  // }, [ambientsList || usersList]);
-
   //Set up the submit function
-  async function handleSubmitLinkUserXAmbient(
-    values,
-    { setSubmitting, resetForm }
-  ) {
+  async function handleSubmitLinkUserXAmbient(values, { setSubmitting, resetForm }) {
     try {
       setSubmitting(true);
       const token = getToken();
@@ -193,7 +164,9 @@ function LinkUserXAmbientsModal({
 
       setOpenLinkUserXAmbientsModal(false);
 
-      toast.success(`Vinculo atualizado com sucesso!`);
+      toast.success(`Vinculo atualizado com sucesso!`, {
+        position: "bottom-right",
+      });
 
       resetForm();
 
@@ -240,10 +213,10 @@ function LinkUserXAmbientsModal({
             <div className="content">
               <div className="form">
                 <div className="form-group">
-                  <FormControl>
+                  <FormControl size="small">
                     <InputLabel id="user_id">Usuário</InputLabel>
                     <Select
-                      sx={{ display: "flex", width: "200px" }}
+                      sx={{ width: "200px" }}
                       size="small"
                       id="user_id"
                       name="user_id"
@@ -253,18 +226,20 @@ function LinkUserXAmbientsModal({
                       onChange={formik.handleChange}
                     >
                       {usersList.map((users) => {
-                        return (
-                          <MenuItem value={users.id}>{users.username}</MenuItem>
-                        );
+                        return <MenuItem value={users.id}>{users.username}</MenuItem>;
                       })}
                     </Select>
                   </FormControl>
-                  <FormControl sx={{ m: 1, width: 300 }}>
+                  <FormControl size="small" sx={{ width: 300 }}>
                     <InputLabel id="ambient">Ambiente</InputLabel>
                     <Select
                       multiple
-                      sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
-                      size="small"
+                      sx={{
+                        display: "flex",
+                        margin: "dence",
+                        flexWrap: "wrap",
+                        gap: 0.5,
+                      }}
                       id="ambient_id"
                       variant="outlined"
                       name="ambient_id"
@@ -273,11 +248,7 @@ function LinkUserXAmbientsModal({
                       onChange={formik.handleChange}
                     >
                       {ambientsList.map((ambient) => {
-                        return (
-                          <MenuItem value={ambient.id}>
-                            {ambient.display_name}
-                          </MenuItem>
-                        );
+                        return <MenuItem value={ambient.id}>{ambient.display_name}</MenuItem>;
                       })}
                     </Select>
                   </FormControl>
@@ -287,11 +258,7 @@ function LinkUserXAmbientsModal({
                 <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
-                <button
-                  disabled={formik.isSubmitting}
-                  type="submit"
-                  className="btn-submit-form"
-                >
+                <button disabled={formik.isSubmitting} type="submit" className="btn-submit-form">
                   Alterar vínculo
                 </button>
               </div>

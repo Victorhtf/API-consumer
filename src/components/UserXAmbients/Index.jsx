@@ -14,11 +14,7 @@ import LinkUserXAmbientsModal from "./LinkUserXAmbientsModal";
 import { routes } from "../../env";
 import { getToken } from "../../auth/authentications";
 
-function Index({
-  openLinkUserXAmbientsModal,
-  setOpenLinkUserXAmbientsModal,
-  fetchAmbients,
-}) {
+function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetchAmbients }) {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
@@ -57,12 +53,7 @@ function Index({
       const usersData = response;
 
       setUsersList(usersData);
-    } catch (error) {
-      const message = error.response.data.detail
-        ? error.response.data.detail
-        : "Algo deu errado.";
-      console.log(message);
-    }
+    } catch (error) {}
   }
 
   //Get the AmbientsList
@@ -77,12 +68,7 @@ function Index({
       const ambientData = response;
 
       setAmbientsList(ambientData);
-    } catch (error) {
-      const message = error.response.data.detail
-        ? error.response.data.detail
-        : "Algo deu errado.";
-      console.log(message);
-    }
+    } catch (error) {}
   }
 
   useEffect(() => {
@@ -93,14 +79,11 @@ function Index({
 
   async function fetchUserXAmbient() {
     try {
-      const { data: response } = await axios.get(
-        userXAmbientRoutes.listAllArray,
-        {
-          headers: {
-            auth: getToken(),
-          },
-        }
-      );
+      const { data: response } = await axios.get(userXAmbientRoutes.listAllArray, {
+        headers: {
+          auth: getToken(),
+        },
+      });
 
       const userXAmbient = response;
 
@@ -108,16 +91,13 @@ function Index({
 
       setLoading(false);
 
-      toast.success("Ambiente desvinculado com sucesso!");
+      toast.info("Base de dados atualizada!", {
+        position: "bottom-right",
+      });
     } catch (error) {
       setLoading(false);
-      const message = error.response.data.detail
-        ? error.response.data.detail
-        : "Algo deu errado.";
 
-      console.log(error);
-
-      toast.error(message);
+      toast.error("Ops, algo deu errado. Tente novamente.");
     }
   }
 
@@ -133,9 +113,7 @@ function Index({
       dataIndex: "username",
       filteredValue: searchValue !== null ? [searchValue] : null,
       onFilter: (value, record) => {
-        return String(record.username)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return String(record.username).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
         return a.username.localeCompare(b.username);
@@ -162,6 +140,7 @@ function Index({
     {
       title: "Ações",
       key: "ações",
+      width: 120,
 
       render: (row) => (
         <Space size="middle">
@@ -202,15 +181,8 @@ function Index({
           setOpenLinkUserXAmbientsModal={setOpenLinkUserXAmbientsModal}
         />
       ) : null}
-      {openUnlinkModal &&
-      userxambient != undefined &&
-      userxambient.length > 0 ? (
-        <UnlinkAmbientModal
-          fetchUserXAmbient={fetchUserXAmbient}
-          row={rowState}
-          openUnlinkModal={openUnlinkModal}
-          setOpenUnlinkModal={setOpenUnlinkModal}
-        />
+      {openUnlinkModal && userxambient != undefined && userxambient.length > 0 ? (
+        <UnlinkAmbientModal fetchUserXAmbient={fetchUserXAmbient} row={rowState} openUnlinkModal={openUnlinkModal} setOpenUnlinkModal={setOpenUnlinkModal} />
       ) : null}
       <Form
         layout="inline"

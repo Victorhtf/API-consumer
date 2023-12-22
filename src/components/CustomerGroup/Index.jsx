@@ -33,10 +33,8 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [openModalDeleteCustomerGroup, setOpenModalDeleteCustomerGroup] =
-    useState(false);
-  const [openModalEditCustomerGroup, setOpenModalEditCustomerGroup] =
-    useState(false);
+  const [openModalDeleteCustomerGroup, setOpenModalDeleteCustomerGroup] = useState(false);
+  const [openModalEditCustomerGroup, setOpenModalEditCustomerGroup] = useState(false);
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -60,15 +58,12 @@ function Index({ openCreateModal, setOpenCreateModal }) {
 
       setLoading(false);
 
-      toast.success("Base de dados atualizada com sucesso!");
+      toast.info("Base de dados atualizada!", {
+        position: "bottom-right",
+      });
     } catch (error) {
       setLoading(false);
-      const message = error.response.data.detail
-        ? error.response.data.detail
-        : "Algo deu errado.";
-      toast.error(message);
-
-      console.log(error);
+      toast.error("Ops, algo deu errado. Tente novamente.");
     }
   }
 
@@ -88,6 +83,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       title: "CG ID",
       dataIndex: "id",
       key: "id",
+      width: 100,
       filteredValue: null,
 
       sorter: (a, b) => a.id - b.id,
@@ -97,9 +93,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       dataIndex: "display_name",
       filteredValue: searchValue !== null ? [searchValue] : null,
       onFilter: (value, record) => {
-        return String(record.display_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return String(record.display_name).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
         return a.display_name.localeCompare(b.display_name);
@@ -110,9 +104,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       dataIndex: "fantasy_name",
       filteredValue: searchValue !== null ? [searchValue] : null,
       onFilter: (value, record) => {
-        return String(record.fantasy_name)
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return String(record.fantasy_name).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
         return a.fantasy_name.localeCompare(b.fantasy_name);
@@ -149,6 +141,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     {
       title: "Ações",
       key: "ações",
+      width: 120,
 
       render: (row) => (
         <Space size="middle">
@@ -194,25 +187,12 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   return (
     <>
       {openCreateModal ? (
-        <CreateCustomerGroupModal
-          fetchCustomerGroup={fetchCustomerGroup}
-          openCreateModal={openCreateModal}
-          setOpenCreateModal={setOpenCreateModal}
-        />
+        <CreateCustomerGroupModal fetchCustomerGroup={fetchCustomerGroup} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
       ) : null}
-      {openEditModal &&
-      customerGroups != undefined &&
-      customerGroups.length > 0 ? (
-        <EditCustomerGroupModal
-          fetchCustomerGroup={fetchCustomerGroup}
-          rowState={rowState}
-          openEditModal={openEditModal}
-          setOpenEditModal={setOpenEditModal}
-        />
+      {openEditModal && customerGroups != undefined && customerGroups.length > 0 ? (
+        <EditCustomerGroupModal fetchCustomerGroup={fetchCustomerGroup} rowState={rowState} openEditModal={openEditModal} setOpenEditModal={setOpenEditModal} />
       ) : null}
-      {openDeleteModal &&
-      customerGroups != undefined &&
-      customerGroups.length > 0 ? (
+      {openDeleteModal && customerGroups != undefined && customerGroups.length > 0 ? (
         <DeleteCustomerGroupModal
           fetchCustomerGroup={fetchCustomerGroup}
           row={rowState}

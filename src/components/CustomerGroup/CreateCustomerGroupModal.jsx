@@ -123,7 +123,10 @@ function CreateCustomerGroupModal({
 
       setOpenCreateModal(false);
 
-      toast.success(`Usuário '${values.display_name}' adicionado com sucesso!`);
+      toast.success(
+        `Usuário '${values.display_name}' adicionado com sucesso!`,
+        { position: "bottom-right" }
+      );
 
       resetForm();
 
