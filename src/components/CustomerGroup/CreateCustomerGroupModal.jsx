@@ -1,21 +1,17 @@
-import {
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  TextField,
-} from "@mui/material";
+//Libs
+import { TextField } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
-import "../../Globals.css";
 import { useFormik } from "formik";
 import axios from "axios";
-
-import { routes } from "../../env";
-
 import { toast } from "react-toastify";
 
-import { getToken } from "../../auth/authentications";
+//Dependencies
+import { getToken } from "../../auth/useAuth";
+import { routes } from "../../env";
+
+//Styles
+import "../../Globals.css";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -96,12 +92,7 @@ const ModalFade = styled.div`
   }
 `;
 
-function CreateCustomerGroupModal({
-  openCreateModal,
-  setOpenCreateModal,
-  fetchCustomerGroup,
-}) {
-  //Set up the submit function
+function CreateCustomerGroupModal({ openCreateModal, setOpenCreateModal, fetchCustomerGroup }) {
   async function handleSubmit(values, props) {
     const { resetForm } = props;
     try {
@@ -123,17 +114,14 @@ function CreateCustomerGroupModal({
 
       setOpenCreateModal(false);
 
-      toast.success(
-        `Usuário '${values.display_name}' adicionado com sucesso!`,
-        { position: "bottom-right" }
-      );
+      toast.success(`Usuário '${values.display_name}' adicionado com sucesso!`, { position: "bottom-right" });
 
       resetForm();
 
       fetchCustomerGroup();
     } catch (error) {
       console.debug(error);
-      toast.error("Ops, algo deu errado. Por favor, tente novamente");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 
@@ -204,11 +192,7 @@ function CreateCustomerGroupModal({
                 <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
-                <button
-                  disabled={formik.isSubmitting}
-                  type="submit"
-                  className="blue-btn"
-                >
+                <button disabled={formik.isSubmitting} type="submit" className="blue-btn">
                   Criar grupo de cliente
                 </button>
               </div>

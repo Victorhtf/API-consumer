@@ -1,16 +1,21 @@
-import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
-import { AiOutlineCloseCircle } from "react-icons/ai";
-import styled from "styled-components";
-import "../../Globals.css";
-import { useFormik } from "formik";
-import axios from "axios";
-
-import { routes } from "../../env";
-
 import { toast } from "react-toastify";
 
-import { getToken } from "../../auth/authentications";
+//React
 import { useEffect, useState } from "react";
+
+//Libs
+import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
+import { AiOutlineCloseCircle } from "react-icons/ai";
+import { useFormik } from "formik";
+import styled from "styled-components";
+import axios from "axios";
+
+//Dependencies
+import { routes } from "../../env";
+import { getToken } from "../../auth/useAuth";
+
+//Styles
+import "../../Globals.css";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -117,7 +122,7 @@ function LinkUserXAmbientsModal({ row, openLinkUserXAmbientsModal, setOpenLinkUs
     handleUserList();
   }
 
-  //Get the AmbientsList
+  //Get thEDe AmbientsList
   async function handleAmbientsList() {
     const ambientRoutes = routes.ambient;
     try {
@@ -140,7 +145,6 @@ function LinkUserXAmbientsModal({ row, openLinkUserXAmbientsModal, setOpenLinkUs
     }
   }, [data]);
 
-  //Set up the submit function
   async function handleSubmitLinkUserXAmbient(values, { setSubmitting, resetForm }) {
     try {
       setSubmitting(true);
@@ -172,7 +176,7 @@ function LinkUserXAmbientsModal({ row, openLinkUserXAmbientsModal, setOpenLinkUs
 
       fetchUserXAmbient();
     } catch (error) {
-      toast.error("Ops, algo deu errado. Por favor, tente novamente");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 

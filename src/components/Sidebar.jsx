@@ -1,12 +1,15 @@
+//Libs
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { RiLinkM } from "react-icons/ri";
-import img1logo from "../assets/logo/logo-primary.png";
-import img2logo from "../assets/logo/logo-text.png";
 import { MdGroups } from "react-icons/md";
 import { LuUserSquare } from "react-icons/lu";
 import { HiOutlineBuildingStorefront } from "react-icons/hi2";
 import { AiOutlineEnvironment } from "react-icons/ai";
+
+//Assets
+import img1logo from "../assets/logo/logo-primary.png";
+import img2logo from "../assets/logo/logo-text.png";
 
 const Aside = styled.div`
   background-color: #182136;
@@ -96,6 +99,7 @@ function Sidebar() {
   function handleNavigate(routes) {
     navigate(`/${routes}`);
   }
+
   return (
     <>
       <Aside>

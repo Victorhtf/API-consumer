@@ -11,9 +11,9 @@ import CreateAmbientModal from "./CreateAmbientModal";
 import EditAmbientModal from "./EditAmbientModal";
 import DeleteAmbientModal from "./DeleteAmbientModal";
 
-//User configs
+//Dependencies
 import { routes } from "../../env";
-import { getToken } from "../../auth/authentications";
+import { getToken } from "../../auth/useAuth";
 
 function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
   const [open, setOpen] = useState(false);
@@ -46,10 +46,6 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         headers: {
           auth: getToken(),
         },
-        // const { data: response } = await axios.get(ambientRoutes.listAll, {
-        //     headers: {
-        //         auth: getToken(),
-        //     },
       });
 
       const ambientData = response;
@@ -64,7 +60,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
     } catch (error) {
       setLoading(false);
 
-      toast.error("Ops, algo deu errado. Tente novamente.");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 

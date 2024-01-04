@@ -1,7 +1,14 @@
-import styled from "styled-components";
+//React
 import { useState } from "react";
-import "../../Globals.css";
+
+//Libs
+import styled from "styled-components";
+
+//Components
 import BaseLayout from "../../pages/BaseLayout";
+
+//Styles
+import "../../Globals.css";
 
 const Box = styled.div`
   width: 100%;
@@ -9,18 +16,21 @@ const Box = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: flex;
 
   .box {
     width: 70%;
     display: flex;
-    flex-direction: column;
-  }
-`;
+    align-items: center;
+    justify-content: center;
 
-const Dashboard = styled.div`
-  background-color: blue;
-  display: grid;
+    div {
+      display: flex;
+      align-items: center;
+      align-self: center;
+      justify-content: center;
+    }
+  }
 `;
 
 function CrudPage() {
@@ -28,10 +38,9 @@ function CrudPage() {
     <>
       <BaseLayout>
         <Box>
-          <div className="top-label">
-            <h1>CRUD - Intradata</h1>
+          <div>
+            <h1>Intradata - CRUD</h1>
           </div>
-          <Dashboard></Dashboard>
         </Box>
       </BaseLayout>
     </>

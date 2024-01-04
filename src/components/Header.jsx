@@ -1,7 +1,12 @@
+//React
+import { useState } from "react";
+
+//Libs
 import styled from "styled-components";
 import { CgProfile } from "react-icons/cg";
+
+//Components
 import SettingsModal from "./Header/SettingsModal";
-import { useState } from "react";
 
 const Box = styled.div`
   width: 100%;
@@ -57,7 +62,13 @@ const Box = styled.div`
 
 function Header() {
   const [openSettingsModal, setOpenSettingsModal] = useState(null);
-  const username = sessionStorage.getItem("name").replace(/["']/g, "");
+
+  const sessionUsername = sessionStorage.getItem("name");
+  let username = null;
+
+  if (sessionUsername != null) {
+    username = sessionUsername.replace(/["']/g, "");
+  }
 
   return (
     <Box>
@@ -65,7 +76,7 @@ function Header() {
       <div className="logout">
         <div className="text">
           <p>Seja bem vindo</p>
-          <p className="name">{username}</p>
+          <p className="name">{sessionUsername != null && sessionUsername !== undefined ? username : ""}</p>
         </div>
         <div
           onClick={() => {

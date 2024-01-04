@@ -1,15 +1,17 @@
+//Libs
 import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
-import "../../Globals.css";
 import { useFormik } from "formik";
 import axios from "axios";
-import "../../Globals.css";
-import { routes } from "../../env";
-
 import { toast } from "react-toastify";
 
-import { getToken } from "../../auth/authentications";
+//Dependencies
+import { routes } from "../../env";
+import { getToken } from "../../auth/useAuth";
+
+//Styles
+import "../../Globals.css";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -150,7 +152,7 @@ function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }
 
       fetchUsers();
     } catch (error) {
-      toast.error("Ops, algo deu errado. Por favor, tente novamente");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 

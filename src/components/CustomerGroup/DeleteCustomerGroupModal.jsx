@@ -1,7 +1,10 @@
+//Libs
 import styled from "styled-components";
-import { getToken } from "../../auth/authentications";
 import { toast } from "react-toastify";
 import axios from "axios";
+
+//Dependencies
+import { getToken } from "../../auth/useAuth";
 import { routes } from "../../env";
 
 const ModalFade = styled.div`
@@ -80,8 +83,7 @@ const ModalFade = styled.div`
 `;
 
 const DeleteCustomerGroupModal = (props) => {
-  const { openDeleteModal, setOpenDeleteModal, row, fetchCustomerGroup } =
-    props;
+  const { openDeleteModal, setOpenDeleteModal, row, fetchCustomerGroup } = props;
 
   const customerGroupsRoutes = routes.customerGroup;
 
@@ -95,16 +97,13 @@ const DeleteCustomerGroupModal = (props) => {
         },
       });
 
-      toast.success(
-        `Grupo de clientes "${row.display_name}" deletado com sucesso`,
-        { position: "bottom-right" }
-      );
+      toast.success(`Grupo de clientes "${row.display_name}" deletado com sucesso`, { position: "bottom-right" });
 
       setOpenDeleteModal(false);
 
       fetchCustomerGroup();
     } catch (error) {
-      toast.error("Ops, ocorreu algum erro. Tente novamente.");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 

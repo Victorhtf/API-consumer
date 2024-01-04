@@ -1,9 +1,13 @@
+//Libs
 import styled from "styled-components";
+
+//Components
 import Sidebar from "../components/Sidebar.jsx";
 import Header from "../components/Header.jsx";
-import "../Globals.css";
+import SessionCheck from "../auth/useAuth.js";
 
-// import SessionCheck from "../auth/useAuth";
+//Styles
+import "../Globals.css";
 
 const RowBox = styled.div`
   display: flex;
@@ -29,14 +33,15 @@ const Card = styled.div`
 function BaseLayout(props) {
   return (
     <>
-      {/* <SessionCheck /> */}
-      <RowBox>
-        <Sidebar />
-        <ColumnBox>
-          <Header />
-          <Card>{props.children}</Card>
-        </ColumnBox>
-      </RowBox>
+      <SessionCheck>
+        <RowBox>
+          <Sidebar />
+          <ColumnBox>
+            <Header />
+            <Card>{props.children}</Card>
+          </ColumnBox>
+        </RowBox>
+      </SessionCheck>
     </>
   );
 }

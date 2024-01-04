@@ -1,8 +1,17 @@
-import styled from "styled-components";
-import BaseLayout from "../../pages/BaseLayout.jsx";
-import "../../Globals.css";
+//React
 import { useState } from "react";
+
+//Libs
+import styled from "styled-components";
+
+//Components
+import BaseLayout from "../../pages/BaseLayout.jsx";
 import Index from "./Index.jsx";
+
+//Dependencies
+
+//Styles
+import "../../Globals.css";
 
 const Box = styled.div`
   width: 100%;
@@ -20,8 +29,7 @@ const Box = styled.div`
 `;
 
 function UserXAmbientPage() {
-  const [openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal] =
-    useState(false);
+  const [openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal] = useState(false);
 
   return (
     <>
@@ -38,10 +46,7 @@ function UserXAmbientPage() {
               Criar vínculo
             </button>
           </div>
-          <Index
-            openLinkUserXAmbientsModal={openLinkUserXAmbientsModal}
-            setOpenLinkUserXAmbientsModal={setOpenLinkUserXAmbientsModal}
-          />
+          <Index openLinkUserXAmbientsModal={openLinkUserXAmbientsModal} setOpenLinkUserXAmbientsModal={setOpenLinkUserXAmbientsModal} />
         </Box>
       </BaseLayout>
     </>

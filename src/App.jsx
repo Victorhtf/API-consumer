@@ -1,7 +1,10 @@
+//Libs
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
+//Components
 import Login from "./pages/Login.jsx";
 import UsersPage from "./components/Users/UsersPage.jsx";
-import { ToastContainer } from "react-toastify";
 import CrudPage from "./components/Crud/CrudPage.jsx";
 import CustomerPage from "./components/Customer/CustomerPage.jsx";
 import CustomerGroupPage from "./components/CustomerGroup/CustomerGroupPage.jsx";

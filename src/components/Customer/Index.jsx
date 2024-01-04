@@ -11,40 +11,37 @@ import CreateCustomerModal from "./CreateCustomerModal";
 import EditCustomerModal from "./EditCustomerModal";
 import DeleteCustomerModal from "./DeleteCustomerModal";
 
-//User configs
+//Dependencies
 import { routes } from "../../env";
-import { getToken } from "../../auth/authentications";
+import { getToken } from "../../auth/useAuth";
 
 function Index({ openCreateModal, setOpenCreateModal }) {
-  const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
-
   const [customer, setCustomer] = useState([]);
   const bordered = false;
-  const [size, setSize] = useState("large");
   const showTitle = false;
   const showHeader = true;
   const [tableLayout, setTableLayout] = useState();
   const [top, setTop] = useState("none");
   const [bottom, setBottom] = useState("bottomRight");
   const [ellipsis, setEllipsis] = useState(false);
-  const [yScroll, setYScroll] = useState(false);
-  const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [openModalDeleteCustomer, setOpenModalDeleteCustomer] = useState(false);
-  const [openModalEditCustomer, setOpenModalEditCustomer] = useState(false);
-  const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [xScroll, setXScroll] = useState();
+  // const [open, setOpen] = useState(false);
+  // const [size, setSize] = useState("large");
+  // const [yScroll, setYScroll] = useState(false);
+  // const [rows, setRows] = useState([]);
 
   const customerRoutes = routes.customer;
-  //Load table
+
   useEffect(() => {
     fetchCustomers();
+    console.log("load table");
   }, []);
 
-  //Load customer
   async function fetchCustomers() {
     try {
       const response = await axios.get(customerRoutes.listAll, {
@@ -64,7 +61,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     } catch (error) {
       setLoading(false);
 
-      toast.error("Ops, algo deu errado. Tente novamente.");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 
@@ -76,10 +73,6 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   async function handleDeleteModal(row) {
     setRowState(row);
     setOpenDeleteModal(true);
-  }
-
-  function handleCreateModal() {
-    setOpenCreateModal(true);
   }
 
   const columns = [

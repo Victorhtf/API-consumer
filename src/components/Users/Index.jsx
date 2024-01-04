@@ -10,11 +10,12 @@ import axios from "axios";
 import CreateUserModal from "./CreateUserModal.jsx";
 import DeleteUserModal from "./DeleteUserModal";
 import EditUserModal from "./EditUserModal";
-//User configs
-import { intradataConfig } from "../../env";
-import { getToken } from "../../auth/authentications";
 
-//Set up the requisition
+//Dependencies
+import { intradataConfig } from "../../env";
+import { getToken } from "../../auth/useAuth";
+
+//REVER
 const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
 const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
 
@@ -54,12 +55,10 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     "CALENDAR_EVENTS_MANAGER",
   ];
 
-  //Load table
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  //Load users
   async function fetchUsers() {
     try {
       const response = await axios.get(finalUrl, {
@@ -78,7 +77,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       });
     } catch (error) {
       setLoading(false);
-      toast.error("message");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 
@@ -104,7 +103,6 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     tableColumns[tableColumns.length - 1].fixed = "right";
   }
 
-  //Set the column props
   const columns = [
     {
       title: "ID",

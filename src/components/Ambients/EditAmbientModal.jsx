@@ -1,17 +1,20 @@
-import { MenuItem, Select, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
-import { AiOutlineCloseCircle } from "react-icons/ai";
-import styled from "styled-components";
-import "../../Globals.css";
-import { useFormik } from "formik";
-import axios from "axios";
-
+//React
 import { useState, useEffect } from "react";
 
-import { routes } from "../../env";
-
+//Libs
+import { MenuItem, Select, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
+import { useFormik } from "formik";
+import styled from "styled-components";
+import axios from "axios";
 
-import { getToken } from "../../auth/authentications";
+//Dependencies
+import { routes } from "../../env";
+import { getToken } from "../../auth/useAuth";
+
+//Styles
+import "../../Globals.css";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -120,13 +123,15 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
   useEffect(() => {
     if (openEditModal) {
       handleCustomerList();
+      console.log("openeditmodal");
     }
-  }, [openEditModal]); //Revisar para tirar esse array de dependência
+  }, []);
 
   useEffect(() => {
     const delayDebounceFunction = setTimeout(() => {
       setCitiesList(citiesListAux.length === 0 ? undefined : citiesListAux);
     }, 1000);
+    console.log("delaydebounce");
     return () => clearTimeout(delayDebounceFunction);
   }, [citiesListAux]);
 
@@ -134,7 +139,12 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
     if (citiesList !== undefined) {
       handleCityList(citiesList);
     }
+    console.log("handlecitieslist");
   }, [citiesList]);
+
+  useEffect(() => {
+    console.log("ok");
+  });
 
   async function handleCityList(citiesList) {
     const ambientRoutes = routes.ambient;
@@ -197,7 +207,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
 
       fetchAmbients();
     } catch (error) {
-      toast.error("Ops, algo deu errado. Por favor, tente novamente");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 

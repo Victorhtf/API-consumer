@@ -12,7 +12,7 @@ import LinkUserXAmbientsModal from "./LinkUserXAmbientsModal";
 
 //User configs
 import { routes } from "../../env";
-import { getToken } from "../../auth/authentications";
+import { getToken } from "../../auth/useAuth";
 
 function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetchAmbients }) {
   const [open, setOpen] = useState(false);
@@ -97,7 +97,7 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
     } catch (error) {
       setLoading(false);
 
-      toast.error("Ops, algo deu errado. Tente novamente.");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde..");
     }
   }
 

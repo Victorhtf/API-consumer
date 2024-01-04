@@ -1,17 +1,20 @@
+//React
+import { useState, useEffect } from "react";
+
+//Libs
 import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import styled from "styled-components";
-import "../../Globals.css";
 import { useFormik } from "formik";
-import axios from "axios";
-
-import { routes } from "../../env";
-
 import { toast } from "react-toastify";
+import axios from "axios";
+import styled from "styled-components";
 
-import { getToken } from "../../auth/authentications";
+//Dependencies
+import { routes } from "../../env";
+import { getToken } from "../../auth/useAuth";
 
-import { useState, useEffect } from "react";
+//Styles
+import "../../Globals.css";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -101,7 +104,6 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchCustomers, ro
     }
   }, [openEditModal]);
 
-  //Get the customer groups list
   async function handleCustomerGroup() {
     const customerGroupRoutes = routes.customerGroup;
     try {
@@ -115,11 +117,10 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchCustomers, ro
 
       setGroupList(customerGroupData);
     } catch (error) {
-      toast.error("Ops, algo deu errado. Recarregue a página e tente novamente.");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 
-  //Set up the submit function
   async function handleEdit(values, { setSubmitting, resetForm }) {
     const { display_name, fantasy_name, customer_group } = values;
 
@@ -152,7 +153,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchCustomers, ro
 
       fetchCustomers();
     } catch (error) {
-      toast.error("Ops, algo deu errado. Por favor, tente novamente");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 

@@ -1,8 +1,15 @@
-import styled from "styled-components";
-import BaseLayout from "../../pages/BaseLayout.jsx";
-import "../../Globals.css";
+//React
 import { useState } from "react";
+
+//Libs
+import styled from "styled-components";
+
+//Components
+import BaseLayout from "../../pages/BaseLayout.jsx";
 import Index from "./Index.jsx";
+
+//Styles
+import "../../Globals.css";
 
 const Box = styled.div`
   width: 100%;
@@ -37,10 +44,7 @@ function UsersPage() {
               Adicionar usuário
             </button>
           </div>
-          <Index
-            openCreateModal={openCreateModal}
-            setOpenCreateModal={setOpenCreateModal}
-          />
+          <Index openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
         </Box>
       </BaseLayout>
     </>

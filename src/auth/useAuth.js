@@ -1,27 +1,55 @@
-// import { getToken } from "./authentications";
-// import axios from "axios";
-// import { routes } from "../env";
+// SessionCheck.js
+//React
+import { useEffect, useState } from "react";
 
-// export const SessionCheck = () => {
-//   if (refresh_token === undefined) {
-//     refresh_token();
-//   }
+//Libs
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-//   return null;
-// };
+//Dependencies
+import { routes } from "../env";
+import { toast } from "react-toastify";
 
-// const token = getToken();
+export function getToken() {
+  const token = sessionStorage.getItem("token");
+  return token;
+}
 
-// export async function refresh_token(token) {
-//   const loginRoutes = routes.login;
+const SessionCheck = (props) => {
+  const [isLogged, setIsLogged] = useState(false);
 
-//   try {
-//     const myInformation = await axios.get(loginRoutes.me, {
-//       headers: {
-//         auth: token,
-//       },
-//     });
+  const navigate = useNavigate();
 
-//     console.log(myInformation);
-//   } catch (err) {}
-// }
+  async function checkUserSession() {
+    const loginRoutes = routes.login;
+    const token = getToken();
+
+    try {
+      const loginData = await axios.get(loginRoutes.me, {
+        headers: {
+          auth: token,
+        },
+      });
+
+      const refresh_token = loginData.headers.token;
+
+      if (refresh_token === undefined) {
+        throw error("Token indefinido"); //Não está funcionando
+      }
+
+      setIsLogged(true);
+    } catch (error) {
+      navigate("/");
+      toast.error("Usuário não autenticado");
+      setIsLogged(false);
+    }
+  }
+
+  useEffect(() => {
+    checkUserSession();
+  }, []);
+
+  return isLogged ? props.children : null;
+};
+
+export default SessionCheck;

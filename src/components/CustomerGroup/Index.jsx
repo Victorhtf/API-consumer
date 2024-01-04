@@ -11,9 +11,9 @@ import CreateCustomerGroupModal from "./CreateCustomerGroupModal";
 import EditCustomerGroupModal from "./EditCustomerGroupModal";
 import DeleteCustomerGroupModal from "./DeleteCustomerGroupModal";
 
-//User configs
+//Dependencies
 import { routes } from "../../env";
-import { getToken } from "../../auth/authentications";
+import { getToken } from "../../auth/useAuth";
 
 function Index({ openCreateModal, setOpenCreateModal }) {
   const [open, setOpen] = useState(false);
@@ -41,6 +41,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   //Load table
   useEffect(() => {
     fetchCustomerGroup();
+    console.log("load cg");
   }, []);
 
   //Load customer groups
@@ -63,11 +64,10 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       });
     } catch (error) {
       setLoading(false);
-      toast.error("Ops, algo deu errado. Tente novamente.");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 
-  //
   function handleEditModal(row) {
     setOpenEditModal(true);
     setRowState(row);
@@ -183,6 +183,8 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     scroll,
     tableLayout,
   };
+
+  // console.log("INDEXCG"); //REVER
 
   return (
     <>

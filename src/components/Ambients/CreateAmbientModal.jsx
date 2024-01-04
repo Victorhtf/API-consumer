@@ -1,20 +1,22 @@
+//React
 import React from "react";
-import { MenuItem, Select, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
 import { useState, useEffect } from "react";
-import { AiOutlineCloseCircle } from "react-icons/ai";
-import styled from "styled-components";
-import "../../Globals.css";
-import { useFormik, validateYupSchema } from "formik";
-import axios from "axios";
 
+//Libs
+import { MenuItem, Select, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
+import { AiOutlineCloseCircle } from "react-icons/ai";
+import { useFormik, validateYupSchema } from "formik";
+import { toast } from "react-toastify";
+import styled from "styled-components";
+import axios from "axios";
+import * as Yup from "yup";
+
+//Dependencies
+import { getToken } from "../../auth/useAuth";
 import { routes } from "../../env";
 
-import { toast } from "react-toastify";
-
-import { getToken } from "../../auth/authentications";
-import { AutoComplete } from "antd";
-
-import * as Yup from "yup";
+//Styles
+import "../../Globals.css";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -140,7 +142,6 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
     }
   }, [citiesList]);
 
-  //Handle cityList
   async function handleCityList(citiesList) {
     const ambientRoutes = routes.ambient;
 
@@ -200,7 +201,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
       fetchAmbients();
     } catch (error) {
       console.debug(error);
-      toast.error("Ops, algo deu errado. Por favor, tente novamente");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 
@@ -223,6 +224,8 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
       formik.resetForm();
     },
   });
+
+  console.log("ok"); //REVER //8 RENDERIZAÇÕES
 
   if (!openCreateModal) return null;
   return (
@@ -285,7 +288,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                       id="customer_id"
                       name="customer_id"
                       label="customer_id"
-                      value={formik.values.customer.id}
+                      value={formik.values.customer_id}
                       onChange={formik.handleChange}
                     >
                       {customerList.map((customerList, index) => (

@@ -1,8 +1,11 @@
+//Libs
 import styled from "styled-components";
-import { routes } from "../../env";
-import { getToken } from "../../auth/authentications";
 import { toast } from "react-toastify";
 import axios from "axios";
+
+//Dependencies
+import { routes } from "../../env";
+import { getToken } from "../../auth/useAuth";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -102,7 +105,7 @@ const DeleteCustomerModal = (props) => {
 
       fetchCustomers();
     } catch (error) {
-      toast.error("Ops, algo deu errado. Tente novamente.");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 

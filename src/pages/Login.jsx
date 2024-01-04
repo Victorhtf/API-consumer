@@ -1,16 +1,23 @@
+//React
+import { useState } from "react";
+
+//Libs
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { Formik } from "formik";
+import { toast } from "react-toastify";
+import styled from "styled-components";
+import axios from "axios";
 import * as Yup from "yup";
+
+//Components
+import Loading from "../components/Loading/Loading";
+
+//Dependencies
+import { routes } from "../env";
+
+//Assets
 import loginbg3 from "../assets/system_pages/login-bg3.jpg";
 import intradataLogo from "../assets/logo/logo-complete.png";
-import axios from "axios";
-import { intradataConfig } from "../env";
-import { useState } from "react";
-import Loading from "../components/Loading/Loading";
-import { toast } from "react-toastify";
-
-import { routes } from "../env";
 
 const Box = styled.div`
   display: flex;
@@ -163,9 +170,7 @@ function Login() {
         }
       );
 
-      const { user, refresh_token } = await handleMyInformation(
-        response.data.token
-      );
+      const { user, refresh_token } = await handleMyInformation(response.data.token);
 
       for (const key in user) {
         sessionStorage.setItem(key, JSON.stringify(user[key]));
@@ -190,7 +195,7 @@ function Login() {
         setRemoveLoading(true);
       }
     } catch (error) {
-      toast.error("404 - Not Found");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
       setRemoveLoading(true);
     }
   }
@@ -204,11 +209,7 @@ function Login() {
 
   return (
     <Box>
-      <Formik
-        initialValues={{ username: "", password: "" }}
-        validationSchema={ValidateSchema}
-        onSubmit={handleLogin}
-      >
+      <Formik initialValues={{ username: "", password: "" }} validationSchema={ValidateSchema} onSubmit={handleLogin}>
         {({ values, errors, handleChange, handleBlur, handleSubmit }) => (
           <div>
             {!removeLoading && <Loading width="300px" height="360px" />}
@@ -216,37 +217,17 @@ function Login() {
               <form onSubmit={handleSubmit} className="form">
                 <div>
                   <img src={intradataLogo} />
-                  <p className="description">
-                    Faça login para ter acesso aos recursos!
-                  </p>
+                  <p className="description">Faça login para ter acesso aos recursos!</p>
                 </div>
 
                 <div className="inputs">
                   <div className="username">
-                    <input
-                      type="text"
-                      id="username"
-                      placeholder="Username"
-                      value={values.username}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    <p className="required">
-                      {errors.username && errors.username}
-                    </p>
+                    <input type="text" id="username" placeholder="Username" value={values.username} onChange={handleChange} onBlur={handleBlur} />
+                    <p className="required">{errors.username && errors.username}</p>
                   </div>
                   <div className="password">
-                    <input
-                      type="password"
-                      id="password"
-                      placeholder="Password"
-                      value={values.password}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    />
-                    <p className="required">
-                      {errors.password && errors.password}
-                    </p>
+                    <input type="password" id="password" placeholder="Password" value={values.password} onChange={handleChange} onBlur={handleBlur} />
+                    <p className="required">{errors.password && errors.password}</p>
                   </div>
                 </div>
 

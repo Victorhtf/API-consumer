@@ -1,21 +1,17 @@
-import {
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  TextField,
-} from "@mui/material";
+//Libs
+import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import styled from "styled-components";
-import "../../Globals.css";
+import { toast } from "react-toastify";
 import { useFormik } from "formik";
+import styled from "styled-components";
 import axios from "axios";
 
+//Dependencies
 import { routes } from "../../env";
+import { getToken } from "../../auth/useAuth";
 
-import { toast } from "react-toastify";
-
-import { getToken } from "../../auth/authentications";
+//Styles
+import "../../Globals.css";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -96,12 +92,7 @@ const ModalFade = styled.div`
   }
 `;
 
-function EditCustomerGroupModal({
-  openEditModal,
-  setOpenEditModal,
-  fetchCustomerGroup,
-  rowState,
-}) {
+function EditCustomerGroupModal({ openEditModal, setOpenEditModal, fetchCustomerGroup, rowState }) {
   const rolesList = [
     "SYS_ADMIN",
     "ADMIN",
@@ -148,7 +139,7 @@ function EditCustomerGroupModal({
 
       fetchCustomerGroup();
     } catch (error) {
-      toast.error("Ops, algo deu errado. Por favor, tente novamente");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 
@@ -217,11 +208,7 @@ function EditCustomerGroupModal({
                 <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
-                <button
-                  disabled={formik.isSubmitting}
-                  type="submit"
-                  className="btn-submit-form"
-                >
+                <button disabled={formik.isSubmitting} type="submit" className="btn-submit-form">
                   Editar grupo de cliente
                 </button>
               </div>

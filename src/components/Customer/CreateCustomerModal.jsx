@@ -1,16 +1,20 @@
-import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
+//React
 import { useState, useEffect } from "react";
+
+//Libs
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
-import "../../Globals.css";
-import { useFormik } from "formik";
 import axios from "axios";
 
+//Components
 import { routes } from "../../env";
+import { getToken } from "../../auth/useAuth";
 
-import { toast } from "react-toastify";
-
-import { getToken } from "../../auth/authentications";
+//Styles
+import "../../Globals.css";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
@@ -148,7 +152,7 @@ function CreateCustomerModal({ openCreateModal, setOpenCreateModal, fetchCustome
       fetchCustomers();
     } catch (error) {
       console.debug(error);
-      toast.error("Ops, algo deu errado. Por favor, tente novamente");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 
