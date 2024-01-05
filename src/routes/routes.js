@@ -1,11 +1,4 @@
-export const intradataConfig = {
-  protocol: "https",
-  url: "localhost",
-  basePath: "v1",
-  port: "8889",
-};
-
-export const baseUrl = `${intradataConfig.protocol}://${intradataConfig.url}:${intradataConfig.port}/${intradataConfig.basePath}`;
+import { baseUrl } from "../env";
 
 export const routes = {
   login: {

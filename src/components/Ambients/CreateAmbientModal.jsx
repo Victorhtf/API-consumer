@@ -225,8 +225,6 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
     },
   });
 
-  console.log("ok"); //REVER //8 RENDERIZAÇÕES
-
   if (!openCreateModal) return null;
   return (
     <ModalFade

@@ -10,33 +10,33 @@ import axios from "axios";
 import UnlinkAmbientModal from "./UnlinkAmbientModal.jsx";
 import LinkUserXAmbientsModal from "./LinkUserXAmbientsModal";
 
-//User configs
+//Dependencies
 import { routes } from "../../env";
 import { getToken } from "../../auth/useAuth";
 
 function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetchAmbients }) {
-  const [open, setOpen] = useState(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  // const [open, setOpen] = useState(false);
+  // const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const [userxambient, setUserxambient] = useState([]);
   const bordered = false;
-  const [size, setSize] = useState("large");
+  // const [size, setSize] = useState("large");
   const showTitle = false;
   const showHeader = true;
-  const [tableLayout, setTableLayout] = useState();
-  const [top, setTop] = useState("none");
-  const [bottom, setBottom] = useState("bottomRight");
-  const [ellipsis, setEllipsis] = useState(false);
-  const [yScroll, setYScroll] = useState(false);
-  const [xScroll, setXScroll] = useState();
+  // const [tableLayout, setTableLayout] = useState();
+  // const [top, setTop] = useState("none");
+  // const [bottom, setBottom] = useState("bottomRight");
+  // const [ellipsis, setEllipsis] = useState(false);
+  // const [yScroll, setYScroll] = useState(false);
+  // const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState(null);
-  const [tableState, setTableState] = useState(null);
+  // const [tableState, setTableState] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openUnlinkModal, setOpenUnlinkModal] = useState(false);
-  const [rows, setRows] = useState([]);
+  // const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  const [ambientsList, setAmbientsList] = useState([]);
-  const [usersList, setUsersList] = useState([]);
+  // const [ambientsList, setAmbientsList] = useState([]);
+  // const [usersList, setUsersList] = useState([]);
 
   const userXAmbientRoutes = routes.userxambient;
 

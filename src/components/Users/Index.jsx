@@ -12,21 +12,17 @@ import DeleteUserModal from "./DeleteUserModal";
 import EditUserModal from "./EditUserModal";
 
 //Dependencies
-import { intradataConfig } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
-//REVER
-const baseServiceUrl = `${intradataConfig["protocol"]}://${intradataConfig["url"]}`;
-const finalUrl = `${baseServiceUrl}:${intradataConfig["port"]}/${intradataConfig["basePath"]}/user`;
-
 function Index({ openCreateModal, setOpenCreateModal }) {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
   const [users, setUsers] = useState([]);
   const bordered = false;
-  const [size, setSize] = useState("large");
+  // const [size, setSize] = useState("large");
   const showTitle = false;
   const showHeader = true;
   const [tableLayout, setTableLayout] = useState();
@@ -60,8 +56,9 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   }, []);
 
   async function fetchUsers() {
+    const userRoutes = routes.user;
     try {
-      const response = await axios.get(finalUrl, {
+      const response = await axios.get(userRoutes.listAll, {
         headers: {
           auth: getToken(),
         },

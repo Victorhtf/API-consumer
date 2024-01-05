@@ -33,11 +33,18 @@ const SessionCheck = (props) => {
 
       const refresh_token = loginData.headers.token;
 
-      if (refresh_token === undefined) {
-        throw error("Token indefinido"); //Não está funcionando
+      const userReqPermissions = loginData.data.permissions;
+      const userSessionPermissions = sessionStorage.getItem("permissions");
+
+      if (userReqPermissions.includes("ALL") && userSessionPermissions.includes("ALL")) {
+        setIsLogged(true);
+      } else {
+        throw error("401 - Unauthorized");
       }
 
-      setIsLogged(true);
+      if (refresh_token === undefined) {
+        throw error("401 - Unauthorized");
+      }
     } catch (error) {
       navigate("/");
       toast.error("Usuário não autenticado");
