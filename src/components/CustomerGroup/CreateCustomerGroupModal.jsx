@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 //Dependencies
 import { getToken } from "../../auth/useAuth";
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 
 //Styles
 import "../../Globals.css";

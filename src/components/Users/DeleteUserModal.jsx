@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Dependencies
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 const ModalFade = styled.div`
@@ -106,8 +106,6 @@ const DeleteUserModal = (props) => {
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
-
-  console.log("OK"); //REVER //RENDERIZAÇÃO DUPLA
 
   if (!openDeleteModal) return null;
   return (

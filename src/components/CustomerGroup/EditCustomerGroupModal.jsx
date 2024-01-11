@@ -7,7 +7,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 //Dependencies
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 //Styles
@@ -106,7 +106,6 @@ function EditCustomerGroupModal({ openEditModal, setOpenEditModal, fetchCustomer
     "CALENDAR_EVENTS_MANAGER",
   ];
 
-  //Set up the submit function
   async function handleEdit(values, { setSubmitting, resetForm }) {
     const { display_name, fantasy_name } = values;
     try {

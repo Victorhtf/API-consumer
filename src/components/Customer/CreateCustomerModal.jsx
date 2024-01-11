@@ -10,7 +10,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 //Components
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 //Styles
@@ -98,7 +98,6 @@ const ModalFade = styled.div`
 function CreateCustomerModal({ openCreateModal, setOpenCreateModal, fetchCustomers }) {
   const [groupList, setGroupList] = useState([]);
 
-  //Get the customer groups list
   async function handleCustomerGroup() {
     const customerGroupRoutes = routes.customerGroup;
     try {
@@ -122,7 +121,6 @@ function CreateCustomerModal({ openCreateModal, setOpenCreateModal, fetchCustome
     }
   }, [openCreateModal]);
 
-  //Set up the submit function
   async function handleSubmit(values, props) {
     const { resetForm } = props;
     try {
@@ -230,8 +228,8 @@ function CreateCustomerModal({ openCreateModal, setOpenCreateModal, fetchCustome
                       value={formik.values.customer_groups}
                       onChange={formik.handleChange}
                     >
-                      {groupList.map((groupList, index) => (
-                        <MenuItem key={index} value={groupList.id}>
+                      {groupList.map((groupList, groupIndex) => (
+                        <MenuItem key={groupIndex} value={groupList.id}>
                           {groupList.display_name}
                         </MenuItem>
                       ))}

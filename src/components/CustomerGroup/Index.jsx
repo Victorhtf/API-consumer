@@ -12,7 +12,7 @@ import EditCustomerGroupModal from "./EditCustomerGroupModal";
 import DeleteCustomerGroupModal from "./DeleteCustomerGroupModal";
 
 //Dependencies
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 function Index({ openCreateModal, setOpenCreateModal }) {
@@ -38,15 +38,16 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
-  //Load table
   useEffect(() => {
     fetchCustomerGroup();
-    console.log("load cg");
+    toast.info("Base de dados atualizada!", {
+      position: "bottom-right",
+    });
   }, []);
 
-  //Load customer groups
   async function fetchCustomerGroup() {
     const customerGroupsRoutes = routes.customerGroup;
+    toast.dismiss();
     try {
       const response = await axios.get(customerGroupsRoutes.listAll, {
         headers: {
@@ -55,13 +56,9 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       });
 
       const customerGroupData = response.data;
+
       setCustomerGroups(customerGroupData);
-
       setLoading(false);
-
-      toast.info("Base de dados atualizada!", {
-        position: "bottom-right",
-      });
     } catch (error) {
       setLoading(false);
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
@@ -183,8 +180,6 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     scroll,
     tableLayout,
   };
-
-  // console.log("INDEXCG"); //REVER
 
   return (
     <>

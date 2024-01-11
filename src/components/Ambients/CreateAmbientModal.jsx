@@ -13,7 +13,7 @@ import * as Yup from "yup";
 
 //Dependencies
 import { getToken } from "../../auth/useAuth";
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 
 //Styles
 import "../../Globals.css";
@@ -165,7 +165,6 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
     }
   }
 
-  //Set up the submit function
   async function handleSubmit(values, props) {
     const { resetForm } = props;
     const ambientRoutes = routes.ambient;
@@ -289,8 +288,8 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                       value={formik.values.customer_id}
                       onChange={formik.handleChange}
                     >
-                      {customerList.map((customerList, index) => (
-                        <MenuItem key={index} value={customerList.id}>
+                      {customerList.map((customerList, customerIndex) => (
+                        <MenuItem key={customerIndex} value={customerList.id}>
                           {customerList.display_name}
                         </MenuItem>
                       ))}

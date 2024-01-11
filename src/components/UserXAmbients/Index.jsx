@@ -11,32 +11,27 @@ import UnlinkAmbientModal from "./UnlinkAmbientModal.jsx";
 import LinkUserXAmbientsModal from "./LinkUserXAmbientsModal";
 
 //Dependencies
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetchAmbients }) {
-  // const [open, setOpen] = useState(false);
-  // const [openDeleteModal, setOpenDeleteModal] = useState(false);
-
   const [userxambient, setUserxambient] = useState([]);
   const bordered = false;
-  // const [size, setSize] = useState("large");
+  const [size, setSize] = useState("large");
   const showTitle = false;
   const showHeader = true;
-  // const [tableLayout, setTableLayout] = useState();
-  // const [top, setTop] = useState("none");
-  // const [bottom, setBottom] = useState("bottomRight");
-  // const [ellipsis, setEllipsis] = useState(false);
-  // const [yScroll, setYScroll] = useState(false);
-  // const [xScroll, setXScroll] = useState();
+  const [tableLayout, setTableLayout] = useState();
+  const [top, setTop] = useState("none");
+  const [bottom, setBottom] = useState("bottomRight");
+  const [ellipsis, setEllipsis] = useState(false);
+  const [yScroll, setYScroll] = useState(false);
+  const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState(null);
-  // const [tableState, setTableState] = useState(null);
+  const [tableState, setTableState] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openUnlinkModal, setOpenUnlinkModal] = useState(false);
-  // const [rows, setRows] = useState([]);
+  const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
-  // const [ambientsList, setAmbientsList] = useState([]);
-  // const [usersList, setUsersList] = useState([]);
 
   const userXAmbientRoutes = routes.userxambient;
 
@@ -56,7 +51,6 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
     } catch (error) {}
   }
 
-  //Get the AmbientsList
   async function handleAmbientsList() {
     const ambientRoutes = routes.ambient;
     try {
@@ -75,9 +69,14 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
     handleAmbientsList();
     handleUserList();
     fetchUserXAmbient();
+    toast.info("Base de dados atualizada!", {
+      position: "bottom-right",
+    });
   }, []);
 
   async function fetchUserXAmbient() {
+    toast.dismiss();
+    console.log("ok");
     try {
       const { data: response } = await axios.get(userXAmbientRoutes.listAllArray, {
         headers: {
@@ -88,16 +87,10 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
       const userXAmbient = response;
 
       setUserxambient(userXAmbient);
-
       setLoading(false);
-
-      toast.info("Base de dados atualizada!", {
-        position: "bottom-right",
-      });
     } catch (error) {
       setLoading(false);
-
-      toast.error("Ops, algo deu errado. Tente novamente mais tarde..");
+      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
 
@@ -126,8 +119,8 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
       render: (ambients) => {
         return ambients.length > 0 ? (
           <div>
-            {ambients.map((ambient) => (
-              <Tag color="blue" key={ambient.id}>
+            {ambients.map((ambient, ambientIndex) => (
+              <Tag color="blue" key={ambientIndex.id}>
                 {ambient.display_name.toUpperCase()}
               </Tag>
             ))}

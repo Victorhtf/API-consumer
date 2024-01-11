@@ -5,7 +5,7 @@ import axios from "axios";
 
 //Dependencies
 import { getToken } from "../../auth/useAuth";
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);

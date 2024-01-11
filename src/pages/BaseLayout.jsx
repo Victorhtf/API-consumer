@@ -8,6 +8,7 @@ import SessionCheck from "../auth/useAuth.js";
 
 //Styles
 import "../Globals.css";
+import { Outlet } from "react-router-dom";
 
 const RowBox = styled.div`
   display: flex;
@@ -38,7 +39,11 @@ function BaseLayout(props) {
           <Sidebar />
           <ColumnBox>
             <Header />
-            <Card>{props.children}</Card>
+            <Card>
+              <Outlet>
+                <SessionCheck />
+              </Outlet>
+            </Card>
           </ColumnBox>
         </RowBox>
       </SessionCheck>

@@ -5,9 +5,10 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import axios from "axios";
+import * as Yup from "yup";
 
 //Dependencies
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 //Styles
@@ -106,7 +107,6 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
     "CALENDAR_EVENTS_MANAGER",
   ];
 
-  //Set up the submit function
   async function handleSubmit(values, props) {
     const { resetForm } = props;
     try {
@@ -114,6 +114,8 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
 
       const { username, email, roles, password } = values;
       const userRoutes = routes.user;
+
+      await validateschema.validate(values, { abortEarly: false });
 
       const body = {
         username: username,
@@ -138,6 +140,12 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
 
       fetchUsers();
     } catch (error) {
+      if (error.inner) {
+        error.inner.forEach((err) => {
+          toast.error(err.message);
+        });
+        return;
+      }
       console.debug(error);
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
@@ -167,6 +175,11 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
     },
   };
 
+  const validateschema = Yup.object().shape({
+    username: Yup.string().required("Campo obrigatório").min(4, "O usuário precisa ter no mínimo 4 caracteres."),
+    password: Yup.string().required("Campo obrigatório").min(4, "A senha precisa ter no mínimo 4 caracteres."),
+  });
+
   if (!openCreateModal) return null;
   return (
     <ModalFade
@@ -194,6 +207,7 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
               <div className="form">
                 <div className="form-group">
                   <TextField
+                    validationSchema={validateschema}
                     fullWidth
                     size="small"
                     id="username"
@@ -241,8 +255,8 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
                       value={formik.values.roles}
                       onChange={formik.handleChange}
                     >
-                      {roles.map((item, index) => (
-                        <MenuItem key={index} value={item}>
+                      {roles.map((item, rolesIndex) => (
+                        <MenuItem key={rolesIndex} value={item}>
                           {item}
                         </MenuItem>
                       ))}

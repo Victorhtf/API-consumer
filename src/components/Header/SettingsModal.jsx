@@ -61,8 +61,6 @@ function SettingsModal({ openSettingsModal, setOpenSettingsModal }) {
     sessionStorage.removeItem("id");
     sessionStorage.removeItem("permissions");
 
-    // setAuthenticated(false);
-
     navigate("/");
 
     toast.error("Usuário desconectado.", {

@@ -5,7 +5,6 @@ import { useState } from "react";
 import styled from "styled-components";
 
 //Components
-import BaseLayout from "../../pages/BaseLayout.jsx";
 import Index from "./Index.jsx";
 
 //Styles
@@ -30,24 +29,20 @@ function AmbientPage() {
   const [openCreateModal, setOpenCreateModal] = useState(false);
 
   return (
-    <>
-      <BaseLayout>
-        <Box>
-          <div className="top-label">
-            <h1> Listar ambientes </h1>
-            <button
-              className="blue-btn"
-              onClick={() => {
-                setOpenCreateModal(true);
-              }}
-            >
-              Adicionar ambiente
-            </button>
-          </div>
-          <Index openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
-        </Box>
-      </BaseLayout>
-    </>
+    <Box>
+      <div className="top-label">
+        <h1> Listar ambientes </h1>
+        <button
+          className="blue-btn"
+          onClick={() => {
+            setOpenCreateModal(true);
+          }}
+        >
+          Adicionar ambiente
+        </button>
+      </div>
+      <Index openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
+    </Box>
   );
 }
 

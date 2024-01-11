@@ -1,5 +1,9 @@
+//React
+import React from "react";
+
 //Libs
 import styled from "styled-components";
+
 import { useNavigate } from "react-router-dom";
 import { RiLinkM } from "react-icons/ri";
 import { MdGroups } from "react-icons/md";
@@ -117,17 +121,17 @@ function Sidebar() {
           </div>
         </div>
         <div>
-          {routes.map((routes, index) => {
+          {routes.map((routes, routesIndex) => {
             return (
               <div
                 onClick={() => {
                   handleNavigate(routes.route);
                 }}
-                key={index}
+                key={routesIndex}
                 className="items"
               >
                 <div className="icon">{routes.icon()}</div>
-                <p className="cathegories" key={index}>
+                <p className="cathegories" key={routesIndex}>
                   {routes.name}
                 </p>
               </div>

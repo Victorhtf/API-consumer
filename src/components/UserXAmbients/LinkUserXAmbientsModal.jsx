@@ -11,7 +11,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 //Dependencies
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 //Styles
@@ -116,13 +116,11 @@ function LinkUserXAmbientsModal({ row, openLinkUserXAmbientsModal, setOpenLinkUs
     } catch (error) {}
   }
 
-  //Handle data
   function handleData() {
     handleAmbientsList();
     handleUserList();
   }
 
-  //Get thEDe AmbientsList
   async function handleAmbientsList() {
     const ambientRoutes = routes.ambient;
     try {

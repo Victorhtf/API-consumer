@@ -1,4 +1,3 @@
-// SessionCheck.js
 //React
 import { useEffect, useState } from "react";
 

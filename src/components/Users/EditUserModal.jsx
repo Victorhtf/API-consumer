@@ -7,7 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 //Dependencies
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 //Styles
@@ -117,7 +117,6 @@ function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }
     "CALENDAR_EVENTS_MANAGER",
   ];
 
-  //Set up the submit function
   async function handleEdit(values, { setSubmitting, resetForm }) {
     const { username, password, email, roles } = values;
     try {
@@ -244,8 +243,8 @@ function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }
                   <FormControl size="small" fullWidth>
                     <InputLabel id="roles">Papéis</InputLabel>
                     <Select multiple MenuProps={MenuProps} id="roles" name="roles" label="roles" value={formik.values.roles} onChange={formik.handleChange}>
-                      {rolesList.map((item, index) => (
-                        <MenuItem key={index} value={item}>
+                      {rolesList.map((item, rolesEditIndex) => (
+                        <MenuItem key={rolesEditIndex} value={item}>
                           {item}
                         </MenuItem>
                       ))}

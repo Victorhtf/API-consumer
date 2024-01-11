@@ -12,7 +12,7 @@ import EditCustomerModal from "./EditCustomerModal";
 import DeleteCustomerModal from "./DeleteCustomerModal";
 
 //Dependencies
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 function Index({ openCreateModal, setOpenCreateModal }) {
@@ -39,10 +39,13 @@ function Index({ openCreateModal, setOpenCreateModal }) {
 
   useEffect(() => {
     fetchCustomers();
-    console.log("load table");
+    toast.info("Base de dados atualizada!", {
+      position: "bottom-right",
+    });
   }, []);
 
   async function fetchCustomers() {
+    toast.dismiss();
     try {
       const response = await axios.get(customerRoutes.listAll, {
         headers: {
@@ -51,13 +54,9 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       });
 
       const customerData = response.data;
+
       setCustomer(customerData);
-
       setLoading(false);
-
-      toast.info("Base de dados atualizada!", {
-        position: "bottom-right",
-      });
     } catch (error) {
       setLoading(false);
 

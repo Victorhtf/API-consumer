@@ -2,6 +2,7 @@
 import { useState } from "react";
 
 //Libs
+import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import { toast } from "react-toastify";
@@ -13,7 +14,7 @@ import * as Yup from "yup";
 import Loading from "../components/Loading/Loading";
 
 //Dependencies
-import { routes } from "../env";
+import { routes } from "../routes/routes";
 
 //Assets
 import loginbg3 from "../assets/system_pages/login-bg3.jpg";
@@ -31,7 +32,7 @@ const Box = styled.div`
 const FormBox = styled.div`
   background-color: red;
   width: 300px;
-  height: 360px;
+  height: auto;
   display: flex;
   flex-direction: column;
   padding: 2rem 3rem 1rem 3rem;
@@ -48,7 +49,6 @@ const FormBox = styled.div`
   .form {
     flex: 1;
     flex-direction: column;
-    justify-content: space-between;
     display: flex;
     padding: 0rem 0px 1rem 0px;
   }
@@ -62,18 +62,43 @@ const FormBox = styled.div`
   }
 
   .inputs {
+    margin-top: 10px;
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 7px;
+  }
+  input:focus {
+    box-sizing: inherit;
+    outline: 2px solid #81008f;
+  }
+
+  .password-input {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .password-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    height: 25px;
+    position: absolute;
+    right: 0;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    background-color: #182136;
   }
 
   .required {
-    color: #a10000;
-    margin-top: 2px;
+    display: flex;
+    color: #810101;
+    margin-top: 6px;
     margin-bottom: 2px;
     align-self: center;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   h3 {
@@ -91,6 +116,7 @@ const FormBox = styled.div`
   }
 
   input {
+    box-sizing: border-box;
     width: 100%;
     border: none;
     border-radius: 4px;
@@ -104,11 +130,13 @@ const ButtonBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
-  justify-content: flex-end;
-  align-items: align-items;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  margin-top: 20px;
 
   button {
+    width: 80%;
     border: none;
     padding: 0.6rem;
     border-radius: 5px;
@@ -117,6 +145,10 @@ const ButtonBox = styled.div`
     font-weight: 500;
     cursor: pointer;
     font-size: 12px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
       background: #171717;
@@ -128,6 +160,7 @@ const ButtonBox = styled.div`
 `;
 
 function Login() {
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const loginRoutes = routes.login;
 
@@ -154,9 +187,10 @@ function Login() {
       return { user: undefined, refresh_token: undefined };
     }
   }
+  const [loading, setLoading] = useState(false);
 
   async function handleLogin(values) {
-    !removeLoading ? setRemoveLoading(true) : setRemoveLoading(false);
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -182,7 +216,7 @@ function Login() {
 
       if (userPermissions.includes("ALL")) {
         navigate("/crud");
-        toast.success("Usuário autenticado", {
+        toast.success("Login realizado com sucesso!", {
           position: "top-center",
           autoClose: 3000,
           closeOnClick: true,
@@ -192,27 +226,24 @@ function Login() {
         });
       } else {
         toast.warn("401 - Unauthorized");
-        setRemoveLoading(true);
+        setLoading(false);
       }
     } catch (error) {
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
-      setRemoveLoading(true);
+      setLoading(false);
     }
   }
 
   const ValidateSchema = Yup.object().shape({
-    username: Yup.string().required("Username is required."),
-    password: Yup.string().required("Password is required."),
+    username: Yup.string().required("Campo obrigatório"),
+    password: Yup.string().required("Campo obrigatório"),
   });
-
-  const [removeLoading, setRemoveLoading] = useState(true);
 
   return (
     <Box>
       <Formik initialValues={{ username: "", password: "" }} validationSchema={ValidateSchema} onSubmit={handleLogin}>
         {({ values, errors, handleChange, handleBlur, handleSubmit }) => (
           <div>
-            {!removeLoading && <Loading width="300px" height="360px" />}
             <FormBox>
               <form onSubmit={handleSubmit} className="form">
                 <div>
@@ -226,14 +257,31 @@ function Login() {
                     <p className="required">{errors.username && errors.username}</p>
                   </div>
                   <div className="password">
-                    <input type="password" id="password" placeholder="Password" value={values.password} onChange={handleChange} onBlur={handleBlur} />
+                    <div className="password-input">
+                      <input
+                        id="password"
+                        type={!showPassword ? "password" : "text"}
+                        placeholder="Password"
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <div
+                        style={{ cursor: "pointer" }}
+                        className="password-icon"
+                        onClick={() => {
+                          setShowPassword(!showPassword);
+                        }}
+                      >
+                        {!showPassword ? <LuEye style={{ color: "white", fontSize: "12px" }} /> : <LuEyeOff style={{ color: "white", fontSize: "12px" }} />}
+                      </div>
+                    </div>
                     <p className="required">{errors.password && errors.password}</p>
                   </div>
                 </div>
 
                 <ButtonBox>
-                  <button type="submit">Login</button>
-                  <button>Cadastre-se</button>
+                  <button type="submit">{loading ? <Loading /> : "Login"}</button>
                 </ButtonBox>
               </form>
             </FormBox>

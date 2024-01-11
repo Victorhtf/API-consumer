@@ -10,7 +10,7 @@ import styled from "styled-components";
 import axios from "axios";
 
 //Dependencies
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 //Styles
@@ -123,7 +123,6 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
   useEffect(() => {
     if (openEditModal) {
       handleCustomerList();
-      console.log("openeditmodal");
     }
   }, []);
 
@@ -131,7 +130,6 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
     const delayDebounceFunction = setTimeout(() => {
       setCitiesList(citiesListAux.length === 0 ? undefined : citiesListAux);
     }, 1000);
-    console.log("delaydebounce");
     return () => clearTimeout(delayDebounceFunction);
   }, [citiesListAux]);
 
@@ -139,12 +137,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
     if (citiesList !== undefined) {
       handleCityList(citiesList);
     }
-    console.log("handlecitieslist");
   }, [citiesList]);
-
-  useEffect(() => {
-    console.log("ok");
-  });
 
   async function handleCityList(citiesList) {
     const ambientRoutes = routes.ambient;
@@ -178,6 +171,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
       setSubmitting(true);
 
       const token = getToken();
+      console.log(values);
 
       const body = {
         external_id: external_id,
@@ -221,6 +215,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
         rowState.address[0].address_complement && rowState.address[0].address_complement.length > 0 ? rowState.address[0].address_complement : "",
       postal_code: rowState.address[0].postal_code && rowState.address[0].postal_code.length > 0 ? rowState.address[0].postal_code : "Vazio",
       city: rowState.address[0].city.city && rowState.address[0].city.city.length > 0 ? rowState.address[0].city : undefined,
+      city_id: rowState.address[0].city.city && rowState.address[0].city.city.length > 0 ? rowState.address[0].city.id : undefined,
     },
     onSubmit: handleEdit,
     resetForm: () => {
@@ -291,8 +286,8 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                       value={formik.values.customer_id}
                       onChange={formik.handleChange}
                     >
-                      {customerList.map((customerList, index) => (
-                        <MenuItem key={index} value={customerList.id}>
+                      {customerList.map((customerList, customerListIndex) => (
+                        <MenuItem key={customerListIndex} value={customerList.id}>
                           {customerList.display_name}
                         </MenuItem>
                       ))}

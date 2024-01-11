@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Dependencies
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 //Styles

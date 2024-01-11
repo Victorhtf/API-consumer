@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 //Libs
 import { Input, Form, Space, Table, Tag } from "antd";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
 //Components
@@ -53,10 +53,14 @@ function Index({ openCreateModal, setOpenCreateModal }) {
 
   useEffect(() => {
     fetchUsers();
+    toast.info("Base de dados atualizada!", {
+      position: "bottom-right",
+    });
   }, []);
 
   async function fetchUsers() {
     const userRoutes = routes.user;
+    toast.dismiss();
     try {
       const response = await axios.get(userRoutes.listAll, {
         headers: {
@@ -65,13 +69,9 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       });
 
       const usersData = response.data;
+
       setUsers(usersData);
-
       setLoading(false);
-
-      toast.info("Base de dados atualizada!", {
-        position: "bottom-right",
-      });
     } catch (error) {
       setLoading(false);
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
@@ -79,8 +79,8 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   }
 
   function handleEditModal(row) {
-    setOpenEditModal(true);
     setRowState(row);
+    setOpenEditModal(true);
   }
 
   async function handleDeleteModal(row) {
@@ -130,10 +130,10 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       title: "Papéis",
       key: "tags",
       dataIndex: "roles",
-      filters: rolesList.map((item, index) => {
+      filters: rolesList.map((item, rolesListIndex) => {
         return {
           text: item,
-          value: index,
+          value: rolesListIndex,
         };
       }),
       onFilter: (value, record) => {

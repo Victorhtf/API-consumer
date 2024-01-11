@@ -10,7 +10,7 @@ import axios from "axios";
 import styled from "styled-components";
 
 //Dependencies
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 //Styles
@@ -230,8 +230,8 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchCustomers, ro
                       value={formik.values.customer_group}
                       onChange={formik.handleChange}
                     >
-                      {groupList.map((item, index) => (
-                        <MenuItem key={index} value={item.id}>
+                      {groupList.map((item, groupListIndex) => (
+                        <MenuItem key={groupListIndex} value={item.id}>
                           {item.display_name}
                         </MenuItem>
                       ))}

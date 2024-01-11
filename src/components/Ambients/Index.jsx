@@ -12,7 +12,7 @@ import EditAmbientModal from "./EditAmbientModal";
 import DeleteAmbientModal from "./DeleteAmbientModal";
 
 //Dependencies
-import { routes } from "../../env";
+import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
 function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
@@ -38,9 +38,13 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
 
   useEffect(() => {
     fetchAmbients();
+    toast.info("Base de dados atualizada!", {
+      position: "bottom-right",
+    });
   }, []);
 
   async function fetchAmbients() {
+    toast.dismiss();
     try {
       const { data: response } = await axios.get(ambientRoutes.listAllWithAddress, {
         headers: {
@@ -51,12 +55,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       const ambientData = response;
 
       setAmbient(ambientData);
-
       setLoading(false);
-
-      toast.info("Base de dados atualizada!", {
-        position: "bottom-right",
-      });
     } catch (error) {
       setLoading(false);
 

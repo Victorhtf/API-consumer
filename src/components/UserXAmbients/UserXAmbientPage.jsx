@@ -5,7 +5,6 @@ import { useState } from "react";
 import styled from "styled-components";
 
 //Components
-import BaseLayout from "../../pages/BaseLayout.jsx";
 import Index from "./Index.jsx";
 
 //Dependencies
@@ -32,24 +31,20 @@ function UserXAmbientPage() {
   const [openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal] = useState(false);
 
   return (
-    <>
-      <BaseLayout>
-        <Box>
-          <div className="top-label">
-            <h1> Ambientes X Usuários </h1>
-            <button
-              className="blue-btn"
-              onClick={() => {
-                setOpenLinkUserXAmbientsModal(true);
-              }}
-            >
-              Criar vínculo
-            </button>
-          </div>
-          <Index openLinkUserXAmbientsModal={openLinkUserXAmbientsModal} setOpenLinkUserXAmbientsModal={setOpenLinkUserXAmbientsModal} />
-        </Box>
-      </BaseLayout>
-    </>
+    <Box>
+      <div className="top-label">
+        <h1> Ambientes X Usuários </h1>
+        <button
+          className="blue-btn"
+          onClick={() => {
+            setOpenLinkUserXAmbientsModal(true);
+          }}
+        >
+          Criar vínculo
+        </button>
+      </div>
+      <Index openLinkUserXAmbientsModal={openLinkUserXAmbientsModal} setOpenLinkUserXAmbientsModal={setOpenLinkUserXAmbientsModal} />
+    </Box>
   );
 }
 
