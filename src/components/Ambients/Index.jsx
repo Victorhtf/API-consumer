@@ -264,6 +264,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         dataSource={ambient.length > 0 ? ambient : []}
         style={{ width: "100%", height: "100%" }}
         scroll={{ y: 395 }}
+        rowKey={"id"}
       />
     </>
   );

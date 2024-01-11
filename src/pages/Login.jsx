@@ -242,7 +242,7 @@ function Login() {
   return (
     <Box>
       <Formik initialValues={{ username: "", password: "" }} validationSchema={ValidateSchema} onSubmit={handleLogin}>
-        {({ values, errors, handleChange, handleBlur, handleSubmit }) => (
+        {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
           <div>
             <FormBox>
               <form onSubmit={handleSubmit} className="form">
@@ -254,7 +254,7 @@ function Login() {
                 <div className="inputs">
                   <div className="username">
                     <input type="text" id="username" placeholder="Username" value={values.username} onChange={handleChange} onBlur={handleBlur} />
-                    <p className="required">{errors.username && errors.username}</p>
+                    <p className="required">{touched.username && errors.username && errors.username}</p>
                   </div>
                   <div className="password">
                     <div className="password-input">

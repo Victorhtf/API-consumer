@@ -120,7 +120,7 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
         return ambients.length > 0 ? (
           <div>
             {ambients.map((ambient, ambientIndex) => (
-              <Tag color="blue" key={ambientIndex.id}>
+              <Tag color="blue" key={ambientIndex}>
                 {ambient.display_name.toUpperCase()}
               </Tag>
             ))}
@@ -205,6 +205,7 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
         dataSource={userxambient.length > 0 ? userxambient : []}
         style={{ width: "100%", height: "100%" }}
         scroll={{ y: 395 }}
+        rowKey={"id"}
       />
     </>
   );

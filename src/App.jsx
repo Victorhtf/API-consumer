@@ -16,6 +16,7 @@ import CustomerPage from "./components/Customer/CustomerPage.jsx";
 import CustomerGroupPage from "./components/CustomerGroup/CustomerGroupPage.jsx";
 import AmbientPage from "./components/Ambients/AmbientPage.jsx";
 import UserXAmbientPage from "./components/UserXAmbients/UserXAmbientPage.jsx";
+import SessionCheck from "./auth/useAuth.js";
 
 function App() {
   return (

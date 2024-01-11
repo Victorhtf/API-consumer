@@ -130,6 +130,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       title: "Papéis",
       key: "tags",
       dataIndex: "roles",
+      filteredValue: null,
       filters: rolesList.map((item, rolesListIndex) => {
         return {
           text: item,
@@ -141,8 +142,8 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       },
       render: (roles) => (
         <>
-          {roles.map((role) => (
-            <Tag style={{ marginBottom: "2px" }} color="blue" key={role}>
+          {roles.map((role, roleIndex) => (
+            <Tag style={{ marginBottom: "2px" }} color="blue" key={roleIndex}>
               {role.name.toUpperCase()}
             </Tag>
           ))}
@@ -167,7 +168,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       title: "Ações",
       key: "ações",
       width: 120,
-
+      filteredValue: null,
       render: (row) => (
         <Space size="middle">
           <a
@@ -248,6 +249,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         dataSource={users.length > 0 ? users : []}
         style={{ width: "100%", height: "100%" }}
         scroll={{ y: 395 }}
+        rowKey={"id"}
       />
     </>
   );

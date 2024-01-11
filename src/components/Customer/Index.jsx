@@ -222,6 +222,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         dataSource={customer.length > 0 ? customer : []}
         style={{ width: "100%", height: "100%" }}
         scroll={{ y: 395 }}
+        rowKey={"id"}
       />
     </>
   );

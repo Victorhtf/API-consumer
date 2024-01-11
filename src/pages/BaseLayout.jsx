@@ -40,9 +40,7 @@ function BaseLayout(props) {
           <ColumnBox>
             <Header />
             <Card>
-              <Outlet>
-                <SessionCheck />
-              </Outlet>
+              <Outlet />
             </Card>
           </ColumnBox>
         </RowBox>
