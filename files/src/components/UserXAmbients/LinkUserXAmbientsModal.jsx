@@ -215,6 +215,25 @@ function LinkUserXAmbientsModal({ row, openLinkUserXAmbientsModal, setOpenLinkUs
             <div className="content">
               <div className="form">
                 <div className="form-group">
+                  <FormControl size="small">
+                    <InputLabel id="user_id">Usuário</InputLabel>
+                    <Select
+                      sx={{ width: "200px" }}
+                      size="small"
+                      id="user_id"
+                      name="user_id"
+                      variant="outlined"
+                      label="Usuário"
+                      value={formik.values.user_id}
+                      onChange={formik.handleChange}
+                    >
+                      {usersList
+                        .sort((a, b) => a.username.localeCompare(b.username))
+                        .map((users) => {
+                          return <MenuItem value={users.id}>{users.username}</MenuItem>;
+                        })}
+                    </Select>
+                  </FormControl>
                   <FormControl size="small" sx={{ width: 300 }}>
                     <InputLabel id="ambient">Ambiente</InputLabel>
                     <Select
@@ -232,26 +251,11 @@ function LinkUserXAmbientsModal({ row, openLinkUserXAmbientsModal, setOpenLinkUs
                       value={formik.values.ambient_id}
                       onChange={formik.handleChange}
                     >
-                      {ambientsList.map((ambient) => {
-                        return <MenuItem value={ambient.id}>{ambient.display_name}</MenuItem>;
-                      })}
-                    </Select>
-                  </FormControl>
-                  <FormControl size="small">
-                    <InputLabel id="user_id">Usuário</InputLabel>
-                    <Select
-                      sx={{ width: "200px" }}
-                      size="small"
-                      id="user_id"
-                      name="user_id"
-                      variant="outlined"
-                      label="Usuário"
-                      value={formik.values.user_id}
-                      onChange={formik.handleChange}
-                    >
-                      {usersList.map((users) => {
-                        return <MenuItem value={users.id}>{users.username}</MenuItem>;
-                      })}
+                      {ambientsList
+                        .sort((a, b) => a.display_name.localeCompare(b.display_name))
+                        .map((ambient) => {
+                          return <MenuItem value={ambient.id}>{ambient.display_name}</MenuItem>;
+                        })}
                     </Select>
                   </FormControl>
                 </div>

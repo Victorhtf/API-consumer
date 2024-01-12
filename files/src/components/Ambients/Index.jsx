@@ -54,6 +54,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       const ambientData = response;
 
       setAmbient(ambientData);
+
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -72,7 +73,6 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
     setOpenDeleteModal(true);
   }
 
-  //Set the column props
   const columns = [
     {
       title: "ID",
@@ -150,7 +150,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       width: 70,
       sorter: (a, b) => a.id - b.id,
       render: (external_id) => {
-        return external_id.length > 0 ? <div>{external_id}</div> : <div>N/A</div>;
+        return external_id && external_id.length > 0 ? <div>{external_id}</div> : <div>N/A</div>;
       },
     },
     {

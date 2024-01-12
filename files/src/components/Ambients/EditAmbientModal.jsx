@@ -285,11 +285,13 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                       value={formik.values.customer_id}
                       onChange={formik.handleChange}
                     >
-                      {customerList.map((customerList, customerListIndex) => (
-                        <MenuItem key={customerListIndex} value={customerList.id}>
-                          {customerList.display_name}
-                        </MenuItem>
-                      ))}
+                      {customerList
+                        .sort((a, b) => a.display_name.localeCompare(b.display_name))
+                        .map((customerList, customerIndex) => (
+                          <MenuItem key={customerIndex} value={customerList.id}>
+                            {customerList.display_name}
+                          </MenuItem>
+                        ))}
                     </Select>
                   </FormControl>
                 </div>

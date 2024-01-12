@@ -228,11 +228,13 @@ function CreateCustomerModal({ openCreateModal, setOpenCreateModal, fetchCustome
                       value={formik.values.customer_groups}
                       onChange={formik.handleChange}
                     >
-                      {groupList.map((groupList, groupIndex) => (
-                        <MenuItem key={groupIndex} value={groupList.id}>
-                          {groupList.display_name}
-                        </MenuItem>
-                      ))}
+                      {groupList
+                        .sort((a, b) => a.display_name.localeCompare(b.display_name))
+                        .map((group, groupIndex) => (
+                          <MenuItem key={groupIndex} value={group.id}>
+                            {group.display_name}
+                          </MenuItem>
+                        ))}
                     </Select>
                   </FormControl>
                 </div>
