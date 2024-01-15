@@ -96,7 +96,8 @@ const ModalFade = styled.div`
   }
 `;
 
-function LinkUserXAmbientsModal({ row, openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetchUserXAmbient }) {
+const LinkUserXAmbientsModal = (props) => {
+  const { openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetchUserXAmbient } = props;
   const [usersList, setUsersList] = useState([]);
   const [ambientsList, setAmbientsList] = useState([]);
   const [data, setData] = useState(false);
@@ -156,7 +157,7 @@ function LinkUserXAmbientsModal({ row, openLinkUserXAmbientsModal, setOpenLinkUs
         user_id: user_id,
       };
 
-      axios.post(userRoutes.linkAmbient, body, {
+      await axios.post(userRoutes.linkAmbient, body, {
         headers: {
           auth: token,
         },
@@ -170,9 +171,10 @@ function LinkUserXAmbientsModal({ row, openLinkUserXAmbientsModal, setOpenLinkUs
         position: "bottom-right",
       });
 
-      resetForm();
-
       fetchUserXAmbient();
+      console.log("pós fetch");
+
+      resetForm();
     } catch (error) {
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
@@ -274,6 +276,6 @@ function LinkUserXAmbientsModal({ row, openLinkUserXAmbientsModal, setOpenLinkUs
       </div>
     </ModalFade>
   );
-}
+};
 
 export default LinkUserXAmbientsModal;

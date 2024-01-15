@@ -51,23 +51,23 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
     } catch (error) {}
   }
 
-  async function handleAmbientsList() {
-    const ambientRoutes = routes.ambient;
-    try {
-      const { data: response } = await axios.get(ambientRoutes.listAll, {
-        headers: {
-          auth: getToken(),
-        },
-      });
-      const ambientData = response;
+  // async function handleAmbientsList() {
+  //   const ambientRoutes = routes.ambient;
+  //   try {
+  //     const { data: response } = await axios.get(ambientRoutes.listAll, {
+  //       headers: {
+  //         auth: getToken(),
+  //       },
+  //     });
+  //     const ambientData = response;
 
-      setAmbientsList(ambientData);
-    } catch (error) {}
-  }
+  //     setAmbientsList(ambientData);
+  //   } catch (error) {}
+  // }
 
   useEffect(() => {
-    handleAmbientsList();
-    handleUserList();
+    // handleAmbientsList();
+    // handleUserList();
     fetchUserXAmbient();
     toast.info("Base de dados atualizada!", {
       position: "bottom-right",
@@ -75,8 +75,7 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
   }, []);
 
   async function fetchUserXAmbient() {
-    toast.dismiss();
-    console.log("ok");
+    console.log("start");
     try {
       const { data: response } = await axios.get(userXAmbientRoutes.listAllArray, {
         headers: {
@@ -88,6 +87,7 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
 
       setUserxambient(userXAmbient);
       setLoading(false);
+      console.log("end");
     } catch (error) {
       setLoading(false);
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
