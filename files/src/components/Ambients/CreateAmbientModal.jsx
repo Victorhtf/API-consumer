@@ -283,11 +283,13 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                       value={formik.values.customer_id}
                       onChange={formik.handleChange}
                     >
-                      {customerList.map((customerList, customerIndex) => (
-                        <MenuItem key={customerIndex} value={customerList.id}>
-                          {customerList.display_name}
-                        </MenuItem>
-                      ))}
+                      {customerList
+                        .sort((a, b) => a.display_name.localeCompare(b.display_name))
+                        .map((customerList, customerIndex) => (
+                          <MenuItem key={customerIndex} value={customerList.id}>
+                            {customerList.display_name}
+                          </MenuItem>
+                        ))}
                     </Select>
                   </FormControl>
                 </div>

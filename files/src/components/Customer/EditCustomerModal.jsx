@@ -134,7 +134,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchCustomers, ro
       const body = {
         display_name: display_name,
         fantasy_name: fantasy_name,
-        customer_group: customer_group,
+        customer_group_id: customer_group,
       };
 
       await axios.patch(customerRoutes.updateById + rowState.id, body, {
@@ -230,11 +230,13 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchCustomers, ro
                       value={formik.values.customer_group}
                       onChange={formik.handleChange}
                     >
-                      {groupList.map((item, groupListIndex) => (
-                        <MenuItem key={groupListIndex} value={item.id}>
-                          {item.display_name}
-                        </MenuItem>
-                      ))}
+                      {groupList
+                        .sort((a, b) => a.display_name.localeCompare(b.display_name))
+                        .map((item, groupListIndex) => (
+                          <MenuItem key={groupListIndex} value={item.id}>
+                            {item.display_name}
+                          </MenuItem>
+                        ))}
                     </Select>
                   </FormControl>
                 </div>
