@@ -10,40 +10,51 @@ import SessionCheck from "../auth/useAuth.js";
 import "../Globals.css";
 import { Outlet } from "react-router-dom";
 
-const RowBox = styled.div`
-  display: flex;
-  flex-direction: row;
+const Box = styled.div`
   width: 100%;
+  display: flex;
   height: 100vh;
 `;
 
-const ColumnBox = styled.div`
+const RowBox = styled.div`
+  display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  overflow: auto;
 `;
 
 const Card = styled.div`
-  height: calc(100vh - 90px);
-  background-color: white;
+  background-color: #ffffff;
+  width: auto;
+  height: auto;
   margin: 15px;
   padding: 30px;
   border-radius: 7px;
+  flex: 1;
 `;
+
+window.addEventListener("resize", () => {
+  const larguraDaTela = window.innerWidth;
+  return larguraDaTela;
+  //Variavel setada, agr só utilizar
+});
+
+window.dispatchEvent(new Event("resize"));
 
 function BaseLayout(props) {
   return (
     <>
       <SessionCheck>
-        <RowBox>
+        <Box>
           <Sidebar />
-          <ColumnBox>
+          <RowBox>
             <Header />
             <Card>
               <Outlet />
             </Card>
-          </ColumnBox>
-        </RowBox>
+          </RowBox>
+        </Box>
       </SessionCheck>
     </>
   );

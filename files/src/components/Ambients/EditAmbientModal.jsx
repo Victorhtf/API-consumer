@@ -6,94 +6,17 @@ import { MenuItem, Select, FormControl, InputLabel, CircularProgress, TextField,
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
-import styled from "styled-components";
 import axios from "axios";
 
 //Dependencies
 import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
+// Components
+import { ModalFade } from "../StyledComponents/ModalFade.jsx";
+
 //Styles
 import "../../Globals.css";
-
-const ModalFade = styled.div`
-  background-color: rgb(0, 0, 0, 0.7);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 1s;
-
-  .modal-card {
-    width: 400px;
-    height: auto;
-    border-radius: 7px;
-    background-color: white;
-    padding: 2rem;
-  }
-
-  .top-label {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-  }
-
-  .close-icon {
-    font-size: 25px;
-    cursor: pointer;
-  }
-
-  .content {
-  }
-
-  .form {
-    gap: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .form-group {
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    gap: 1rem;
-  }
-
-  label {
-    font-weight: 300px;
-    font-size: 15px;
-  }
-
-  .input {
-    width: 100%;
-    border-radius: var(--btn-border-radius);
-    height: 30px;
-    padding: 10px;
-    border: var(--input-border-color);
-  }
-
-  .buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    margin-top: 20px;
-  }
-
-  .btn-submit-form {
-    background-color: var(--btn-bg-color);
-    border: none;
-    padding: 7px 14px 7px 14px;
-    border-radius: var(--btn-border-radius);
-    font-size: var(--btn-font-size);
-    color: var(--primary-text-color);
-    cursor: pointer;
-  }
-`;
 
 function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, rowState }) {
   const [loading, setLoading] = useState(false);
@@ -134,7 +57,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
   }, [citiesListAux]);
 
   useEffect(() => {
-    if (citiesList !== undefined) {
+    if (citiesListAux && citiesListAux.length > 0) {
       handleCityList(citiesList);
     }
   }, [citiesList]);
@@ -206,15 +129,15 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
 
   const formik = useFormik({
     initialValues: {
-      external_id: rowState.external_id > 0 ? rowState.external_id : "",
+      external_id: rowState.external_id && rowState.external_id > 0 ? rowState.external_id : "",
       display_name: rowState.display_name ? rowState.display_name : "",
-      customer_id: rowState.customer.id,
+      customer_id: rowState.customer.id && rowState.customer.id > 0 ? rowState.customer.id : "",
       address: rowState.address[0].address && rowState.address[0].address.length > 0 ? rowState.address[0].address : "",
       address_complement:
         rowState.address[0].address_complement && rowState.address[0].address_complement.length > 0 ? rowState.address[0].address_complement : "",
-      postal_code: rowState.address[0].postal_code && rowState.address[0].postal_code.length > 0 ? rowState.address[0].postal_code : "Vazio",
-      city: rowState.address[0].city.city && rowState.address[0].city.city.length > 0 ? rowState.address[0].city : undefined,
-      city_id: rowState.address[0].city.city && rowState.address[0].city.city.length > 0 ? rowState.address[0].city.id : undefined,
+      postal_code: rowState.address[0].postal_code && rowState.address[0].postal_code.length > 0 ? rowState.address[0].postal_code : "",
+      city: rowState.address[0].city.city && rowState.address[0].city.city.length > 0 ? rowState.address[0].city : "",
+      city_id: rowState.address[0].city.city && rowState.address[0].city.city.length > 0 ? rowState.address[0].city.id : "",
     },
     onSubmit: handleEdit,
     resetForm: () => {
@@ -250,7 +173,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="small"
+                    size="medium"
                     id="external_id"
                     label="External ID"
                     variant="outlined"
@@ -263,7 +186,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                   <TextField
                     fullWidth
                     required
-                    size="small"
+                    size="medium"
                     id="display_name"
                     label="Nome"
                     variant="outlined"
@@ -273,7 +196,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="small" fullWidth>
+                  <FormControl size="medium" fullWidth>
                     <InputLabel id="customer_groups">ID de cliente</InputLabel>
                     <Select
                       maxMenuHeight="200"
@@ -298,7 +221,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="small"
+                    size="medium"
                     id="address"
                     label="Endereço"
                     variant="outlined"
@@ -310,7 +233,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="small"
+                    size="medium"
                     id="address_complement"
                     label="Complemento"
                     variant="outlined"
@@ -322,7 +245,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="small"
+                    size="medium"
                     id="postal_code"
                     label="CEP"
                     variant="outlined"
@@ -332,10 +255,10 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="small" fullWidth>
+                  <FormControl size="medium" fullWidth>
                     <Autocomplete
                       isOptionEqualToValue={(option, value) => option.city_id === value.city_id}
-                      size="small"
+                      size="medium"
                       filterOptions={(x) => x}
                       fullWidth
                       options={filteredCities}

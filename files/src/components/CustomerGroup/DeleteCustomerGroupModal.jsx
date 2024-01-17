@@ -9,7 +9,7 @@ import { routes } from "../../routes/routes.js";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -33,9 +33,6 @@ const ModalFade = styled.div`
   .close-icon {
     font-size: 25px;
     cursor: pointer;
-  }
-
-  .content {
   }
 
   .form {

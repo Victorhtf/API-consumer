@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
 //Libs
-import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
+import { MenuItem, Chip, Select, FormControl, InputLabel, TextField, Autocomplete } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useFormik } from "formik";
 import styled from "styled-components";
@@ -19,7 +19,7 @@ import "../../Globals.css";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -101,6 +101,7 @@ const LinkUserXAmbientsModal = (props) => {
   const [usersList, setUsersList] = useState([]);
   const [ambientsList, setAmbientsList] = useState([]);
   const [data, setData] = useState(false);
+  const [value, setValue] = useState(null);
 
   async function handleUserList() {
     const usersRoutes = routes.user;
@@ -172,7 +173,6 @@ const LinkUserXAmbientsModal = (props) => {
       });
 
       fetchUserXAmbient();
-      console.log("pós fetch");
 
       resetForm();
     } catch (error) {
@@ -217,11 +217,11 @@ const LinkUserXAmbientsModal = (props) => {
             <div className="content">
               <div className="form">
                 <div className="form-group">
-                  <FormControl size="small">
+                  <FormControl size="medium">
                     <InputLabel id="user_id">Usuário</InputLabel>
                     <Select
                       sx={{ width: "200px" }}
-                      size="small"
+                      size="medium"
                       id="user_id"
                       name="user_id"
                       variant="outlined"
@@ -236,30 +236,51 @@ const LinkUserXAmbientsModal = (props) => {
                         })}
                     </Select>
                   </FormControl>
-                  <FormControl size="small" sx={{ width: 300 }}>
-                    <InputLabel id="ambient">Ambiente</InputLabel>
-                    <Select
+                  <FormControl size="medium" sx={{ width: 300, maxHeight: "300px" }}>
+                    <Autocomplete
                       multiple
+                      fullWidth
+                      size="medium"
+                      filterOptions={(x) => x}
+                      id="customerList"
+                      options={ambientsList}
                       sx={{
                         display: "flex",
                         margin: "dence",
                         flexWrap: "wrap",
                         gap: 0.5,
                       }}
-                      id="ambient_id"
+                      onChange={(event, options) => {
+                        const selectedIds = options.map((option) => option.id);
+                        formik.setFieldValue("ambient_id", selectedIds);
+                      }}
+                      getOptionLabel={(option) => option.display_name}
                       variant="outlined"
-                      name="ambient_id"
-                      label="Ambiente"
-                      value={formik.values.ambient_id}
-                      onChange={formik.handleChange}
-                    >
-                      {ambientsList
-                        .sort((a, b) => a.display_name.localeCompare(b.display_name))
-                        .map((ambient) => {
-                          return <MenuItem value={ambient.id}>{ambient.display_name}</MenuItem>;
-                        })}
-                    </Select>
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index) => <Chip variant="outlined" label={option.display_name} {...getTagProps({ index })} />)
+                      }
+                      renderInput={(params) => <TextField {...params} label="ID de cliente" />}
+                    />
                   </FormControl>
+                  {/* <FormControl size="medium" sx={{ width: 300, maxHeight: "300px" }}>
+                    <Autocomplete
+                      disablePortal
+                      size="medium"
+                      id="ambientsList"
+                      // filterOptions={(options, { inputValue }) => options.filter((option) => option.toLowerCase().includes(inputValue.toLowerCase()))}
+                      options={ambientsList}
+                      onChange={(value) => formik.setFieldValue("ambient_id", value.id)}
+                      getOptionLabel={(option) => option.display_name}
+                      variant="outlined"
+                      sx={{
+                        display: "flex",
+                        margin: "dence",
+                        flexWrap: "wrap",
+                        gap: 0.5,
+                      }}
+                      renderInput={(params) => <TextField {...params} label="Ambiente" />}
+                    />
+                  </FormControl> */}
                 </div>
               </div>
               <div className="buttons">

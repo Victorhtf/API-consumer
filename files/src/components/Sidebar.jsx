@@ -17,10 +17,10 @@ import img2logo from "../assets/logo/logo-text.png";
 
 const Aside = styled.div`
   background-color: #182136;
+  height: 100%;
   max-width: 15%;
   min-width: 15%;
   color: #f0eff4;
-  height: 100vh;
   padding: 1rem;
   position: sticky;
   font-size: 10px;

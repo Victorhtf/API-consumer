@@ -29,8 +29,6 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   const [top, setTop] = useState("none");
   const [bottom, setBottom] = useState("bottomRight");
   const [ellipsis, setEllipsis] = useState(false);
-  const [yScroll, setYScroll] = useState(false);
-  const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openModalDeleteCustomerGroup, setOpenModalDeleteCustomerGroup] = useState(false);
@@ -166,17 +164,13 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     ...item,
     ellipsis,
   }));
-  if (xScroll === "fixed") {
-    tableColumns[0].fixed = true;
-    tableColumns[tableColumns.length - 1].fixed = "right";
-  }
+
   const tableProps = {
     bordered,
     loading,
     size: "extra-small",
     title: showTitle ? defaultTitle : undefined,
     showHeader,
-    scroll,
     tableLayout,
   };
 
@@ -223,7 +217,6 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         columns={tableColumns}
         dataSource={customerGroups.length > 0 ? customerGroups : []}
         style={{ width: "100%", height: "100%" }}
-        scroll={{ y: 395 }}
         rowKey={"id"}
       />
     </>

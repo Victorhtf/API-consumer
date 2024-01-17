@@ -1,5 +1,5 @@
 //React
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //Libs
 import { LuEye, LuEyeOff } from "react-icons/lu";
@@ -17,6 +17,8 @@ import Loading from "../components/Loading/Loading";
 import { routes } from "../routes/routes";
 
 //Assets
+import loginbg1 from "../assets/system_pages/login-bg1.jpg";
+import loginbg2 from "../assets/system_pages/login-bg2.jpg";
 import loginbg3 from "../assets/system_pages/login-bg3.jpg";
 import intradataLogo from "../assets/logo/logo-complete.png";
 
@@ -25,12 +27,10 @@ const Box = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-image: url(${loginbg3});
   background-size: cover;
 `;
 
 const FormBox = styled.div`
-  background-color: red;
   width: 300px;
   height: auto;
   display: flex;
@@ -161,8 +161,16 @@ const ButtonBox = styled.div`
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [background, setBackground] = useState([loginbg1]);
+
   const navigate = useNavigate();
   const loginRoutes = routes.login;
+
+  function getRandomWallpaper() {
+    const backgroundsList = [loginbg1, loginbg2, loginbg3];
+    const randomIndex = Math.floor(Math.random() * backgroundsList.length);
+    return backgroundsList[randomIndex];
+  }
 
   async function handleMyInformation(token) {
     const response = await axios.get(loginRoutes.me, {
@@ -239,8 +247,13 @@ function Login() {
     password: Yup.string().required("Campo obrigatório"),
   });
 
+  useEffect(() => {
+    setBackground(getRandomWallpaper([loginbg1, loginbg2, loginbg3]));
+  }, []);
+
   return (
     <Box>
+      <div style={{ filter: "brightness(70%)", backgroundImage: `url(${background})`, width: "100%", height: "100%", position: "absolute" }}></div>
       <Formik initialValues={{ username: "", password: "" }} validationSchema={ValidateSchema} onSubmit={handleLogin}>
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
           <div>

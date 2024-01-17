@@ -3,7 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 //Libs
-import { MenuItem, Select, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
+import { MenuItem, Chip, Select, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { useFormik, validateYupSchema } from "formik";
 import { toast } from "react-toastify";
@@ -14,88 +14,10 @@ import * as Yup from "yup";
 //Dependencies
 import { getToken } from "../../auth/useAuth";
 import { routes } from "../../routes/routes.js";
+import { ModalFade } from "../StyledComponents/ModalFade.jsx";
 
 //Styles
 import "../../Globals.css";
-
-const ModalFade = styled.div`
-  background-color: rgb(0, 0, 0, 0.7);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 1s;
-
-  .modal-card {
-    width: 400px;
-    height: auto;
-    border-radius: 7px;
-    background-color: white;
-    padding: 2rem;
-  }
-
-  .top-label {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-  }
-
-  .close-icon {
-    font-size: 25px;
-    cursor: pointer;
-  }
-
-  .content {
-  }
-
-  .form {
-    gap: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .form-group {
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    gap: 1rem;
-  }
-
-  label {
-    font-weight: 300px;
-    font-size: 15px;
-  }
-
-  .input {
-    width: 100%;
-    border-radius: var(--btn-border-radius);
-    height: 30px;
-    padding: 10px;
-    border: var(--input-border-color);
-  }
-
-  .buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    margin-top: 20px;
-  }
-
-  .btn-submit-form {
-    background-color: var(--btn-bg-color);
-    border: none;
-    padding: 7px 14px 7px 14px;
-    border-radius: var(--btn-border-radius);
-    font-size: var(--btn-font-size);
-    color: var(--primary-text-color);
-    cursor: pointer;
-  }
-`;
 
 function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
   const [loading, setLoading] = useState(false);
@@ -198,7 +120,6 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
 
       toast.success(`Ambiente '${values.display_name}' adicionado com sucesso!`);
     } catch (error) {
-      console.debug(error);
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
@@ -247,7 +168,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="small"
+                    size="medium"
                     id="external_id"
                     label="External ID"
                     variant="outlined"
@@ -260,7 +181,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                   <TextField
                     fullWidth
                     required
-                    size="small"
+                    size="medium"
                     id="display_name"
                     label="Nome"
                     variant="outlined"
@@ -270,34 +191,36 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="small" required fullWidth>
-                    <InputLabel id="customer_groups">ID de cliente</InputLabel>
-                    <Select
-                      defaultValue=""
-                      maxMenuHeight="200"
+                  <FormControl fullWidth>
+                    <Autocomplete
                       fullWidth
-                      required
-                      id="customer_id"
-                      name="customer_id"
-                      label="customer_id"
-                      value={formik.values.customer_id}
-                      onChange={formik.handleChange}
-                    >
-                      {customerList
-                        .sort((a, b) => a.display_name.localeCompare(b.display_name))
-                        .map((customerList, customerIndex) => (
-                          <MenuItem key={customerIndex} value={customerList.id}>
-                            {customerList.display_name}
-                          </MenuItem>
-                        ))}
-                    </Select>
+                      size="medium"
+                      filterOptions={(x) => x}
+                      id="customerList"
+                      options={customerList}
+                      onChange={(event, options) => {
+                        return formik.setFieldValue("customer_id", options.id);
+                      }}
+                      sx={{
+                        display: "flex",
+                        margin: "dence",
+                        flexWrap: "wrap",
+                        gap: 0.5,
+                      }}
+                      getOptionLabel={(option) => option.display_name}
+                      variant="outlined"
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index) => <Chip variant="outlined" label={option.display_name} {...getTagProps({ index })} />)
+                      }
+                      renderInput={(params) => <TextField {...params} label="ID de cliente" />}
+                    />
                   </FormControl>
                 </div>
                 <div className="form-group">
                   <TextField
                     fullWidth
                     required
-                    size="small"
+                    size="medium"
                     id="address"
                     label="Endereço"
                     variant="outlined"
@@ -309,7 +232,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="small"
+                    size="medium"
                     id="address_complement"
                     label="Complemento"
                     variant="outlined"
@@ -323,7 +246,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                   <TextField
                     required
                     fullWidth
-                    size="small"
+                    size="medium"
                     id="postal_code"
                     label="CEP"
                     variant="outlined"
@@ -333,10 +256,10 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="small" fullWidth>
+                  <FormControl size="medium" fullWidth>
                     <Autocomplete
                       isOptionEqualToValue={(option, value) => option.city_id === value.city_id}
-                      size="small"
+                      size="medium"
                       filterOptions={(x) => x}
                       fullWidth
                       options={filteredCities}
