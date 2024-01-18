@@ -6,7 +6,7 @@ import { AiOutlinePoweroff } from "react-icons/ai";
 
 const ModalFade = styled.div`
   background-color: rgb(0, 0, 0, 0.7);
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -16,6 +16,7 @@ const ModalFade = styled.div`
   transition: 1s;
   justify-content: flex-end;
   align-items: flex-start;
+  z-index: 99999;
 
   .modal-card {
     position: relative;

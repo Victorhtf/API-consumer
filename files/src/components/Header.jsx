@@ -8,14 +8,20 @@ import { CgProfile } from "react-icons/cg";
 //Components
 import SettingsModal from "./Header/SettingsModal";
 
-const Box = styled.div`
+const SidebarBox = styled.div`
   width: 100%;
-  background-color: #182136;
   height: 60px;
+  background-color: #182136;
   color: black;
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  -moz-box-shadow: 4px 0 5px 0 #000000;
+  -webkit-box-shadow: 4px 0 5px 0 #000000;
+  box-shadow: 4px 0 5px 0 #000000;
 
   .logout {
     justify-self: flex-end;
@@ -71,23 +77,25 @@ function Header() {
   }
 
   return (
-    <Box>
+    <>
       <SettingsModal openSettingsModal={openSettingsModal} setOpenSettingsModal={setOpenSettingsModal} />
-      <div className="logout">
-        <div className="text">
-          <p>Seja bem vindo</p>
-          <p className="name">{sessionUsername != null && sessionUsername !== undefined ? username : ""}</p>
+      <SidebarBox>
+        <div className="logout">
+          <div className="text">
+            <p>Seja bem vindo</p>
+            <p className="name">{sessionUsername != null && sessionUsername !== undefined ? username : ""}</p>
+          </div>
+          <div
+            onClick={() => {
+              setOpenSettingsModal(true);
+            }}
+            className="icon"
+          >
+            <CgProfile className="self-center" />
+          </div>
         </div>
-        <div
-          onClick={() => {
-            setOpenSettingsModal(true);
-          }}
-          className="icon"
-        >
-          <CgProfile className="self-center" />
-        </div>
-      </div>
-    </Box>
+      </SidebarBox>
+    </>
   );
 }
 

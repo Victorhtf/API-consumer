@@ -24,8 +24,6 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
   const [top, setTop] = useState("none");
   const [bottom, setBottom] = useState("bottomRight");
   const [ellipsis, setEllipsis] = useState(false);
-  const [yScroll, setYScroll] = useState(false);
-  const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState(null);
   const [tableState, setTableState] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -51,23 +49,7 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
     } catch (error) {}
   }
 
-  // async function handleAmbientsList() {
-  //   const ambientRoutes = routes.ambient;
-  //   try {
-  //     const { data: response } = await axios.get(ambientRoutes.listAll, {
-  //       headers: {
-  //         auth: getToken(),
-  //       },
-  //     });
-  //     const ambientData = response;
-
-  //     setAmbientsList(ambientData);
-  //   } catch (error) {}
-  // }
-
   useEffect(() => {
-    // handleAmbientsList();
-    // handleUserList();
     fetchUserXAmbient();
     toast.info("Base de dados atualizada!", {
       position: "bottom-right",
@@ -75,7 +57,6 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
   }, []);
 
   async function fetchUserXAmbient() {
-    console.log("start");
     try {
       const { data: response } = await axios.get(userXAmbientRoutes.listAllArray, {
         headers: {
@@ -87,7 +68,6 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
 
       setUserxambient(userXAmbient);
       setLoading(false);
-      console.log("end");
     } catch (error) {
       setLoading(false);
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
@@ -160,7 +140,6 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
     size: "extra-small",
     title: showTitle ? defaultTitle : undefined,
     showHeader,
-    scroll,
     tableLayout,
   };
 
@@ -204,7 +183,6 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
         columns={tableColumns}
         dataSource={userxambient.length > 0 ? userxambient : []}
         style={{ width: "100%", height: "100%" }}
-        scroll={{ y: 395 }}
         rowKey={"id"}
       />
     </>

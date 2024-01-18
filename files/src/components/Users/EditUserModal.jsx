@@ -10,98 +10,11 @@ import { toast } from "react-toastify";
 import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth.js";
 
+// Components
+import { ModalFade } from "../StyledComponents/ModalFade.jsx";
+
 //Styles
 import "../../Globals.css";
-
-const ModalFade = styled.div`
-  background-color: rgb(0, 0, 0, 0.7);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 1s;
-
-  .modal-card {
-    width: 400px;
-    height: auto;
-    border-radius: 7px;
-    background-color: white;
-    padding: 2rem;
-  }
-
-  .top-label {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-  }
-
-  .close-icon {
-    font-size: 25px;
-    cursor: pointer;
-  }
-
-  .content {
-  }
-
-  .form {
-    gap: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .form-group {
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    gap: 1rem;
-  }
-
-  label {
-    font-weight: 300px;
-    font-size: 15px;
-  }
-
-  .input {
-    width: 100%;
-    border-radius: var(--btn-border-radius);
-    height: 30px;
-    padding: 10px;
-    border: var(--input-border-color);
-  }
-
-  .buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: flex-end;
-    margin-top: 20px;
-  }
-
-  .btn-submit-form {
-    background-color: var(--btn-bg-color);
-    border: none;
-    padding: 7px 14px 7px 14px;
-    border-radius: var(--btn-border-radius);
-    font-size: var(--btn-font-size);
-    color: var(--primary-text-color);
-    cursor: pointer;
-  }
-
-  .cancel-btn {
-    background-color: var(--btn-2bg-color);
-    border: var(--btn-border-color);
-    padding: 7px 14px 7px 14px;
-    border-radius: var(--btn-border-radius);
-    font-size: var(--btn-font-size);
-    color: var(--secondary-text-color);
-    font-size: var(--btn-font-size);
-    cursor: pointer;
-  }
-`;
 
 function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }) {
   const rolesList = [
@@ -206,7 +119,7 @@ function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="small"
+                    size="medium"
                     id="username"
                     label="Nome de usuário"
                     variant="outlined"
@@ -218,7 +131,7 @@ function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="small"
+                    size="medium"
                     id="password"
                     label="Senha"
                     variant="outlined"
@@ -230,7 +143,7 @@ function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="small"
+                    size="medium"
                     id="email"
                     label="E-mail"
                     variant="outlined"
@@ -240,7 +153,7 @@ function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="small" fullWidth>
+                  <FormControl size="medium" fullWidth>
                     <InputLabel id="roles">Papéis</InputLabel>
                     <Select multiple MenuProps={MenuProps} id="roles" name="roles" label="roles" value={formik.values.roles} onChange={formik.handleChange}>
                       {rolesList.map((item, rolesEditIndex) => (

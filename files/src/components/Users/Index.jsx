@@ -16,21 +16,17 @@ import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth.js";
 
 function Index({ openCreateModal, setOpenCreateModal }) {
-  // const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
   const [users, setUsers] = useState([]);
   const bordered = false;
-  // const [size, setSize] = useState("large");
   const showTitle = false;
   const showHeader = true;
   const [tableLayout, setTableLayout] = useState();
   const [top, setTop] = useState("none");
   const [bottom, setBottom] = useState("bottomRight");
   const [ellipsis, setEllipsis] = useState(false);
-  const [yScroll, setYScroll] = useState(false);
-  const [xScroll, setXScroll] = useState();
   const [rowState, setRowState] = useState(null);
   const [loading, setLoading] = useState(true);
   const [openModalDeleteUsers, setOpenModalDeleteUsers] = useState(false);
@@ -85,18 +81,6 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   async function handleDeleteModal(row) {
     setRowState(row);
     setOpenDeleteModal(true);
-  }
-
-  const scroll = {};
-  if (yScroll) {
-    scroll.y = 240;
-  }
-  if (xScroll) {
-    scroll.x = "100vw";
-  }
-  if (xScroll === "fixed") {
-    tableColumns[0].fixed = true;
-    tableColumns[tableColumns.length - 1].fixed = "right";
   }
 
   const columns = [
@@ -195,14 +179,10 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     ...item,
     ellipsis,
   }));
-  if (xScroll === "fixed") {
-    tableColumns[0].fixed = true;
-    tableColumns[tableColumns.length - 1].fixed = "right";
-  }
+
   const tableProps = {
     bordered,
     loading,
-    scroll,
     size: "extra-small",
     title: showTitle ? defaultTitle : undefined,
     showHeader,
@@ -247,7 +227,6 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         columns={tableColumns}
         dataSource={users.length > 0 ? users : []}
         style={{ width: "100%", height: "100%" }}
-        scroll={{ y: 395 }}
         rowKey={"id"}
       />
     </>
