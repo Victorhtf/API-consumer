@@ -102,7 +102,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchCustomers, ro
       }}
       className="modal-container"
     >
-      <div className="create-modal-card">
+      <div className="modal-card">
         <div className="top-label">
           <h2>Editar cliente</h2>
           <AiOutlineCloseCircle

@@ -195,11 +195,13 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                     <Autocomplete
                       fullWidth
                       size="medium"
-                      filterOptions={(x) => x}
+                      filterOptions={(options, { inputValue }) => {
+                        return options.filter((option) => option.display_name.toLowerCase().includes(inputValue.toLowerCase()));
+                      }}
                       id="customerList"
                       options={customerList}
                       onChange={(event, options) => {
-                        return formik.setFieldValue("customer_id", options.id);
+                        formik.setFieldValue("customer_id", options.id);
                       }}
                       sx={{
                         display: "flex",
