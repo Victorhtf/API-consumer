@@ -101,7 +101,6 @@ const LinkUserXAmbientsModal = (props) => {
   const [usersList, setUsersList] = useState([]);
   const [ambientsList, setAmbientsList] = useState([]);
   const [data, setData] = useState(false);
-  const [value, setValue] = useState(null);
 
   async function handleUserList() {
     const usersRoutes = routes.user;
@@ -218,30 +217,39 @@ const LinkUserXAmbientsModal = (props) => {
               <div className="form">
                 <div className="form-group">
                   <FormControl size="medium">
-                    <InputLabel id="user_id">Usuário</InputLabel>
-                    <Select
+                    <Autocomplete
                       sx={{ width: "200px" }}
+                      fullWidth
+                      required
+                      maxMenuHeight="200"
                       size="medium"
                       id="user_id"
                       name="user_id"
+                      label="user_id"
+                      value={usersList.find((option) => option.id === formik.values.customer_id) || null}
+                      options={usersList}
+                      onChange={(event, options) => {
+                        formik.setFieldValue("user_id", options.id);
+                      }}
+                      filterOptions={(options, { inputValue }) => {
+                        return options.filter((option) => option.username.toLowerCase().includes(inputValue.toLowerCase()));
+                      }}
+                      getOptionLabel={(option) => option.username}
                       variant="outlined"
-                      label="Usuário"
-                      value={formik.values.user_id}
-                      onChange={formik.handleChange}
-                    >
-                      {usersList
-                        .sort((a, b) => a.username.localeCompare(b.username))
-                        .map((users) => {
-                          return <MenuItem value={users.id}>{users.username}</MenuItem>;
-                        })}
-                    </Select>
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index) => <Chip variant="outlined" label={option.username} {...getTagProps({ index })} />)
+                      }
+                      renderInput={(params) => <TextField {...params} label="ID de cliente" />}
+                    />
                   </FormControl>
                   <FormControl size="medium" sx={{ width: 300, maxHeight: "300px" }}>
                     <Autocomplete
                       multiple
                       fullWidth
                       size="medium"
-                      filterOptions={(x) => x}
+                      filterOptions={(options, { inputValue }) => {
+                        return options.filter((option) => option.display_name.toLowerCase().includes(inputValue.toLowerCase()));
+                      }}
                       id="customerList"
                       options={ambientsList}
                       sx={{
@@ -262,25 +270,6 @@ const LinkUserXAmbientsModal = (props) => {
                       renderInput={(params) => <TextField {...params} label="ID de cliente" />}
                     />
                   </FormControl>
-                  {/* <FormControl size="medium" sx={{ width: 300, maxHeight: "300px" }}>
-                    <Autocomplete
-                      disablePortal
-                      size="medium"
-                      id="ambientsList"
-                      // filterOptions={(options, { inputValue }) => options.filter((option) => option.toLowerCase().includes(inputValue.toLowerCase()))}
-                      options={ambientsList}
-                      onChange={(value) => formik.setFieldValue("ambient_id", value.id)}
-                      getOptionLabel={(option) => option.display_name}
-                      variant="outlined"
-                      sx={{
-                        display: "flex",
-                        margin: "dence",
-                        flexWrap: "wrap",
-                        gap: 0.5,
-                      }}
-                      renderInput={(params) => <TextField {...params} label="Ambiente" />}
-                    />
-                  </FormControl> */}
                 </div>
               </div>
               <div className="buttons">

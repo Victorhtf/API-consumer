@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 //Libs
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
-import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
+import { MenuItem, Select, FormControl, InputLabel, TextField, Autocomplete } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import styled from "styled-components";
 import axios from "axios";
@@ -140,24 +140,29 @@ function CreateCustomerModal({ openCreateModal, setOpenCreateModal, fetchCustome
                 </div>
                 <div className="form-group">
                   <FormControl size="medium" fullWidth>
-                    <InputLabel id="customer_groups">Grupos de cliente</InputLabel>
-                    <Select
-                      maxMenuHeight="200"
+                    <Autocomplete
                       fullWidth
-                      id="customer_groups"
-                      name="customer_groups"
-                      label="customer_groups"
-                      value={formik.values.customer_groups}
-                      onChange={formik.handleChange}
-                    >
-                      {groupList
-                        .sort((a, b) => a.display_name.localeCompare(b.display_name))
-                        .map((group, groupIndex) => (
-                          <MenuItem key={groupIndex} value={group.id}>
-                            {group.display_name}
-                          </MenuItem>
-                        ))}
-                    </Select>
+                      required
+                      maxMenuHeight="200"
+                      size="medium"
+                      id="customer_id"
+                      name="customer_id"
+                      label="customer_id"
+                      value={groupList.find((option) => option.id === formik.values.customer_id) || null}
+                      options={groupList}
+                      onChange={(event, options) => {
+                        formik.setFieldValue("customer_groups", options.id);
+                      }}
+                      filterOptions={(options, { inputValue }) => {
+                        return options.filter((option) => option.display_name.toLowerCase().includes(inputValue.toLowerCase()));
+                      }}
+                      getOptionLabel={(option) => option.display_name}
+                      variant="outlined"
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index) => <Chip variant="outlined" label={option.display_name} {...getTagProps({ index })} />)
+                      }
+                      renderInput={(params) => <TextField {...params} label="ID de cliente" />}
+                    />
                   </FormControl>
                 </div>
               </div>
