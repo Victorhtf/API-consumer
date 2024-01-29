@@ -130,7 +130,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
   const formik = useFormik({
     initialValues: {
       external_id: rowState.external_id && rowState.external_id > 0 ? rowState.external_id : "",
-      display_name: rowState.display_name ? rowState.display_name : "",
+      display_name: rowState.display_name && rowState.display_name.length > 0 ? rowState.display_name : "",
       customer_id: rowState.customer.id && rowState.customer.id > 0 ? rowState.customer.id : "",
       address: rowState.address[0].address && rowState.address[0].address.length > 0 ? rowState.address[0].address : "",
       address_complement:
@@ -197,25 +197,29 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                 </div>
                 <div className="form-group">
                   <FormControl size="medium" fullWidth>
-                    <InputLabel id="customer_groups">ID de cliente</InputLabel>
-                    <Select
-                      maxMenuHeight="200"
+                    <Autocomplete
                       fullWidth
                       required
+                      maxMenuHeight="200"
+                      size="medium"
                       id="customer_id"
                       name="customer_id"
                       label="customer_id"
-                      value={formik.values.customer_id}
-                      onChange={formik.handleChange}
-                    >
-                      {customerList
-                        .sort((a, b) => a.display_name.localeCompare(b.display_name))
-                        .map((customerList, customerIndex) => (
-                          <MenuItem key={customerIndex} value={customerList.id}>
-                            {customerList.display_name}
-                          </MenuItem>
-                        ))}
-                    </Select>
+                      value={customerList.find((option) => option.id === formik.values.customer_id) || null}
+                      options={customerList}
+                      onChange={(event, options) => {
+                        formik.setFieldValue("customer_id", options.id);
+                      }}
+                      filterOptions={(options, { inputValue }) => {
+                        return options.filter((option) => option.display_name.toLowerCase().includes(inputValue.toLowerCase()));
+                      }}
+                      getOptionLabel={(option) => option.display_name}
+                      variant="outlined"
+                      renderTags={(value, getTagProps) =>
+                        value.map((option, index) => <Chip variant="outlined" label={option.display_name} {...getTagProps({ index })} />)
+                      }
+                      renderInput={(params) => <TextField {...params} label="ID de cliente" />}
+                    />
                   </FormControl>
                 </div>
                 <div className="form-group">

@@ -253,7 +253,16 @@ function Login() {
 
   return (
     <Box>
-      <div style={{ filter: "brightness(70%)", backgroundImage: `url(${background})`, width: "100%", height: "100%", position: "absolute" }}></div>
+      <div
+        style={{
+          backgroundSize: "cover",
+          filter: "brightness(70%)",
+          backgroundImage: `url(${background})`,
+          width: "100%",
+          height: "100%",
+          position: "absolute",
+        }}
+      ></div>
       <Formik initialValues={{ username: "", password: "" }} validationSchema={ValidateSchema} onSubmit={handleLogin}>
         {({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
           <div>
