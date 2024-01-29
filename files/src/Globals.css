@@ -128,3 +128,25 @@ body {
   font-size: 12px;
   text-transform: uppercase;
 }
+
+.download-btn {
+  background: #1874fc;
+  align-self: center;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  height: 32px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  padding: 5px 10px 5px 10px;
+  font-size: 1rem;
+  color: white;
+
+
+
+
+
+
+
+}

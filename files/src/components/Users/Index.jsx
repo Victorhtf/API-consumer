@@ -3,8 +3,10 @@ import React, { useState, useEffect } from "react";
 
 //Libs
 import { Input, Form, Space, Table, Tag } from "antd";
-import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { IoMdDownload } from "react-icons/io";
+import * as xlsx from "xlsx";
 
 //Components
 import CreateUserModal from "./CreateUserModal.jsx";
@@ -81,6 +83,20 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   async function handleDeleteModal(row) {
     setRowState(row);
     setOpenDeleteModal(true);
+  }
+
+  function handleExport() {
+    const newUsers = users.map((item) => ({
+      ...item,
+      roles: item.roles.map((role) => role.name).join(", "),
+    }));
+    var workbook = xlsx.utils.book_new();
+
+    const worksheet = xlsx.utils.json_to_sheet(newUsers);
+
+    xlsx.utils.book_append_sheet(workbook, worksheet, "Usuários");
+
+    xlsx.writeFile(workbook, "Users - Intradata CRUD.xlsx");
   }
 
   const columns = [
@@ -207,18 +223,30 @@ function Index({ openCreateModal, setOpenCreateModal }) {
           marginBottom: 16,
         }}
       ></Form>
-      <Input.Search
-        placeholder="Nome de usuário"
-        style={{
-          width: "20%",
-          display: "flex",
-          alignSelf: "flex-end",
-          marginBottom: "6px",
-        }}
-        onChange={(e) => {
-          setSearchValue(e.target.value);
-        }}
-      />
+      <div style={{ display: "flex", width: "100%", justifyContent: "flex-end", alignItems: "flex-end", gap: "10px", marginBottom: "5px" }}>
+        <Input.Search
+          placeholder="Nome de usuário"
+          style={{
+            width: "20%",
+            display: "flex",
+            alignContent: "center",
+            alignSelf: "center",
+            justifyContent: "center",
+            justifySelf: "center",
+          }}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+          }}
+        />
+        <button
+          className="download-btn"
+          onClick={() => {
+            handleExport();
+          }}
+        >
+          <IoMdDownload />
+        </button>
+      </div>
       <Table
         {...tableProps}
         pagination={{
