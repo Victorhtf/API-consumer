@@ -28,9 +28,9 @@ const Card = styled.div`
   background-color: #ffffff;
   width: auto;
   height: auto;
-  margin: 15px;
-  padding: 30px;
-  border-radius: 7px;
+  margin: 18.75px;
+  padding: 37.5px;
+  border-radius: 8.75px;
   flex: 1;
 `;
 

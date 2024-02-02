@@ -31,18 +31,18 @@ const Box = styled.div`
 `;
 
 const FormBox = styled.div`
-  width: 300px;
+  width: 375px;
   height: auto;
   display: flex;
   flex-direction: column;
-  padding: 2rem 3rem 1rem 3rem;
-  border-radius: 20px;
+  padding: 2.5rem 3.75rem 1.25rem 3.75rem;
+  border-radius: 25px;
   background: rgba(255, 255, 255, 0.36);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 5px 37.5px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10.1px);
   -webkit-backdrop-filter: blur(10.1px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1.25px solid rgba(255, 255, 255, 0.3);
   justify-content: space-between;
   position: relative;
 
@@ -50,7 +50,7 @@ const FormBox = styled.div`
     flex: 1;
     flex-direction: column;
     display: flex;
-    padding: 0rem 0px 1rem 0px;
+    padding: 0rem 0px 1.25rem 0px;
   }
 
   .description {
@@ -58,19 +58,19 @@ const FormBox = styled.div`
     align-self: center;
     display: flex;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 12.5px;
   }
 
   .inputs {
-    margin-top: 10px;
+    margin-top: 10.5px;
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 8.75px;
   }
   input:focus {
     box-sizing: inherit;
-    outline: 2px solid #81008f;
+    outline: 2.5px solid #81008f;
   }
 
   .password-input {
@@ -84,68 +84,68 @@ const FormBox = styled.div`
     justify-content: center;
     align-items: center;
     padding: 10px;
-    height: 25px;
+    height: 31.25px;
     position: absolute;
     right: 0;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     background-color: #182136;
   }
 
   .required {
     display: flex;
     color: #810101;
-    margin-top: 6px;
-    margin-bottom: 2px;
+    margin-top: 7.5px;
+    margin-bottom: 2.5px;
     align-self: center;
-    font-size: 0.7rem;
+    font-size: 0.875rem;
   }
 
   h3 {
     color: #171717;
-    font-weight: 700;
-    font-size: 20px;
+    font-weight: 875;
+    font-size: 25px;
     align-self: center;
   }
 
   p {
     color: #171717;
-    font-weight: 500;
-    font-size: 14px;
-    margin-bottom: 5px;
+    font-weight: 625;
+    font-size: 17.5px;
+    margin-bottom: 6.25px;
   }
 
   input {
     box-sizing: border-box;
     width: 100%;
     border: none;
-    border-radius: 4px;
-    height: 25px;
-    padding-left: 10px;
-    font-size: 12px;
+    border-radius: 5px;
+    height: 31.25px;
+    padding-left: 12.5px;
+    font-size: 15px;
   }
 `;
 
 const ButtonBox = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.875rem;
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 25px;
 
   button {
     width: 80%;
     border: none;
-    padding: 0.6rem;
-    border-radius: 5px;
+    padding: 0.75rem;
+    border-radius: 6.25px;
     background: linear-gradient(to right, rgb(173, 83, 137), rgb(60, 16, 83));
     color: white;
-    font-weight: 500;
+    font-weight: 625;
     cursor: pointer;
-    font-size: 12px;
-    height: 35px;
+    font-size: 15px;
+    height: 43.75px;
     display: flex;
     align-items: center;
     justify-content: center;

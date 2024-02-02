@@ -89,7 +89,7 @@ function CreateCustomerGroupModal({ openCreateModal, setOpenCreateModal, fetchCu
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="display_name"
                     label="Nome"
                     variant="outlined"
@@ -101,7 +101,7 @@ function CreateCustomerGroupModal({ openCreateModal, setOpenCreateModal, fetchCu
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="fantasy_name"
                     label="Nome fantasia"
                     variant="outlined"

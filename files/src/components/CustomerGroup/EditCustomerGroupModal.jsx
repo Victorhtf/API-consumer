@@ -92,7 +92,7 @@ function EditCustomerGroupModal({ openEditModal, setOpenEditModal, fetchCustomer
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="display_name"
                     label="Nome"
                     variant="outlined"
@@ -104,7 +104,7 @@ function EditCustomerGroupModal({ openEditModal, setOpenEditModal, fetchCustomer
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="fantasy_name"
                     label="Nome fantasia"
                     variant="outlined"

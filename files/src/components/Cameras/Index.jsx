@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Components
-import CreateAmbientModal from "./CreateAmbientModal";
+import CreateCameraModal from "./CreateCameraModal.jsx";
 import EditAmbientModal from "./EditAmbientModal";
 import DeleteAmbientModal from "./DeleteAmbientModal";
 
@@ -15,12 +15,12 @@ import DeleteAmbientModal from "./DeleteAmbientModal";
 import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
-function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
+function Index({ openCreateModal, setOpenCreateModal, fetchCameras }) {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
-  const [ambient, setAmbient] = useState([]);
+  const [cameraData, setCameraData] = useState([]);
   const bordered = false;
   const [size, setSize] = useState("large");
   const showTitle = false;
@@ -34,26 +34,24 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
-  const ambientRoutes = routes.ambient;
+  const camerasRoutes = routes.camera;
 
   useEffect(() => {
-    fetchAmbients();
+    fetchCameras();
     toast.info("Base de dados atualizada!", {
       position: "bottom-right",
     });
   }, []);
 
-  async function fetchAmbients() {
+  async function fetchCameras() {
     try {
-      const { data: response } = await axios.get(ambientRoutes.listAllWithAddress, {
+      const { data: response } = await axios.get(camerasRoutes.listAll, {
         headers: {
           auth: getToken(),
         },
       });
 
-      const ambientData = response;
-
-      setAmbient(ambientData);
+      setCameraData(response);
 
       setLoading(false);
     } catch (error) {
@@ -79,16 +77,28 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       key: "id",
       dataIndex: "id",
       width: 75,
-      align: "center",
       filteredValue: null,
-      sorter: (a, b) => a.id - b.id,
+      align: "center",
+      sorter: (a, b, id) => a.id - b.id,
+    },
+    {
+      title: "xFaces ID",
+      key: "xfaces_camera_id",
+      dataIndex: "xfaces_camera_id",
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record, xfaces_camera_id) => {
+        return String(record.xfaces_camera_id).toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.xfaces_camera_id.localeCompare(b.xfaces_camera_id);
+      },
     },
     {
       title: "Nome",
       key: "display_name",
       dataIndex: "display_name",
       filteredValue: searchValue !== null ? [searchValue] : null,
-      onFilter: (value, record) => {
+      onFilter: (value, record, display_name) => {
         return String(record.display_name).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
@@ -96,63 +106,69 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       },
     },
     {
-      title: "Cliente",
-      key: "customer",
-      dataIndex: "customer",
-      filteredValue: null,
-      render: (value) => {
-        return value.display_name && value.display_name ? (
+      title: "Fonte",
+      key: "video_source",
+      dataIndex: "video_source",
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record, video_source) => {
+        return String(record.video_source).toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.video_source.localeCompare(b.video_source);
+      },
+    },
+    {
+      title: "Tipo de câmera",
+      key: "camera_type",
+      align: "center",
+      dataIndex: "camera_type",
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record) => {
+        return String(record.type).toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b, camera_type) => {
+        return a.camera_type.type.localeCompare(b.camera_type.type);
+      },
+      render: (camera_type) => {
+        return (
+          <Tag style={{ marginBottom: "2px" }} color={camera_type.type == "ENTRANCE" ? "red" : "green"}>
+            {camera_type.type}
+          </Tag>
+        );
+      },
+    },
+    {
+      title: "Ambientes",
+      key: "ambient",
+      align: "center",
+      dataIndex: "ambient",
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record, ambient) => {
+        return String(record.ambient.display_name).toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.ambient.display_name.localeCompare(b.ambient.display_name);
+      },
+      render: (ambient) => {
+        return (
           <>
-            <Tag color="blue" key={value}>
-              {value.display_name.toUpperCase()}
+            <Tag style={{ marginBottom: "2px" }} color="blue">
+              {ambient.display_name}
             </Tag>
           </>
-        ) : null;
+        );
       },
     },
     {
-      title: "Endereço",
-      key: "address",
-      dataIndex: "address",
-      filteredValue: null,
-      render: (value) => {
-        if (value != undefined && value.length > 0) {
-          const addressBase = value[0];
-          const address =
-            addressBase.address +
-            (addressBase.address_complement && addressBase.address_complement.length > 0 ? " - " + addressBase.address_complement : "") +
-            (addressBase.postal_code && addressBase.postal_code.length > 0 ? " - " + addressBase.postal_code : "");
-          return address;
-        } else {
-          return null;
-        }
-      },
-    },
-    {
-      title: "Cidade",
-      key: "address",
-      dataIndex: "address",
-      filteredValue: null,
-      render: (value) => {
-        if (value != undefined && value.length > 0) {
-          const addressBase = value[0];
-          return addressBase.city.city + " - " + addressBase.city.state.state;
-        } else {
-          return null;
-        }
-      },
-    },
-
-    {
-      title: "ID externo",
-      key: "external_id",
-      dataIndex: "external_id",
+      title: "Ativo",
+      key: "active",
       align: "center",
+      dataIndex: "active",
       filteredValue: null,
-      width: 87.5,
-      sorter: (a, b) => a.id - b.id,
-      render: (external_id) => {
-        return external_id && external_id.length > 0 ? <div>{external_id}</div> : <div>N/A</div>;
+      width: 100,
+      render: (active) => (active == true ? "Ativo" : "Inativo"),
+      sorter: (a, b) => {
+        return String(a.active).localeCompare(String(b.active));
       },
     },
     {
@@ -171,44 +187,29 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         return new Date(date).toLocaleDateString("pt-BR");
       },
     },
-    {
-      title: "Data da atualização",
-      align: "center",
-      key: "updated_date",
-      dataIndex: "updated_date",
-      filteredValue: null,
-      width: 125,
-      sorter: (a, b) => {
-        const dateA = new Date(a.updated_date);
-        const dateB = new Date(b.updated_date);
-        return dateA - dateB;
-      },
-      render: (date) => {
-        return new Date(date).toLocaleDateString("pt-BR");
-      },
-    },
+
     {
       title: "Ações",
       key: "ações",
-      align: "center",
       width: 150,
+
       render: (row) => (
         <Space size="middle">
           <a
-            onClick={() => {
-              handleDeleteModal(row);
-            }}
+            disabled
+            // onClick={() => {
+            //   handleDeleteModal(row);
+            // }}
           >
             Delete
           </a>
-          <a>
-            <Space
-              onClick={() => {
-                handleEditModal(row);
-              }}
-            >
-              Editar
-            </Space>
+          <a
+            disabled
+            // onClick={() => {
+            //   handleEditModal(row);
+            // }}
+          >
+            Editar
           </a>
         </Space>
       ),
@@ -231,12 +232,12 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
 
   return (
     <>
-      {openCreateModal ? <CreateAmbientModal fetchAmbients={fetchAmbients} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} /> : null}
-      {openEditModal && ambient != undefined && ambient.length > 0 ? (
-        <EditAmbientModal fetchAmbients={fetchAmbients} rowState={rowState} openEditModal={openEditModal} setOpenEditModal={setOpenEditModal} />
+      {openCreateModal ? <CreateCameraModal fetchCameras={fetchCameras} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} /> : null}
+      {openEditModal && cameraData != undefined && cameraData.length > 0 ? (
+        <EditAmbientModal fetchCameras={fetchCameras} rowState={rowState} openEditModal={openEditModal} setOpenEditModal={setOpenEditModal} />
       ) : null}
-      {openDeleteModal && ambient != undefined && ambient.length > 0 ? (
-        <DeleteAmbientModal fetchAmbients={fetchAmbients} row={rowState} openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal} />
+      {openDeleteModal && cameraData != undefined && cameraData.length > 0 ? (
+        <DeleteAmbientModal fetchCameras={fetchCameras} row={rowState} openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal} />
       ) : null}
       <Form
         layout="inline"
@@ -246,7 +247,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         }}
       ></Form>
       <Input.Search
-        placeholder="Ambiente"
+        placeholder="Nome"
         style={{
           width: "25%",
           display: "flex",
@@ -264,7 +265,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
           pageSize: 6,
         }}
         columns={tableColumns}
-        dataSource={ambient.length > 0 ? ambient : []}
+        dataSource={cameraData.length > 0 ? cameraData : []}
         style={{ width: "100%", height: "100%" }}
         rowKey={"id"}
         scroll={{ y: "calc(100vh - 4em)" }}

@@ -1,22 +1,24 @@
 //React
-import React from "react";
 import { useState, useEffect } from "react";
 
 //Libs
-import { Chip, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
+import { MenuItem, Select, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { useFormik } from "formik";
 import { toast } from "react-toastify";
+import { useFormik } from "formik";
+import axios from "axios";
 
 //Dependencies
-import { getToken } from "../../auth/useAuth";
 import { routes } from "../../routes/routes.js";
+import { getToken } from "../../auth/useAuth";
+
+// Components
 import { ModalFade } from "../StyledComponents/ModalFade.jsx";
 
 //Styles
 import "../../Globals.css";
 
-function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
+function EditCustomerModal({ openEditModal, setOpenEditModal, fetchWatchlistAmbients, rowState }) {
   const [loading, setLoading] = useState(false);
   const [customerList, setCustomerList] = useState([]);
   const [citiesList, setCitiesList] = useState([]);
@@ -40,10 +42,10 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
   }
 
   useEffect(() => {
-    if (openCreateModal) {
+    if (openEditModal) {
       handleCustomerList();
     }
-  }, [openCreateModal]);
+  }, []);
 
   useEffect(() => {
     const delayDebounceFunction = setTimeout(() => {
@@ -53,7 +55,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
   }, [citiesListAux]);
 
   useEffect(() => {
-    if (citiesList !== undefined) {
+    if (citiesListAux && citiesListAux.length > 0) {
       handleCityList(citiesList);
     }
   }, [citiesList]);
@@ -81,13 +83,15 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
     }
   }
 
-  async function handleSubmit(values, props) {
-    const { resetForm } = props;
-    const ambientRoutes = routes.ambient;
-    try {
-      const token = getToken();
+  async function handleEdit(values, { setSubmitting, resetForm }) {
+    const { external_id, display_name, customer_id, address, address_complement, postal_code, city_id } = values;
 
-      const { external_id, display_name, customer_id, address, address_complement, postal_code, city_id } = values;
+    const ambientRoutes = routes.ambient;
+
+    try {
+      setSubmitting(true);
+
+      const token = getToken();
 
       const body = {
         external_id: external_id,
@@ -101,19 +105,21 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
         },
       };
 
-      await axios.post(ambientRoutes.create, body, {
+      await axios.patch(ambientRoutes.updateById + rowState.id, body, {
         headers: {
           auth: token,
         },
       });
 
-      setOpenCreateModal(false);
+      setSubmitting(false);
+
+      setOpenEditModal(false);
 
       resetForm();
 
-      fetchAmbients();
+      fetchWatchlistAmbients();
 
-      toast.success(`Ambiente '${values.display_name}' adicionado com sucesso!`);
+      toast.success(`Ambiente '${values.display_name}' atualizado com sucesso!`, { position: "bottom-right" });
     } catch (error) {
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
@@ -121,38 +127,40 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
 
   const formik = useFormik({
     initialValues: {
-      external_id: "",
-      display_name: "",
-      customer_id: null,
-      address: "",
-      address_complement: "",
-      postal_code: "",
-      city_id: "",
+      external_id: rowState.external_id && rowState.external_id > 0 ? rowState.external_id : "",
+      display_name: rowState.display_name && rowState.display_name.length > 0 ? rowState.display_name : "",
+      customer_id: rowState.customer.id && rowState.customer.id > 0 ? rowState.customer.id : "",
+      address: rowState.address[0].address && rowState.address[0].address.length > 0 ? rowState.address[0].address : "",
+      address_complement:
+        rowState.address[0].address_complement && rowState.address[0].address_complement.length > 0 ? rowState.address[0].address_complement : "",
+      postal_code: rowState.address[0].postal_code && rowState.address[0].postal_code.length > 0 ? rowState.address[0].postal_code : "",
+      city: rowState.address[0].city.city && rowState.address[0].city.city.length > 0 ? rowState.address[0].city : "",
+      city_id: rowState.address[0].city.city && rowState.address[0].city.city.length > 0 ? rowState.address[0].city.id : "",
     },
-    onSubmit: handleSubmit,
+    onSubmit: handleEdit,
     resetForm: () => {
       formik.resetForm();
     },
   });
 
-  if (!openCreateModal) return null;
+  if (!openEditModal) return null;
   return (
     <ModalFade
       onClick={(e) => {
         if (e.target.classList.contains("modal-container")) {
-          setOpenCreateModal(false);
+          setOpenEditModal(false);
         }
       }}
       className="modal-container"
     >
       <div className="modal-card">
         <div className="top-label">
-          <h2>Criar ambiente</h2>
+          <h2>Editar ambiente</h2>
           <AiOutlineCloseCircle
             style={{ color: "#171717" }}
             className="close-icon"
             onClick={() => {
-              setOpenCreateModal(false);
+              setOpenEditModal(false);
             }}
           />
         </div>
@@ -186,23 +194,22 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl fullWidth>
+                  <FormControl size="large" fullWidth>
                     <Autocomplete
                       fullWidth
+                      required
+                      maxMenuHeight="200"
                       size="large"
-                      filterOptions={(options, { inputValue }) => {
-                        return options.filter((option) => option.display_name.toLowerCase().includes(inputValue.toLowerCase()));
-                      }}
-                      id="customerList"
+                      id="customer_id"
+                      name="customer_id"
+                      label="customer_id"
+                      value={customerList.find((option) => option.id === formik.values.customer_id) || null}
                       options={customerList}
                       onChange={(event, options) => {
                         formik.setFieldValue("customer_id", options.id);
                       }}
-                      sx={{
-                        display: "flex",
-                        margin: "dence",
-                        flexWrap: "wrap",
-                        gap: 0.625,
+                      filterOptions={(options, { inputValue }) => {
+                        return options.filter((option) => option.display_name.toLowerCase().includes(inputValue.toLowerCase()));
                       }}
                       getOptionLabel={(option) => option.display_name}
                       variant="outlined"
@@ -216,7 +223,6 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    required
                     size="large"
                     id="address"
                     label="Endereço"
@@ -238,10 +244,8 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                     onChange={formik.handleChange}
                   />
                 </div>
-
                 <div className="form-group">
                   <TextField
-                    required
                     fullWidth
                     size="large"
                     id="postal_code"
@@ -261,6 +265,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                       fullWidth
                       options={filteredCities}
                       getOptionLabel={(option) => option.city + " - " + option.state.state}
+                      defaultValue={formik.values.city}
                       id="city_id"
                       loading={loading}
                       loadingText="Carregando..."
@@ -278,8 +283,8 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                 <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar
                 </button>
-                <button disabled={formik.isSubmitting} type="submit" className="blue-btn">
-                  Criar ambiente
+                <button disabled={formik.isSubmitting} type="submit" className="btn-submit-form">
+                  Editar ambiente
                 </button>
               </div>
             </div>
@@ -290,4 +295,4 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
   );
 }
 
-export default CreateAmbientModal;
+export default EditCustomerModal;

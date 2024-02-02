@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Components
-import CreateAmbientModal from "./CreateAmbientModal";
+import CreateAmbientModal from "./CreateCustomerWatchlistModal.jsx";
 import EditAmbientModal from "./EditAmbientModal";
 import DeleteAmbientModal from "./DeleteAmbientModal";
 
@@ -15,12 +15,12 @@ import DeleteAmbientModal from "./DeleteAmbientModal";
 import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
-function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
+function Index({ openCreateModal, setOpenCreateModal, fetchWatchlistCustomer }) {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
-  const [ambient, setAmbient] = useState([]);
+  const [watchlistCustomer, setWatchlistCustomer] = useState([]);
   const bordered = false;
   const [size, setSize] = useState("large");
   const showTitle = false;
@@ -34,26 +34,26 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
-  const ambientRoutes = routes.ambient;
+  const watchlistRoutes = routes.watchlists.customer;
 
   useEffect(() => {
-    fetchAmbients();
+    fetchWatchlistCustomer();
     toast.info("Base de dados atualizada!", {
       position: "bottom-right",
     });
   }, []);
 
-  async function fetchAmbients() {
+  async function fetchWatchlistCustomer() {
     try {
-      const { data: response } = await axios.get(ambientRoutes.listAllWithAddress, {
+      const { data: response } = await axios.get(watchlistRoutes.listAll, {
         headers: {
           auth: getToken(),
         },
       });
 
-      const ambientData = response;
+      const watchlistresponse = response;
 
-      setAmbient(ambientData);
+      setWatchlistCustomer(watchlistresponse);
 
       setLoading(false);
     } catch (error) {
@@ -79,16 +79,28 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       key: "id",
       dataIndex: "id",
       width: 75,
-      align: "center",
       filteredValue: null,
-      sorter: (a, b) => a.id - b.id,
+      align: "center",
+      sorter: (a, b, id) => a.id - b.id,
+    },
+    {
+      title: "xFaces ID",
+      key: "xfaces_watchlist_id",
+      dataIndex: "xfaces_watchlist_id",
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record, xfaces_watchlist_id) => {
+        return String(record.xfaces_watchlist_id).toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.xfaces_watchlist_id.localeCompare(b.xfaces_watchlist_id);
+      },
     },
     {
       title: "Nome",
       key: "display_name",
       dataIndex: "display_name",
       filteredValue: searchValue !== null ? [searchValue] : null,
-      onFilter: (value, record) => {
+      onFilter: (value, record, display_name) => {
         return String(record.display_name).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
@@ -96,68 +108,51 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       },
     },
     {
-      title: "Cliente",
-      key: "customer",
-      dataIndex: "customer",
-      filteredValue: null,
-      render: (value) => {
-        return value.display_name && value.display_name ? (
+      title: "Tipo",
+      key: "watchlist_customer_type",
+      align: "center",
+      dataIndex: "watchlist_customer_type",
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record, watchlist_customer_type) => {
+        return String(record.watchlist_customer_type.type).toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.watchlist_customer_type.type.localeCompare(b.watchlist_customer_type.type);
+      },
+      render: (watchlist_customer_type) => {
+        return (
           <>
-            <Tag color="blue" key={value}>
-              {value.display_name.toUpperCase()}
+            <Tag style={{ marginBottom: "2px" }} color={watchlist_customer_type.type == "RISK" ? "red" : "orange"}>
+              {watchlist_customer_type.type}
             </Tag>
           </>
-        ) : null;
+        );
       },
     },
     {
-      title: "Endereço",
-      key: "address",
-      dataIndex: "address",
-      filteredValue: null,
-      render: (value) => {
-        if (value != undefined && value.length > 0) {
-          const addressBase = value[0];
-          const address =
-            addressBase.address +
-            (addressBase.address_complement && addressBase.address_complement.length > 0 ? " - " + addressBase.address_complement : "") +
-            (addressBase.postal_code && addressBase.postal_code.length > 0 ? " - " + addressBase.postal_code : "");
-          return address;
-        } else {
-          return null;
-        }
-      },
-    },
-    {
-      title: "Cidade",
-      key: "address",
-      dataIndex: "address",
-      filteredValue: null,
-      render: (value) => {
-        if (value != undefined && value.length > 0) {
-          const addressBase = value[0];
-          return addressBase.city.city + " - " + addressBase.city.state.state;
-        } else {
-          return null;
-        }
-      },
-    },
-
-    {
-      title: "ID externo",
-      key: "external_id",
-      dataIndex: "external_id",
+      title: "Clientes",
+      key: "customer",
       align: "center",
-      filteredValue: null,
-      width: 87.5,
-      sorter: (a, b) => a.id - b.id,
-      render: (external_id) => {
-        return external_id && external_id.length > 0 ? <div>{external_id}</div> : <div>N/A</div>;
+      dataIndex: "customer",
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record, customer) => {
+        return String(record.customer.display_name).toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.customer.display_name.localeCompare(b.customer.display_name);
+      },
+      render: (customer) => {
+        return (
+          <>
+            <Tag style={{ marginBottom: "2px" }} color="blue">
+              {customer.display_name}
+            </Tag>
+          </>
+        );
       },
     },
     {
       title: "Data da criação",
-      align: "center",
       key: "created_date",
       dataIndex: "created_date",
       filteredValue: null,
@@ -171,44 +166,29 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         return new Date(date).toLocaleDateString("pt-BR");
       },
     },
-    {
-      title: "Data da atualização",
-      align: "center",
-      key: "updated_date",
-      dataIndex: "updated_date",
-      filteredValue: null,
-      width: 125,
-      sorter: (a, b) => {
-        const dateA = new Date(a.updated_date);
-        const dateB = new Date(b.updated_date);
-        return dateA - dateB;
-      },
-      render: (date) => {
-        return new Date(date).toLocaleDateString("pt-BR");
-      },
-    },
+
     {
       title: "Ações",
       key: "ações",
-      align: "center",
       width: 150,
+      align: "center",
       render: (row) => (
         <Space size="middle">
           <a
-            onClick={() => {
-              handleDeleteModal(row);
-            }}
+            disabled
+            // onClick={() => {
+            //   handleDeleteModal(row);
+            // }}
           >
             Delete
           </a>
-          <a>
-            <Space
-              onClick={() => {
-                handleEditModal(row);
-              }}
-            >
-              Editar
-            </Space>
+          <a
+            disabled
+            // onClick={() => {
+            //   handleEditModal(row);
+            // }}
+          >
+            Editar
           </a>
         </Space>
       ),
@@ -231,12 +211,24 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
 
   return (
     <>
-      {openCreateModal ? <CreateAmbientModal fetchAmbients={fetchAmbients} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} /> : null}
-      {openEditModal && ambient != undefined && ambient.length > 0 ? (
-        <EditAmbientModal fetchAmbients={fetchAmbients} rowState={rowState} openEditModal={openEditModal} setOpenEditModal={setOpenEditModal} />
+      {openCreateModal ? (
+        <CreateAmbientModal fetchWatchlistCustomer={fetchWatchlistCustomer} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
       ) : null}
-      {openDeleteModal && ambient != undefined && ambient.length > 0 ? (
-        <DeleteAmbientModal fetchAmbients={fetchAmbients} row={rowState} openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal} />
+      {openEditModal && watchlistCustomer != undefined && watchlistCustomer.length > 0 ? (
+        <EditAmbientModal
+          fetchWatchlistCustomer={fetchWatchlistCustomer}
+          rowState={rowState}
+          openEditModal={openEditModal}
+          setOpenEditModal={setOpenEditModal}
+        />
+      ) : null}
+      {openDeleteModal && watchlistCustomer != undefined && watchlistCustomer.length > 0 ? (
+        <DeleteAmbientModal
+          fetchWatchlistCustomer={fetchWatchlistCustomer}
+          row={rowState}
+          openDeleteModal={openDeleteModal}
+          setOpenDeleteModal={setOpenDeleteModal}
+        />
       ) : null}
       <Form
         layout="inline"
@@ -246,7 +238,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         }}
       ></Form>
       <Input.Search
-        placeholder="Ambiente"
+        placeholder="Nome"
         style={{
           width: "25%",
           display: "flex",
@@ -264,7 +256,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
           pageSize: 6,
         }}
         columns={tableColumns}
-        dataSource={ambient.length > 0 ? ambient : []}
+        dataSource={watchlistCustomer.length > 0 ? watchlistCustomer : []}
         style={{ width: "100%", height: "100%" }}
         rowKey={"id"}
         scroll={{ y: "calc(100vh - 4em)" }}

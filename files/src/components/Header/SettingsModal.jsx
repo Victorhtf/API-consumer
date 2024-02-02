@@ -21,10 +21,10 @@ const ModalFade = styled.div`
   .modal-card {
     position: relative;
     margin: 3.8% 1.6%;
-    padding: 30px;
-    border-radius: 7px;
+    padding: 37.5px;
+    border-radius: 8.75px;
     background-color: white;
-    padding: 10px 0px;
+    padding: 12.5px 0px;
     transition: 1;
   }
 
@@ -37,8 +37,8 @@ const ModalFade = styled.div`
   }
 
   .logout-container {
-    padding: 10px 20px;
-    gap: 10px;
+    padding: 12.5px 32.5px;
+    gap: 12.5px;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -47,7 +47,7 @@ const ModalFade = styled.div`
   }
 
   p {
-    font-size: 14px;
+    font-size: 17.5px;
   }
 `;
 

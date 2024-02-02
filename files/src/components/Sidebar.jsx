@@ -1,5 +1,5 @@
 //React
-import React from "react";
+import React, { useState } from "react";
 
 //Libs
 import styled from "styled-components";
@@ -7,6 +7,10 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { RiLinkM } from "react-icons/ri";
 import { MdGroups } from "react-icons/md";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+
+import { BsCameraVideo } from "react-icons/bs";
+
 import { LuUserSquare } from "react-icons/lu";
 import { HiOutlineBuildingStorefront } from "react-icons/hi2";
 import { AiOutlineEnvironment } from "react-icons/ai";
@@ -23,7 +27,6 @@ const Aside = styled.div`
   color: #f0eff4;
   padding: 1rem;
   position: sticky;
-  font-size: 10px;
 
   .trademark {
     display: flex;
@@ -46,62 +49,202 @@ const Aside = styled.div`
   .icon {
     font-size: 22px;
   }
-  .items {
-    border-radius: 10px;
-    margin-bottom: 10px;
+
+  .side-box {
     display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 10px 0px;
+  }
+
+  .menu {
+    padding: 15px 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding-left: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    gap: 20px;
+    transition: 0.25s ease;
+    transform: translateX(-5px);
 
-    .cathegories {
-      font-size: 13px;
-      letter-spacing: 0.05rem;
-    }
-
-    &:hover {
-      background: linear-gradient(118deg, #4ec3ee, rgba(78, 195, 238, 0.7));
-      box-shadow: 0 0 10px 1px rgba(78, 195, 238, 0.7);
-      cursor: pointer;
-      transition: 0.25s ease;
-      transform: translateX(5px);
+    .arrow-icon {
+      opacity: 100%;
+      transition: ease, 0.5s;
+      -webkit-transition: ease, 0.5s;
     }
   }
+
+  .menu:hover {
+    background: linear-gradient(118deg, #4ec3ee, rgba(78, 195, 238, 0.7));
+    box-shadow: 0 0 10px 1px rgba(78, 195, 238, 0.7);
+    cursor: pointer;
+    transition: 0.5s ease;
+    transform: translateX(5px);
+    height: auto;
+    -webkit-transition: ease, 0.5s;
+
+    .arrow-icon {
+      opacity: 100%;
+      transition: ease, 0.5s;
+      rotate: -45deg;
+      -webkit-transition: ease, 0.5s;
+    }
+  }
+
+  .arrow-icon {
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 0px;
+    opacity: 50%;
+  }
+
+  .row-content {
+    gap: 15px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+    justify-self: center;
+  }
+
+  .columns-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .p-cathegories {
+    font-size: 16px;
+    width: auto;
+    letter-spacing: 0.05rem;
+  }
+
+  .items.open {
+    padding: 10px 60px 10px 60px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    font-size: 242px;
+    letter-spacing: 0.05rem;
+    transition: ease 0.5s;
+  }
+
+  .items.open:hover {
+    background: linear-gradient(118deg, #713d90, rgb(113, 61, 144, 0.7));
+    box-shadow: 0 0 10px 1px rgb(113, 61, 144, 0.7);
+    cursor: pointer;
+    padding: 10px 60px 10px 60px;
+  }
+
+  .items.closed {
+    opacity: 0;
+    height: 0;
+    left: 0;
+    transition: ease 0.5s;
+  }
+
+  .p-items {
+    font-size: 14px;
+    width: auto;
+    letter-spacing: 0.05rem;
+  }
+
   .icon {
     justify-content: center;
     align-items: center;
     display: flex;
   }
+
+  .menu:hover {
+    opacity: 100%;
+  }
+
   p {
-    font-size: 13px;
     cursor: pointer;
   }
 `;
 
 function Sidebar() {
+  const [open, setOpen] = useState(false);
+
   const routes = [
-    { route: "users", name: "Usuários", icon: LuUserSquare },
+    {
+      route: "users",
+      name: "Usuários",
+      icon: <LuUserSquare />,
+      children: [],
+    },
     {
       route: "customer-groups",
       name: "Grupos de clientes",
-      icon: MdGroups,
+      icon: <MdGroups />,
+      children: [],
     },
-
-    { route: "customer", name: "Clientes", icon: HiOutlineBuildingStorefront },
-    { route: "ambients", name: "Ambientes", icon: AiOutlineEnvironment },
+    {
+      route: "customer",
+      name: "Clientes",
+      icon: <HiOutlineBuildingStorefront />,
+      children: [],
+    },
+    {
+      route: "ambients",
+      name: "Ambientes",
+      icon: <AiOutlineEnvironment />,
+      children: [],
+    },
     {
       route: "userxambients",
       name: "Vínculos",
-      icon: RiLinkM,
+      icon: <RiLinkM />,
+      children: [],
+    },
+    {
+      route: "cameras",
+      name: "Câmeras",
+      icon: <BsCameraVideo />,
+      children: [],
+    },
+    {
+      route: "watchlist",
+      name: "Watchlists",
+      icon: <AiOutlineEnvironment />,
+      children: [
+        {
+          name: "Global",
+          subroute: "global",
+        },
+        {
+          name: "Ambiente",
+          subroute: "ambient",
+        },
+        {
+          name: "Clientes",
+          subroute: "customer",
+        },
+      ],
     },
   ];
 
   const navigate = useNavigate();
 
-  function handleNavigate(routes) {
-    navigate(`/${routes}`);
+  function handleNavigate(item, route) {
+    if (!item.children.length > 0) {
+      navigate(item.route);
+    } else {
+      navigate(item.route + "/" + route.subroute);
+    }
+  }
+
+  function handleContent(item) {
+    if (!item.children.length > 0) {
+      handleNavigate(item);
+    } else {
+      setOpen(!open);
+    }
   }
 
   return (
@@ -120,20 +263,39 @@ function Sidebar() {
             <img className="img2-logo" src={img2logo} />
           </div>
         </div>
-        <div>
-          {routes.map((routes, routesIndex) => {
+        <div className="side-box">
+          {routes.map((item, itemIndex) => {
             return (
-              <div
-                onClick={() => {
-                  handleNavigate(routes.route);
-                }}
-                key={routesIndex}
-                className="items"
-              >
-                <div className="icon">{routes.icon()}</div>
-                <p className="cathegories" key={routesIndex}>
-                  {routes.name}
-                </p>
+              <div>
+                <div
+                  key={itemIndex}
+                  className="menu"
+                  onClick={() => {
+                    handleContent(item);
+                  }}
+                >
+                  <div className="row-content">
+                    <div className="row-content">
+                      <div className="icon">{item.icon}</div>
+                      <p className="p-cathegories">{item.name}</p>
+                    </div>
+                    <div className="arrow-icon">
+                      <MdOutlineKeyboardArrowDown className="arrow-icon" />
+                    </div>
+                  </div>
+                </div>
+                {item.children.map((route, routeIndex) => (
+                  <div
+                    className={`items ${open ? "open" : "closed"}`}
+                    onClick={() => {
+                      handleNavigate(item, route);
+                    }}
+                  >
+                    <p className="p-items" key={routeIndex}>
+                      {route.name}
+                    </p>
+                  </div>
+                ))}
               </div>
             );
           })}

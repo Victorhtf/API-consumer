@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Components
-import CreateAmbientModal from "./CreateAmbientModal";
+import CreateAmbientModal from "./CreateAmbientWatchlistModal.jsx";
 import EditAmbientModal from "./EditAmbientModal";
 import DeleteAmbientModal from "./DeleteAmbientModal";
 
@@ -15,12 +15,12 @@ import DeleteAmbientModal from "./DeleteAmbientModal";
 import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
-function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
+function Index({ openCreateModal, setOpenCreateModal, fetchWatchlistAmbients }) {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
-  const [ambient, setAmbient] = useState([]);
+  const [watchlistAmbient, setWatchlistAmbient] = useState([]);
   const bordered = false;
   const [size, setSize] = useState("large");
   const showTitle = false;
@@ -34,26 +34,26 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
-  const ambientRoutes = routes.ambient;
+  const watchlistRoutes = routes.watchlists.ambient;
 
   useEffect(() => {
-    fetchAmbients();
+    fetchWatchlistAmbients();
     toast.info("Base de dados atualizada!", {
       position: "bottom-right",
     });
   }, []);
 
-  async function fetchAmbients() {
+  async function fetchWatchlistAmbients() {
     try {
-      const { data: response } = await axios.get(ambientRoutes.listAllWithAddress, {
+      const { data: response } = await axios.get(watchlistRoutes.listAll, {
         headers: {
           auth: getToken(),
         },
       });
 
-      const ambientData = response;
+      const watchlistAmbientData = response;
 
-      setAmbient(ambientData);
+      setWatchlistAmbient(watchlistAmbientData);
 
       setLoading(false);
     } catch (error) {
@@ -79,16 +79,28 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       key: "id",
       dataIndex: "id",
       width: 75,
-      align: "center",
       filteredValue: null,
-      sorter: (a, b) => a.id - b.id,
+      align: "center",
+      sorter: (a, b, id) => a.id - b.id,
+    },
+    {
+      title: "xFaces ID",
+      key: "xfaces_watchlist_id",
+      dataIndex: "xfaces_watchlist_id",
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record, xfaces_watchlist_id) => {
+        return String(record.xfaces_watchlist_id).toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.xfaces_watchlist_id.localeCompare(b.xfaces_watchlist_id);
+      },
     },
     {
       title: "Nome",
       key: "display_name",
       dataIndex: "display_name",
       filteredValue: searchValue !== null ? [searchValue] : null,
-      onFilter: (value, record) => {
+      onFilter: (value, record, display_name) => {
         return String(record.display_name).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
@@ -96,69 +108,53 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       },
     },
     {
-      title: "Cliente",
-      key: "customer",
-      dataIndex: "customer",
-      filteredValue: null,
-      render: (value) => {
-        return value.display_name && value.display_name ? (
+      title: "Tipo",
+      key: "watchlist_ambient_type",
+      align: "center",
+      dataIndex: "watchlist_ambient_type",
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record, watchlist_ambient_type) => {
+        return String(record.watchlist_ambient_type.type).toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.watchlist_ambient_type.type.localeCompare(b.watchlist_ambient_type.type);
+      },
+      render: (watchlist_ambient_type) => {
+        return (
           <>
-            <Tag color="blue" key={value}>
-              {value.display_name.toUpperCase()}
+            <Tag style={{ marginBottom: "2px" }} color={watchlist_ambient_type.type == "EXCEPTION" ? "red" : "green"}>
+              {watchlist_ambient_type.type}
             </Tag>
           </>
-        ) : null;
+        );
       },
     },
     {
-      title: "Endereço",
-      key: "address",
-      dataIndex: "address",
-      filteredValue: null,
-      render: (value) => {
-        if (value != undefined && value.length > 0) {
-          const addressBase = value[0];
-          const address =
-            addressBase.address +
-            (addressBase.address_complement && addressBase.address_complement.length > 0 ? " - " + addressBase.address_complement : "") +
-            (addressBase.postal_code && addressBase.postal_code.length > 0 ? " - " + addressBase.postal_code : "");
-          return address;
-        } else {
-          return null;
-        }
-      },
-    },
-    {
-      title: "Cidade",
-      key: "address",
-      dataIndex: "address",
-      filteredValue: null,
-      render: (value) => {
-        if (value != undefined && value.length > 0) {
-          const addressBase = value[0];
-          return addressBase.city.city + " - " + addressBase.city.state.state;
-        } else {
-          return null;
-        }
-      },
-    },
-
-    {
-      title: "ID externo",
-      key: "external_id",
-      dataIndex: "external_id",
+      title: "Ambientes",
+      key: "ambient",
       align: "center",
-      filteredValue: null,
-      width: 87.5,
-      sorter: (a, b) => a.id - b.id,
-      render: (external_id) => {
-        return external_id && external_id.length > 0 ? <div>{external_id}</div> : <div>N/A</div>;
+      dataIndex: "ambient",
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record, ambient) => {
+        return String(record.ambient.display_name).toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.ambient.display_name.localeCompare(b.ambient.display_name);
+      },
+      render: (ambient) => {
+        return (
+          <>
+            <Tag style={{ marginBottom: "2px" }} color="blue">
+              {ambient.display_name}
+            </Tag>
+          </>
+        );
       },
     },
     {
       title: "Data da criação",
-      align: "center",
       key: "created_date",
+      align: "center",
       dataIndex: "created_date",
       filteredValue: null,
       width: 125,
@@ -171,44 +167,29 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         return new Date(date).toLocaleDateString("pt-BR");
       },
     },
-    {
-      title: "Data da atualização",
-      align: "center",
-      key: "updated_date",
-      dataIndex: "updated_date",
-      filteredValue: null,
-      width: 125,
-      sorter: (a, b) => {
-        const dateA = new Date(a.updated_date);
-        const dateB = new Date(b.updated_date);
-        return dateA - dateB;
-      },
-      render: (date) => {
-        return new Date(date).toLocaleDateString("pt-BR");
-      },
-    },
+
     {
       title: "Ações",
       key: "ações",
-      align: "center",
       width: 150,
+
       render: (row) => (
         <Space size="middle">
           <a
-            onClick={() => {
-              handleDeleteModal(row);
-            }}
+            disabled
+            // onClick={() => {
+            //   handleDeleteModal(row);
+            // }}
           >
             Delete
           </a>
-          <a>
-            <Space
-              onClick={() => {
-                handleEditModal(row);
-              }}
-            >
-              Editar
-            </Space>
+          <a
+            disabled
+            // onClick={() => {
+            //   handleEditModal(row);
+            // }}
+          >
+            Editar
           </a>
         </Space>
       ),
@@ -231,12 +212,24 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
 
   return (
     <>
-      {openCreateModal ? <CreateAmbientModal fetchAmbients={fetchAmbients} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} /> : null}
-      {openEditModal && ambient != undefined && ambient.length > 0 ? (
-        <EditAmbientModal fetchAmbients={fetchAmbients} rowState={rowState} openEditModal={openEditModal} setOpenEditModal={setOpenEditModal} />
+      {openCreateModal ? (
+        <CreateAmbientModal fetchWatchlistAmbients={fetchWatchlistAmbients} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
       ) : null}
-      {openDeleteModal && ambient != undefined && ambient.length > 0 ? (
-        <DeleteAmbientModal fetchAmbients={fetchAmbients} row={rowState} openDeleteModal={openDeleteModal} setOpenDeleteModal={setOpenDeleteModal} />
+      {openEditModal && watchlistAmbient != undefined && watchlistAmbient.length > 0 ? (
+        <EditAmbientModal
+          fetchWatchlistAmbients={fetchWatchlistAmbients}
+          rowState={rowState}
+          openEditModal={openEditModal}
+          setOpenEditModal={setOpenEditModal}
+        />
+      ) : null}
+      {openDeleteModal && watchlistAmbient != undefined && watchlistAmbient.length > 0 ? (
+        <DeleteAmbientModal
+          fetchWatchlistAmbients={fetchWatchlistAmbients}
+          row={rowState}
+          openDeleteModal={openDeleteModal}
+          setOpenDeleteModal={setOpenDeleteModal}
+        />
       ) : null}
       <Form
         layout="inline"
@@ -246,7 +239,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         }}
       ></Form>
       <Input.Search
-        placeholder="Ambiente"
+        placeholder="Nome"
         style={{
           width: "25%",
           display: "flex",
@@ -264,7 +257,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
           pageSize: 6,
         }}
         columns={tableColumns}
-        dataSource={ambient.length > 0 ? ambient : []}
+        dataSource={watchlistAmbient.length > 0 ? watchlistAmbient : []}
         style={{ width: "100%", height: "100%" }}
         rowKey={"id"}
         scroll={{ y: "calc(100vh - 4em)" }}

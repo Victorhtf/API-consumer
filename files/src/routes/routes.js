@@ -43,4 +43,35 @@ export const routes = {
     listAll: baseUrl + "/admin/userXAmbient", //GET
     listAllArray: baseUrl + "/admin/userXAmbient/array", //GET
   },
+  camera: {
+    listTypes: baseUrl + "/admin/camera/cameraTypes", //GET
+    listAll: baseUrl + "/admin/camera", //GET
+    listById: baseUrl + "/admin/camera/", //GET
+    listMy: baseUrl + "/admin/camera/myCameras", //GET
+    create: baseUrl + "/admin/camera", //POST
+  },
+  watchlists: {
+    global: {
+      listTypes: baseUrl + "/admin/watchlistGlobal/watchlistGlobalTypes", //GET
+      listAll: baseUrl + "/admin/watchlistGlobal", //GET
+      listById: baseUrl + "/admin/watchlistGlobal/", //GET
+      create: baseUrl + "/watchlistGlobal", //POST
+    },
+    ambient: {
+      listTypes: baseUrl + "/admin/watchlistAmbient/watchlistAmbientTypes", //GET
+      listAll: baseUrl + "/admin/watchlistAmbient/", //GET
+      listById: baseUrl + "/admin/watchlistAmbient/", //GET
+      create: baseUrl + "/admin/watchlistAmbient", //POST
+    },
+    customer: {
+      listTypes: baseUrl + "/admin/watchlistCustomer/watchlistCustomerTypes", //GET
+      listAll: baseUrl + "/admin/watchlistCustomer", //GET
+      listById: baseUrl + "/admin/watchlistCustomer/", //GET
+      listMy: baseUrl + "/admin/watchlistCustomer/myWatchlists", //GET
+      create: baseUrl + "/admin/watchlistCustomer/", //POST
+      deleteByDisplayName: baseUrl + "/admin/watchlistCustomer/deleteItemByDisplayName", //POST
+      mergeById: baseUrl + "/admin/watchlistCustomer/mergeItemsById", //POST
+      mergeByDisplayName: baseUrl + "/admin/watchlistCustomer/mergeItemsByDisplayName", //POST
+    },
+  },
 };

@@ -3,19 +3,19 @@
   padding: 0px;
   box-sizing: border-box;
   font-family: "Montserrat", Helvetica, Arial, serif;
-  letter-spacing: 0.01rem;
+  letter-spacing: 0.0125rem;
 }
 
 p {
-  font-size: 13px
+  font-size: 16.25px
 }
 
 :root {
-  --h2-font-size: 25px;
-  --h3-font-size: 20px;
-  --h4-font-size: 15px;
-  --h5-font-size: 10px;
-  --h6-font-size: 5px;
+  --h2-font-size: 31.25px;
+  --h3-font-size: 25px;
+  --h4-font-size: 18.75px;
+  --h5-font-size: 12.5px;
+  --h6-font-size: 6.25px;
 
   /* Font color */
   --primary-text-color: #ffffff;
@@ -24,28 +24,28 @@ p {
   /* Card */
   --card-bg-color: #fff;
     /* Button */
-    --btn-border-radius: 6px;
+    --btn-border-radius: 7.5px;
     --btn-bg-color: #1874fc;
     --btn-2bg-color: #ffffff;
-    --btn-font-size: 15px;
+    --btn-font-size: 18.75px;
     --btn-border-color: ;
-    --font-size: 300;
+    --font-size: 375;
 
-    --btn-border-radius: 6px;
-    --btn-font-size: 15px;
+    --btn-border-radius: 7.5px;
+    --btn-font-size: 18.75px;
 
   /* Cancel button */
   --btn-cancel-color: #fff;
   --btn-cancel-bg-color: #df0133;
 
   /* Input */
-  --input-border-radius: 6px;
-  --input-border-color: 1px #e0dcdc solid;
+  --input-border-radius: 7.5px;
+  --input-border-color: 1.25px #e0dcdc solid;
   --input-border-color-when-hover:
 
   /*  */
-  --card-border-radius: 5px;
-  --line-height: 40px;
+  --card-border-radius: 6.25px;
+  --line-height: 50px;
 }
 
 body {
@@ -54,19 +54,19 @@ body {
 
 .delete-btn{
   background-color: #df0133;
-  border: 1px solid #a52d37;
-  padding: 7px 14px 7px 14px;
+  border: 1.25px solid #a52d37;
+  padding: 8.75px 17.5px 8.75px 17.5px;
   border-radius: var(--btn-border-radius);
   font-size: var(--btn-font-size);
   color: #fff;
-  font-weight: 300;
+  font-weight: 375;
   cursor: pointer;
 }
 
 .cancel-btn {
   background-color: #ffffff;
-  border: 1px solid #5e5f68;
-  padding: 7px 14px 7px 14px;
+  border: 1.25px solid #5e5f68;
+  padding: 8.75px 17.5px 8.75px 17.5px;
   border-radius: var(--btn-border-radius);
   font-size: var(--btn-font-size);
   color: var(--secondary-text-color);
@@ -76,9 +76,9 @@ body {
 
 
 .highlight {
-  font-size: 14px;
-  padding: 1px 4px 1px 4px;
-  margin: 0px -10px;
+  font-size: 17.5px;
+  padding: 1.25px 5px 1.25px 5px;
+  margin: 0px -12.5px;
   background-color: #ffffff;
   border: 1px #e0dcdc solid;
   border-radius: var(--btn-border-radius);
@@ -102,51 +102,29 @@ body {
 }
 
 .warn-text {
-  margin-bottom: 20px;  
+  margin-bottom: 25px;  
 }
 
-.ant-table table { font-size: 11.7px; }
+.ant-table table { font-size: 14.625px; }
 
 .ant-table-body {
-  min-height: 500px;
+  min-height: 625px;
 }
 
-.ant-tag {font-size: 11px;} 
+.ant-tag {font-size: 13.75px;} 
 
 .blue-btn {
   background:  #1874fc;
   color: white;
   align-self: center;
   border: none;
-  padding: 10px 15px 10px 15px;
-  border-radius: 6px;
+  padding: 12.5px 18.75px 12.5px 18.75px;
+  border-radius: 7.5px;
   cursor: pointer;
-  height: 32px;
+  height: 40px;
   justify-content: center;
   align-items: center;
   display: flex;
-  font-size: 12px;
+  font-size: 15px;
   text-transform: uppercase;
-}
-
-.download-btn {
-  background: #1874fc;
-  align-self: center;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  height: 32px;
-  justify-content: center;
-  display: flex;
-  align-items: center;
-  padding: 5px 10px 5px 10px;
-  font-size: 1rem;
-  color: white;
-
-
-
-
-
-
-
 }

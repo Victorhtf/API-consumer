@@ -133,7 +133,7 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
                   <TextField
                     validationSchema={validateschema}
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="username"
                     label="Nome de usuário"
                     variant="outlined"
@@ -145,7 +145,7 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="password"
                     label="Senha"
                     variant="outlined"
@@ -157,7 +157,7 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="email"
                     label="E-mail"
                     variant="outlined"
@@ -167,7 +167,7 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="medium" fullWidth>
+                  <FormControl size="large" fullWidth>
                     <InputLabel id="roles">Papéis</InputLabel>
                     <Select
                       multiple

@@ -3,10 +3,11 @@ import React, { useState, useEffect } from "react";
 
 //Libs
 import { Input, Form, Space, Table, Tag } from "antd";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { IoMdDownload } from "react-icons/io";
-import * as xlsx from "xlsx";
+
+// import * as xlsx from "xlsx";
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 //Components
 import CreateUserModal from "./CreateUserModal.jsx";
@@ -59,15 +60,13 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   async function fetchUsers() {
     const userRoutes = routes.user;
     try {
-      const response = await axios.get(userRoutes.listAll, {
+      const { data: response } = await axios.get(userRoutes.listAll, {
         headers: {
           auth: getToken(),
         },
       });
 
-      const usersData = response.data;
-
-      setUsers(usersData);
+      setUsers(response);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -85,23 +84,24 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     setOpenDeleteModal(true);
   }
 
-  function handleExport() {
-    const newUsers = users.map((item) => ({
-      ...item,
-      roles: item.roles.map((role) => role.name).join(", "),
-    }));
-    var workbook = xlsx.utils.book_new();
+  // function handleExport() {
+  //   const newUsers = users.map((item) => ({
+  //     ...item,
+  //     roles: item.roles.map((role) => role.name).join(", "),
+  //   }));
+  //   var workbook = xlsx.utils.book_new();
 
-    const worksheet = xlsx.utils.json_to_sheet(newUsers);
+  //   const worksheet = xlsx.utils.json_to_sheet(newUsers);
 
-    xlsx.utils.book_append_sheet(workbook, worksheet, "Usuários");
+  //   xlsx.utils.book_append_sheet(workbook, worksheet, "Usuários");
 
-    xlsx.writeFile(workbook, "Users - Intradata CRUD.xlsx");
-  }
+  //   xlsx.writeFile(workbook, "Users - Intradata CRUD.xlsx");
+  // }
 
   const columns = [
     {
       title: "ID",
+      align: "center",
       dataIndex: "id",
       key: "id",
       width: 60,
@@ -129,6 +129,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       title: "Papéis",
       key: "tags",
       dataIndex: "roles",
+      align: "center",
       filteredValue: null,
       filters: rolesList.map((item, rolesListIndex) => {
         return {
@@ -152,6 +153,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     {
       title: "Data da criação",
       key: "created_date",
+      align: "center",
       dataIndex: "created_date",
       filteredValue: null,
       sorter: (a, b) => {
@@ -166,6 +168,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     {
       title: "Ações",
       key: "ações",
+      align: "center",
       width: 120,
       filteredValue: null,
       render: (row) => (

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 //Libs
-import { MenuItem, Select, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
+import { FormControl, TextField, Autocomplete } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
@@ -35,9 +35,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
         },
       });
 
-      const customerData = response;
-
-      setCustomerList(customerData);
+      setCustomerList(response);
     } catch (error) {
       setCustomerList([]);
     }
@@ -173,7 +171,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="external_id"
                     label="External ID"
                     variant="outlined"
@@ -186,7 +184,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                   <TextField
                     fullWidth
                     required
-                    size="medium"
+                    size="large"
                     id="display_name"
                     label="Nome"
                     variant="outlined"
@@ -196,12 +194,12 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="medium" fullWidth>
+                  <FormControl size="large" fullWidth>
                     <Autocomplete
                       fullWidth
                       required
                       maxMenuHeight="200"
-                      size="medium"
+                      size="large"
                       id="customer_id"
                       name="customer_id"
                       label="customer_id"
@@ -225,7 +223,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="address"
                     label="Endereço"
                     variant="outlined"
@@ -237,7 +235,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="address_complement"
                     label="Complemento"
                     variant="outlined"
@@ -249,7 +247,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="postal_code"
                     label="CEP"
                     variant="outlined"
@@ -259,10 +257,10 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="medium" fullWidth>
+                  <FormControl size="large" fullWidth>
                     <Autocomplete
                       isOptionEqualToValue={(option, value) => option.city_id === value.city_id}
-                      size="medium"
+                      size="large"
                       filterOptions={(x) => x}
                       fullWidth
                       options={filteredCities}

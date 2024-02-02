@@ -120,7 +120,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchCustomers, ro
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="display_name"
                     label="Nome"
                     variant="outlined"
@@ -132,7 +132,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchCustomers, ro
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="fantasy_name"
                     label="Nome fantasia"
                     variant="outlined"
@@ -142,7 +142,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchCustomers, ro
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="medium" fullWidth>
+                  <FormControl size="large" fullWidth>
                     <InputLabel id="customer_group">Grupos de cliente</InputLabel>
                     <Select
                       maxMenuHeight="200"

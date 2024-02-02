@@ -119,7 +119,7 @@ function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="username"
                     label="Nome de usuário"
                     variant="outlined"
@@ -131,7 +131,7 @@ function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="password"
                     label="Senha"
                     variant="outlined"
@@ -143,7 +143,7 @@ function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="email"
                     label="E-mail"
                     variant="outlined"
@@ -153,7 +153,7 @@ function EditUserModal({ openEditModal, setOpenEditModal, fetchUsers, rowState }
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="medium" fullWidth>
+                  <FormControl size="large" fullWidth>
                     <InputLabel id="roles">Papéis</InputLabel>
                     <Select multiple MenuProps={MenuProps} id="roles" name="roles" label="roles" value={formik.values.roles} onChange={formik.handleChange}>
                       {rolesList.map((item, rolesEditIndex) => (

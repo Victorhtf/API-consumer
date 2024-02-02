@@ -41,15 +41,13 @@ function Index({ openCreateModal, setOpenCreateModal }) {
 
   async function fetchCustomers() {
     try {
-      const response = await axios.get(customerRoutes.listAll, {
+      const { data: response } = await axios.get(customerRoutes.listAll, {
         headers: {
           auth: getToken(),
         },
       });
 
-      const customerData = response.data;
-
-      setCustomer(customerData);
+      setCustomer(response);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -72,6 +70,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     {
       title: "Customer ID",
       dataIndex: "id",
+      align: "center",
       key: "id",
       width: 120,
       filteredValue: null,
@@ -120,6 +119,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     {
       title: "Data da criação",
       key: "created_date",
+      align: "center",
       dataIndex: "created_date",
       filteredValue: null,
       sorter: (a, b) => {
@@ -134,8 +134,8 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     {
       title: "Ações",
       key: "ações",
+      align: "center",
       width: 120,
-
       render: (row) => (
         <Space size="middle">
           <a
