@@ -21,6 +21,7 @@ export const routes = {
     listMy: baseUrl + "admin/customer/myCustomers", //GET
     listById: baseUrl + "admin/customer/", //GET
     deleteById: baseUrl + "/admin/customer/",
+    deleteByDisplayName: baseUrl + "/admin/watchlistCustomer/deleteItemByDisplayName", //POST
     updateById: baseUrl + "/admin/customer/", //PATCH
   },
   customerGroup: {

@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { RiLinkM } from "react-icons/ri";
 import { MdGroups } from "react-icons/md";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { MdOutlineKeyboardArrowDown, MdOutlinePhotoSizeSelectActual } from "react-icons/md";
 
 import { BsCameraVideo } from "react-icons/bs";
 
@@ -253,6 +253,12 @@ function Sidebar() {
         },
       ],
     },
+    {
+      route: "registry",
+      name: "Registros",
+      icon: <MdOutlinePhotoSizeSelectActual />,
+      children: [],
+    },
   ];
 
   function handleNavigate(item, route) {
@@ -264,9 +270,10 @@ function Sidebar() {
     }
   }
 
-  function handleContent(item) {
-    setCurrentPage(item.name);
+  function handleContent(item, route) {
+    setCurrentPage(route && route.length > 0 ? route.name : item.name);
     if (!item.children.length > 0 && open == false) {
+      console.log(currentPage);
       handleNavigate(item);
     } else {
       setOpen(!open);
