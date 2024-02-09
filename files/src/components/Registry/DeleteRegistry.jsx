@@ -6,16 +6,29 @@ import { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import { useFormik } from "formik";
+import { FaCheckCircle } from "react-icons/fa";
+import { HiXCircle } from "react-icons/hi";
+
 import { toast } from "react-toastify";
 
 //Dependencies
 import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth.js";
 
-function DeleteRegistry() {
+function DeleteRegistry({ handleSetDeleteHistory }) {
   async function handleSubmit(values, props) {
     const { resetForm } = props;
     const customerRoutes = routes.customer;
+
+    const deletedData = [];
+
+    class History {
+      constructor(deleted_at, status, display_name) {
+        this.deleted_at = deleted_at;
+        this.status = status;
+        this.display_name = display_name;
+      }
+    }
 
     try {
       const splittedValues = values.display_name.split("\n");
@@ -23,6 +36,8 @@ function DeleteRegistry() {
       const token = getToken();
 
       splittedValues.forEach((id_xfaces) => {
+        const date = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+
         try {
           const body = {
             display_name: id_xfaces,
@@ -34,10 +49,30 @@ function DeleteRegistry() {
           //   },
           // });
 
+          const status = (
+            <div style={{ width: "100%", height: "100%" }}>
+              <FaCheckCircle style={{ color: "green" }} />
+            </div>
+          );
+
+          const historyEntry = new History(date, status, id_xfaces);
+          deletedData.push(historyEntry);
+
           toast.success(`Registro '${id_xfaces}' deletado com sucesso!`);
         } catch (error) {
+          const status = (
+            <div style={{ width: "100%", height: "100%" }}>
+              <HiXCircle style={{ color: "red" }} />;
+            </div>
+          );
+
+          const historyEntry = new History(date, status, id_xfaces);
+          deletedData.push(historyEntry);
+
           toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
         }
+
+        handleSetDeleteHistory(deletedData);
       });
 
       resetForm();

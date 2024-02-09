@@ -63,16 +63,6 @@ function Index({ openCreateModal, setOpenCreateModal, fetchWatchlistCustomer }) 
     }
   }
 
-  function handleEditModal(row) {
-    setOpenEditModal(true);
-    setRowState(row);
-  }
-
-  async function handleDeleteModal(row) {
-    setRowState(row);
-    setOpenDeleteModal(true);
-  }
-
   const columns = [
     {
       title: "ID",
@@ -88,7 +78,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchWatchlistCustomer }) 
       key: "xfaces_watchlist_id",
       dataIndex: "xfaces_watchlist_id",
       filteredValue: searchValue !== null ? [searchValue] : null,
-      onFilter: (value, record, xfaces_watchlist_id) => {
+      onFilter: (value, record) => {
         return String(record.xfaces_watchlist_id).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
