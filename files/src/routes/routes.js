@@ -56,7 +56,7 @@ export const routes = {
       listTypes: baseUrl + "/admin/watchlistGlobal/watchlistGlobalTypes", //GET
       listAll: baseUrl + "/admin/watchlistGlobal", //GET
       listById: baseUrl + "/admin/watchlistGlobal/", //GET
-      create: baseUrl + "/watchlistGlobal", //POST
+      create: baseUrl + "/admin/watchlistGlobal", //POST
     },
     ambient: {
       listTypes: baseUrl + "/admin/watchlistAmbient/watchlistAmbientTypes", //GET

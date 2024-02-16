@@ -42,6 +42,9 @@ function RegistryPage() {
       <div className="top-label">
         <h1> Registros X-Faces </h1>
       </div>
+      <div style={{ marginTop: "10px", alignSelf: "flex-start", justifySelf: "center", display: "flex" }}>
+        <p>Para excluir os registros, insira um ID no campo abaixo.</p>
+      </div>
       <div
         style={{
           display: "flex",
@@ -56,7 +59,10 @@ function RegistryPage() {
       >
         <div className="grid">
           <DeleteRegistry handleSetDeleteHistory={handleSetDeleteHistory} />
-          <HistoryRegistry deletedData={deletedData} />
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <h2 style={{ display: "flex" }}>Deletados nesta sessão</h2>
+            <HistoryRegistry deletedData={deletedData} />
+          </div>
         </div>
       </div>
     </Box>

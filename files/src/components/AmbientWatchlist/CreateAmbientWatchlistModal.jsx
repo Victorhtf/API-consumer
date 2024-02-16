@@ -61,33 +61,37 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchWatchlis
 
   async function handleSubmit(values, props) {
     const { resetForm } = props;
-    const ambientRoutes = routes.ambient;
+
+    const watchlistAmbients = routes.watchlists.ambient;
+
     try {
       const token = getToken();
 
       const { ambient_id, type_id, display_name, full_name, threshold } = values;
 
-      const body = {
-        ambient_id: ambient_id,
-        type_id: type_id,
-        display_name: display_name,
-        full_name: full_name,
-        threshold: threshold,
-      };
+      if (ambient_id && type_id && full_name && full_name.length > 0 && display_name && display_name.length > 0 && threshold) {
+        const body = {
+          ambient_id: ambient_id,
+          type_id: type_id,
+          full_name: full_name,
+          display_name: display_name,
+          threshold: threshold,
+        };
 
-      // await axios.post(ambientRoutes.create, body, {
-      //   headers: {
-      //     auth: token,
-      //   },
-      // });
+        await axios.post(watchlistAmbients.create, body, {
+          headers: {
+            auth: token,
+          },
+        });
 
-      setOpenCreateModal(false);
+        setOpenCreateModal(false);
 
-      resetForm();
+        resetForm();
 
-      fetchWatchlistAmbients();
+        fetchWatchlistAmbients();
 
-      toast.success(`Ambiente '${values.display_name}' adicionado com sucesso!`);
+        toast.success(`Ambiente '${values.display_name}' adicionado com sucesso!`);
+      }
     } catch (error) {
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
@@ -144,7 +148,6 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchWatchlis
                     onChange={formik.handleChange}
                   />
                 </div>
-
                 <div className="form-group">
                   <TextField
                     fullWidth
@@ -157,7 +160,6 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchWatchlis
                     onChange={formik.handleChange}
                   />
                 </div>
-
                 <div className="form-group">
                   <FormControl size="large" fullWidth>
                     <InputLabel id="roles">Ambientes</InputLabel>
@@ -180,7 +182,6 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchWatchlis
                     </Select>
                   </FormControl>
                 </div>
-
                 <div className="form-group">
                   <FormControl>
                     <FormLabel id="type_id">Tipo de watchlist</FormLabel>
@@ -200,7 +201,6 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchWatchlis
                     </RadioGroup>
                   </FormControl>
                 </div>
-
                 <div className="form-group">
                   <FormControl fullWidth>
                     <FormLabel id="roles">Threshold</FormLabel>

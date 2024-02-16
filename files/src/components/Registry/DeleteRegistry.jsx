@@ -1,6 +1,5 @@
 //React
 import * as React from "react";
-import { useState, useEffect } from "react";
 
 //Libs
 import { TextField } from "@mui/material";
@@ -8,7 +7,7 @@ import FormControl from "@mui/material/FormControl";
 import { useFormik } from "formik";
 import { FaCheckCircle } from "react-icons/fa";
 import { HiXCircle } from "react-icons/hi";
-
+import axios from "axios";
 import { toast } from "react-toastify";
 
 //Dependencies
@@ -35,19 +34,19 @@ function DeleteRegistry({ handleSetDeleteHistory }) {
 
       const token = getToken();
 
-      splittedValues.forEach((id_xfaces) => {
-        const date = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+      const date = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 
+      for (const id_xfaces of splittedValues) {
         try {
           const body = {
             display_name: id_xfaces,
           };
 
-          // await axios.post(customerRoutes.deleteByDisplayName, body, {
-          //   headers: {
-          //     auth: token,
-          //   },
-          // });
+          await axios.post(customerRoutes.deleteByDisplayName, body, {
+            headers: {
+              auth: token,
+            },
+          });
 
           const status = (
             <div style={{ width: "100%", height: "100%" }}>
@@ -62,7 +61,7 @@ function DeleteRegistry({ handleSetDeleteHistory }) {
         } catch (error) {
           const status = (
             <div style={{ width: "100%", height: "100%" }}>
-              <HiXCircle style={{ color: "red" }} />;
+              <HiXCircle style={{ color: "red" }} />
             </div>
           );
 
@@ -73,7 +72,7 @@ function DeleteRegistry({ handleSetDeleteHistory }) {
         }
 
         handleSetDeleteHistory(deletedData);
-      });
+      }
 
       resetForm();
     } catch (error) {

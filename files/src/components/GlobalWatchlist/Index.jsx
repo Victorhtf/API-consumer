@@ -7,15 +7,15 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Components
-import CreateAmbientModal from "./CreateAmbientModal";
-import EditAmbientModal from "./EditAmbientModal";
-import DeleteAmbientModal from "./DeleteAmbientModal";
+import CreateGlobalWatchlistModal from "./CreateGlobalWatchlistModal.jsx";
+import DeleteGlobalWatchlistModal from "./DeleteGlobalWatchlistModal.jsx";
+import EditGlobalWatchlistModal from "./EditGlobalWatchlistModal.jsx";
 
 //Dependencies
 import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
-function Index({ openCreateModal, setOpenCreateModal, fetchGlobalWatchlist }) {
+function Index({ openCreateModal, setOpenCreateModal }) {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -189,13 +189,18 @@ function Index({ openCreateModal, setOpenCreateModal, fetchGlobalWatchlist }) {
   return (
     <>
       {openCreateModal ? (
-        <CreateAmbientModal fetchGlobalWatchlist={fetchGlobalWatchlist} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
+        <CreateGlobalWatchlistModal fetchGlobalWatchlist={fetchGlobalWatchlist} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
       ) : null}
       {openEditModal && watchlistGlobal != undefined && watchlistGlobal.length > 0 ? (
-        <EditAmbientModal fetchGlobalWatchlist={fetchGlobalWatchlist} rowState={rowState} openEditModal={openEditModal} setOpenEditModal={setOpenEditModal} />
+        <EditGlobalWatchlistModal
+          fetchGlobalWatchlist={fetchGlobalWatchlist}
+          rowState={rowState}
+          openEditModal={openEditModal}
+          setOpenEditModal={setOpenEditModal}
+        />
       ) : null}
       {openDeleteModal && watchlistGlobal != undefined && watchlistGlobal.length > 0 ? (
-        <DeleteAmbientModal
+        <DeleteGlobalWatchlistModal
           fetchGlobalWatchlist={fetchGlobalWatchlist}
           row={rowState}
           openDeleteModal={openDeleteModal}

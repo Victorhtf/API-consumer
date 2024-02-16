@@ -273,7 +273,6 @@ function Sidebar() {
   function handleContent(item, route) {
     setCurrentPage(route && route.length > 0 ? route.name : item.name);
     if (!item.children.length > 0 && open == false) {
-      console.log(currentPage);
       handleNavigate(item);
     } else {
       setOpen(!open);

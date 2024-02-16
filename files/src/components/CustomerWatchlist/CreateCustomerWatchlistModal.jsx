@@ -22,14 +22,14 @@ import { ModalFade } from "../StyledComponents/ModalFade.jsx";
 //Styles
 import "../../Globals.css";
 
-function CreateCustomerWatchlistModal({ openCreateModal, setOpenCreateModal, fetchWatchlistsCustomer }) {
+function CreateCustomerWatchlistModal({ openCreateModal, setOpenCreateModal, fetchWatchlistCustomer }) {
   const [watchlistTypes, setWatchlistTypes] = useState([]);
   const [customerList, setCustomerList] = useState([]);
 
   async function handleCustomerList() {
-    const customerRoutes = routes.customer;
+    const watchlistCustomer = routes.customer;
     try {
-      const { data: response } = await axios.get(customerRoutes.listAll, {
+      const { data: response } = await axios.get(watchlistCustomer.listAll, {
         headers: {
           auth: getToken(),
         },
@@ -40,9 +40,10 @@ function CreateCustomerWatchlistModal({ openCreateModal, setOpenCreateModal, fet
   }
 
   async function handleWatchlistTypes() {
-    const watchlistRoutes = routes.watchlists.customer;
+    const watchlistCustomer = routes.watchlists.customer;
+
     try {
-      const { data: response } = await axios.get(watchlistRoutes.listTypes, {
+      const { data: response } = await axios.get(watchlistCustomer.listTypes, {
         headers: {
           auth: getToken(),
         },
@@ -61,33 +62,37 @@ function CreateCustomerWatchlistModal({ openCreateModal, setOpenCreateModal, fet
 
   async function handleSubmit(values, props) {
     const { resetForm } = props;
-    const customerRoutes = routes.customer;
+
+    const watchlistCustomer = routes.watchlists.customer;
+
     try {
       const token = getToken();
 
       const { customer_id, type_id, display_name, full_name, threshold } = values;
 
-      const body = {
-        customer_id: customer_id,
-        type_id: type_id,
-        display_name: display_name,
-        full_name: full_name,
-        threshold: threshold,
-      };
+      if (customer_id && type_id && full_name && full_name.length > 0 && display_name && display_name.length > 0 && threshold) {
+        const body = {
+          customer_id: customer_id,
+          type_id: type_id,
+          display_name: display_name,
+          full_name: full_name,
+          threshold: threshold,
+        };
 
-      // await axios.post(ambientRoutes.create, body, {
-      //   headers: {
-      //     auth: token,
-      //   },
-      // });
+        await axios.post(watchlistCustomer.create, body, {
+          headers: {
+            auth: token,
+          },
+        });
 
-      setOpenCreateModal(false);
+        setOpenCreateModal(false);
 
-      resetForm();
+        resetForm();
 
-      fetchWatchlistsCustomer();
+        fetchWatchlistCustomer();
 
-      toast.success(`Ambiente '${values.display_name}' adicionado com sucesso!`);
+        toast.success(`Watchlist '${values.display_name}' adicionada com sucesso!`);
+      }
     } catch (error) {
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }

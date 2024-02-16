@@ -15,7 +15,7 @@ import DeleteAmbientModal from "./DeleteAmbientModal";
 import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
-function Index({ openCreateModal, setOpenCreateModal, fetchCameras }) {
+function Index({ openCreateModal, setOpenCreateModal }) {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);

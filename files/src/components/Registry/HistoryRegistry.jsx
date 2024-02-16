@@ -60,7 +60,6 @@ function HistoryRegistry({ deletedData }) {
 
   return (
     <>
-      {console.log(deletedData)}
       <Table
         {...tableProps}
         pagination={{

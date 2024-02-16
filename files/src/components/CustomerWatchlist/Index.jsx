@@ -7,15 +7,15 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Components
-import CreateAmbientModal from "./CreateCustomerWatchlistModal.jsx";
-import EditAmbientModal from "./EditAmbientModal";
-import DeleteAmbientModal from "./DeleteAmbientModal";
+import CreateCustomerWatchlistModal from "./CreateCustomerWatchlistModal.jsx";
+import DeleteCustomerWatchlistModal from "./DeleteCustomerWatchlistModal.jsx";
+import EditCustomerWatchlistModal from "./EditCustomerWatchlistModal.jsx";
 
 //Dependencies
 import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
-function Index({ openCreateModal, setOpenCreateModal, fetchWatchlistCustomer }) {
+function Index({ openCreateModal, setOpenCreateModal }) {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -202,10 +202,14 @@ function Index({ openCreateModal, setOpenCreateModal, fetchWatchlistCustomer }) 
   return (
     <>
       {openCreateModal ? (
-        <CreateAmbientModal fetchWatchlistCustomer={fetchWatchlistCustomer} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
+        <CreateCustomerWatchlistModal
+          fetchWatchlistCustomer={fetchWatchlistCustomer}
+          openCreateModal={openCreateModal}
+          setOpenCreateModal={setOpenCreateModal}
+        />
       ) : null}
       {openEditModal && watchlistCustomer != undefined && watchlistCustomer.length > 0 ? (
-        <EditAmbientModal
+        <EditCustomerWatchlistModal
           fetchWatchlistCustomer={fetchWatchlistCustomer}
           rowState={rowState}
           openEditModal={openEditModal}
@@ -213,7 +217,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchWatchlistCustomer }) 
         />
       ) : null}
       {openDeleteModal && watchlistCustomer != undefined && watchlistCustomer.length > 0 ? (
-        <DeleteAmbientModal
+        <DeleteCustomerWatchlistModal
           fetchWatchlistCustomer={fetchWatchlistCustomer}
           row={rowState}
           openDeleteModal={openDeleteModal}

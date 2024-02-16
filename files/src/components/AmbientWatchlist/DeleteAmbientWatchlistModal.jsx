@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Dependencies
-import { getToken } from "../../auth/useAuth";
+import { getToken } from "../../auth/useAuth.js";
 import { routes } from "../../routes/routes.js";
 
 const ModalFade = styled.div`
@@ -82,8 +82,8 @@ const ModalFade = styled.div`
   }
 `;
 
-const DeleteCustomerModal = (props) => {
-  const { openDeleteModal, setOpenDeleteModal, row, fetchWatchlistCustomers } = props;
+const DeleteAmbientWatchlistModal = (props) => {
+  const { openDeleteModal, setOpenDeleteModal, row, fetchWatchlistAmbients } = props;
 
   async function handleDelete(row) {
     const ambientRoutes = routes.ambient;
@@ -103,7 +103,7 @@ const DeleteCustomerModal = (props) => {
 
       setOpenDeleteModal(false);
 
-      fetchWatchlistCustomers();
+      fetchWatchlistAmbients();
     } catch (error) {
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
@@ -150,4 +150,4 @@ const DeleteCustomerModal = (props) => {
   );
 };
 
-export default DeleteCustomerModal;
+export default DeleteAmbientWatchlistModal;

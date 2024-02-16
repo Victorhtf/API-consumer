@@ -10,7 +10,7 @@ import axios from "axios";
 
 //Dependencies
 import { routes } from "../../routes/routes.js";
-import { getToken } from "../../auth/useAuth";
+import { getToken } from "../../auth/useAuth.js";
 
 // Components
 import { ModalFade } from "../StyledComponents/ModalFade.jsx";
@@ -18,7 +18,7 @@ import { ModalFade } from "../StyledComponents/ModalFade.jsx";
 //Styles
 import "../../Globals.css";
 
-function EditCustomerModal({ openEditModal, setOpenEditModal, fetchWatchlistAmbients, rowState }) {
+function EditAmbientWatchlistModal({ openEditModal, setOpenEditModal, fetchWatchlistAmbients, rowState }) {
   const [loading, setLoading] = useState(false);
   const [customerList, setCustomerList] = useState([]);
   const [citiesList, setCitiesList] = useState([]);
@@ -295,4 +295,4 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchWatchlistAmbi
   );
 }
 
-export default EditCustomerModal;
+export default EditAmbientWatchlistModal;

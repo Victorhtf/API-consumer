@@ -10,7 +10,7 @@ import axios from "axios";
 
 //Dependencies
 import { routes } from "../../routes/routes.js";
-import { getToken } from "../../auth/useAuth";
+import { getToken } from "../../auth/useAuth.js";
 
 // Components
 import { ModalFade } from "../StyledComponents/ModalFade.jsx";
@@ -18,7 +18,7 @@ import { ModalFade } from "../StyledComponents/ModalFade.jsx";
 //Styles
 import "../../Globals.css";
 
-function EditCustomerModal({ openEditModal, setOpenEditModal, fetchWatchlistCustomers, rowState }) {
+function EditGlobalWatchlistModal({ openEditModal, setOpenEditModal, fetchGlobalCustomers, rowState }) {
   const [loading, setLoading] = useState(false);
   const [customerList, setCustomerList] = useState([]);
   const [citiesList, setCitiesList] = useState([]);
@@ -117,7 +117,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchWatchlistCust
 
       resetForm();
 
-      fetchWatchlistCustomers();
+      fetchGlobalCustomers();
 
       toast.success(`Ambiente '${values.display_name}' atualizado com sucesso!`, { position: "bottom-right" });
     } catch (error) {
@@ -295,4 +295,4 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchWatchlistCust
   );
 }
 
-export default EditCustomerModal;
+export default EditGlobalWatchlistModal;

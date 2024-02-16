@@ -62,35 +62,37 @@ function CreateCameraModal({ openCreateModal, setOpenCreateModal, fetchCameras }
 
   async function handleSubmit(values, props) {
     const { resetForm } = props;
-    const ambientRoutes = routes.ambient;
+
+    const cameraRoutes = routes.camera;
+
     try {
       const token = getToken();
 
       const { ambient_id, type_id, display_name, video_source, active } = values;
 
-      const body = {
-        ambient_id: ambient_id,
-        type_id: type_id,
-        display_name: display_name,
-        video_source: video_source,
-        active: active,
-      };
+      if (ambient_id && type_id && display_name && display_name.length > 0 && video_source && video_source.length > 0) {
+        const body = {
+          ambient_id: ambient_id,
+          type_id: type_id,
+          display_name: display_name,
+          video_source: video_source,
+          active: active == undefined || active == "off" ? false : true,
+        };
 
-      // await axios.post(ambientRoutes.create, body, {
-      //   headers: {
-      //     auth: token,
-      //   },
-      // });
+        await axios.post(cameraRoutes.create, body, {
+          headers: {
+            auth: token,
+          },
+        });
 
-      console.log(body);
+        setOpenCreateModal(false);
 
-      setOpenCreateModal(false);
+        resetForm();
 
-      resetForm();
+        fetchCameras();
 
-      fetchCameras();
-
-      toast.success(`Ambiente '${values.display_name}' adicionado com sucesso!`);
+        toast.success(`Ambiente '${values.display_name}' adicionado com sucesso!`);
+      }
     } catch (error) {
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
@@ -177,7 +179,7 @@ function CreateCameraModal({ openCreateModal, setOpenCreateModal, fetchCameras }
                       fullWidth
                       required
                       placeholder="String de conexão"
-                      label="Fonte"
+                      label="URL stream"
                       size="large"
                       id="video_source"
                       variant="outlined"

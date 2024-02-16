@@ -17,18 +17,19 @@ import axios from "axios";
 import * as Yup from "yup";
 
 //Dependencies
-import { getToken } from "../../auth/useAuth";
+import { getToken } from "../../auth/useAuth.js";
 import { routes } from "../../routes/routes.js";
 import { ModalFade } from "../StyledComponents/ModalFade.jsx";
 
 //Styles
 import "../../Globals.css";
 
-function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchGlobalCustomers }) {
+function CreateGlobalWatchlistModal({ openCreateModal, setOpenCreateModal, fetchGlobalWatchlist }) {
   const [watchlistTypes, setWatchlistTypes] = useState([]);
 
   async function handleWatchlistTypes() {
     const watchlistRoutes = routes.watchlists.global;
+
     try {
       const { data: response } = await axios.get(watchlistRoutes.listTypes, {
         headers: {
@@ -48,11 +49,14 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchGlobalCu
 
   async function handleSubmit(values, props) {
     const { resetForm } = props;
-    const ambientRoutes = routes.ambient;
+    const watchlistGlobal = routes.watchlists.global;
     try {
       const token = getToken();
 
       const { display_name, full_name, type_id, threshold } = values;
+
+      if (display_name && display_name.length > 0 && full_name && full_name.length > 0 && type_id && threshold) {
+      }
 
       const body = {
         display_name: display_name,
@@ -61,17 +65,17 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchGlobalCu
         threshold: threshold,
       };
 
-      // await axios.post(ambientRoutes.create, body, {
-      //   headers: {
-      //     auth: token,
-      //   },
-      // });
+      await axios.post(watchlistGlobal.create, body, {
+        headers: {
+          auth: token,
+        },
+      });
 
       setOpenCreateModal(false);
 
       resetForm();
 
-      fetchGlobalCustomers();
+      fetchGlobalWatchlist();
 
       toast.success(`Ambiente '${values.display_name}' adicionado com sucesso!`);
     } catch (error) {
@@ -203,4 +207,4 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchGlobalCu
   );
 }
 
-export default CreateAmbientModal;
+export default CreateGlobalWatchlistModal;

@@ -7,15 +7,15 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Components
-import CreateAmbientModal from "./CreateAmbientWatchlistModal.jsx";
-import EditAmbientModal from "./EditAmbientModal";
-import DeleteAmbientModal from "./DeleteAmbientModal";
+import CreateAmbientWatchlistModal from "./CreateAmbientWatchlistModal.jsx";
+import DeleteAmbientWatchlistModal from "./DeleteAmbientWatchlistModal.jsx";
+import EditAmbientWatchlistModal from "./EditAmbientWatchlistModal.jsx";
 
 //Dependencies
 import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth";
 
-function Index({ openCreateModal, setOpenCreateModal, fetchWatchlistAmbients }) {
+function Index({ openCreateModal, setOpenCreateModal }) {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -213,10 +213,14 @@ function Index({ openCreateModal, setOpenCreateModal, fetchWatchlistAmbients }) 
   return (
     <>
       {openCreateModal ? (
-        <CreateAmbientModal fetchWatchlistAmbients={fetchWatchlistAmbients} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
+        <CreateAmbientWatchlistModal
+          fetchWatchlistAmbients={fetchWatchlistAmbients}
+          openCreateModal={openCreateModal}
+          setOpenCreateModal={setOpenCreateModal}
+        />
       ) : null}
       {openEditModal && watchlistAmbient != undefined && watchlistAmbient.length > 0 ? (
-        <EditAmbientModal
+        <EditAmbientWatchlistModal
           fetchWatchlistAmbients={fetchWatchlistAmbients}
           rowState={rowState}
           openEditModal={openEditModal}
@@ -224,7 +228,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchWatchlistAmbients }) 
         />
       ) : null}
       {openDeleteModal && watchlistAmbient != undefined && watchlistAmbient.length > 0 ? (
-        <DeleteAmbientModal
+        <DeleteAmbientWatchlistModal
           fetchWatchlistAmbients={fetchWatchlistAmbients}
           row={rowState}
           openDeleteModal={openDeleteModal}
