@@ -219,7 +219,6 @@ const LinkUserXAmbientsModal = (props) => {
                       sx={{ width: "250px" }}
                       fullWidth
                       required
-                      maxMenuHeight="250"
                       size="large"
                       id="user_id"
                       name="user_id"

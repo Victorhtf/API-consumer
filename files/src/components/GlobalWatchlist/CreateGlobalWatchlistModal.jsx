@@ -88,7 +88,7 @@ function CreateGlobalWatchlistModal({ openCreateModal, setOpenCreateModal, fetch
       display_name: "",
       full_name: "",
       type_id: "",
-      threshold: "",
+      threshold: 60,
     },
 
     onSubmit: handleSubmit,
@@ -109,7 +109,7 @@ function CreateGlobalWatchlistModal({ openCreateModal, setOpenCreateModal, fetch
     >
       <div className="modal-card">
         <div className="top-label">
-          <h2>Criar watchlist de ambiente</h2>
+          <h2>Criar watchlist global</h2>
           <AiOutlineCloseCircle
             style={{ color: "#171717" }}
             className="close-icon"
@@ -125,6 +125,7 @@ function CreateGlobalWatchlistModal({ openCreateModal, setOpenCreateModal, fetch
                 <div className="form-group">
                   <TextField
                     fullWidth
+                    required
                     label="Nome"
                     size="large"
                     id="display_name"
@@ -138,6 +139,7 @@ function CreateGlobalWatchlistModal({ openCreateModal, setOpenCreateModal, fetch
                 <div className="form-group">
                   <TextField
                     fullWidth
+                    required
                     size="large"
                     id="full_name"
                     label="Nome completo"

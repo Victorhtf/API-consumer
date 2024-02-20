@@ -315,6 +315,7 @@ function Sidebar() {
                 {item.children.map((route, routeIndex) => (
                   <div
                     className={`items ${open ? "open" : "closed"}`}
+                    key={routeIndex}
                     onClick={() => {
                       handleNavigate(item, route);
                     }}

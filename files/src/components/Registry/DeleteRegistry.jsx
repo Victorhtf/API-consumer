@@ -70,9 +70,10 @@ function DeleteRegistry({ handleSetDeleteHistory }) {
 
           toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
         }
-
-        handleSetDeleteHistory(deletedData);
       }
+
+      // Move a chamada da função handleSetDeleteHistory para fora do loop for
+      handleSetDeleteHistory(deletedData);
 
       resetForm();
     } catch (error) {
@@ -106,6 +107,7 @@ function DeleteRegistry({ handleSetDeleteHistory }) {
               <TextField
                 placeholder={`Digite um ou mais ID's de registro separados por quebras de linha`}
                 multiline
+                helperText="Para excluir os registros, insira um ID no campo acima."
                 rows={15}
                 variant="outlined"
                 id="display_name"

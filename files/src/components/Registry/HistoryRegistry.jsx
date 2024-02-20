@@ -2,9 +2,7 @@
 import React, { useState, useEffect } from "react";
 
 //Libs
-import { Input, Form, Space, Table, Tag } from "antd";
-import { toast } from "react-toastify";
-import axios from "axios";
+import { Table } from "antd";
 
 function HistoryRegistry({ deletedData }) {
   const bordered = false;
@@ -15,6 +13,14 @@ function HistoryRegistry({ deletedData }) {
   const [bottom, setBottom] = useState("bottomRight");
   const [ellipsis, setEllipsis] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [dataSource, setDataSource] = useState([]);
+
+  useEffect(() => {
+    if (Array.isArray(deletedData) && deletedData.length > 0) {
+      setDataSource(deletedData);
+    }
+    console.log(dataSource);
+  }, [deletedData]);
 
   const columns = [
     {
@@ -66,9 +72,9 @@ function HistoryRegistry({ deletedData }) {
           position: [top, bottom],
         }}
         columns={tableColumns}
-        dataSource={deletedData.length > 0 ? deletedData : []}
+        dataSource={dataSource.length > 0 ? dataSource : []}
         style={{ width: "100%", height: "100%" }}
-        rowKey={"id"}
+        rowKey={"deleted_at"}
       />
     </>
   );

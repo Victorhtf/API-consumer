@@ -104,7 +104,7 @@ function CreateCustomerWatchlistModal({ openCreateModal, setOpenCreateModal, fet
       type_id: "",
       display_name: "",
       full_name: "",
-      threshold: "",
+      threshold: 60,
     },
     onSubmit: handleSubmit,
     resetForm: () => {
@@ -141,6 +141,7 @@ function CreateCustomerWatchlistModal({ openCreateModal, setOpenCreateModal, fet
                   <TextField
                     fullWidth
                     label="Nome"
+                    required
                     size="large"
                     id="display_name"
                     variant="outlined"
@@ -153,6 +154,7 @@ function CreateCustomerWatchlistModal({ openCreateModal, setOpenCreateModal, fet
                 <div className="form-group">
                   <TextField
                     fullWidth
+                    required
                     size="large"
                     id="full_name"
                     label="Nome completo"

@@ -143,7 +143,6 @@ function CreateCustomerModal({ openCreateModal, setOpenCreateModal, fetchCustome
                     <Autocomplete
                       fullWidth
                       required
-                      maxMenuHeight="200"
                       size="large"
                       id="customer_id"
                       name="customer_id"

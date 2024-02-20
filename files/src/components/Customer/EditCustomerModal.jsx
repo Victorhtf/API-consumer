@@ -145,7 +145,6 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchCustomers, ro
                   <FormControl size="large" fullWidth>
                     <InputLabel id="customer_group">Grupos de cliente</InputLabel>
                     <Select
-                      maxMenuHeight="200"
                       fullWidth
                       id="customer_group"
                       name="customer_group"

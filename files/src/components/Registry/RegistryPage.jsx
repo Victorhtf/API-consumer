@@ -42,9 +42,6 @@ function RegistryPage() {
       <div className="top-label">
         <h1> Registros X-Faces </h1>
       </div>
-      <div style={{ marginTop: "10px", alignSelf: "flex-start", justifySelf: "center", display: "flex" }}>
-        <p>Para excluir os registros, insira um ID no campo abaixo.</p>
-      </div>
       <div
         style={{
           display: "flex",

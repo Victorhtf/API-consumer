@@ -92,8 +92,9 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchWatchlis
 
         toast.success(`Ambiente '${values.display_name}' adicionado com sucesso!`);
       }
+      throw new Error("Por favor, preencha todos os campos obrigatórios.");
     } catch (error) {
-      toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
+      toast.error(error.message);
     }
   }
 
@@ -103,7 +104,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchWatchlis
       type_id: "",
       display_name: "",
       full_name: "",
-      threshold: "",
+      threshold: 60,
     },
     onSubmit: handleSubmit,
     resetForm: () => {
@@ -138,6 +139,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchWatchlis
               <div className="form">
                 <div className="form-group">
                   <TextField
+                    required
                     fullWidth
                     label="Nome"
                     size="large"
@@ -150,6 +152,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchWatchlis
                 </div>
                 <div className="form-group">
                   <TextField
+                    required
                     fullWidth
                     size="large"
                     id="full_name"

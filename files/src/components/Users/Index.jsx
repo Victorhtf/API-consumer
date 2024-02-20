@@ -241,14 +241,14 @@ function Index({ openCreateModal, setOpenCreateModal }) {
             setSearchValue(e.target.value);
           }}
         />
-        <button
+        {/* <button
           className="download-btn"
           onClick={() => {
             handleExport();
           }}
         >
           <IoMdDownload />
-        </button>
+        </button> */}
       </div>
       <Table
         {...tableProps}
