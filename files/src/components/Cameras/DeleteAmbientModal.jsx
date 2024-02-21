@@ -23,15 +23,15 @@ const ModalFade = styled.div`
   .modal-card {
     width: auto;
     height: auto;
-    border-radius: 8.75px;
+    border-radius: 7px;
     background-color: white;
-    padding: 2.5rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
   }
 
   .close-icon {
-    font-size: 31.25px;
+    font-size: 25px;
     cursor: pointer;
   }
 
@@ -39,7 +39,7 @@ const ModalFade = styled.div`
   }
 
   .form {
-    gap: 1.25rem;
+    gap: 1rem;
     display: flex;
     flex-direction: column;
   }
@@ -48,12 +48,12 @@ const ModalFade = styled.div`
     display: flex;
     align-items: center;
     white-space: nowrap;
-    gap: 1.25rem;
+    gap: 1rem;
   }
 
   label {
-    font-weight: 375px;
-    font-size: 18.75px;
+    font-weight: 300px;
+    font-size: 15px;
   }
 
   .input {
@@ -66,15 +66,15 @@ const ModalFade = styled.div`
 
   .buttons {
     display: flex;
-    gap: 1.25rem;
+    gap: 1rem;
     justify-content: flex-end;
-    margin-top: 25px;
+    margin-top: 20px;
   }
 
   .btn-submit-form {
     background-color: var(--btn-bg-color);
     border: none;
-    padding: 8.75px 17.5px 8.75px 17.5px;
+    padding: 7px 14px 7px 14px;
     border-radius: var(--btn-border-radius);
     font-size: var(--btn-font-size);
     color: var(--primary-text-color);
@@ -83,7 +83,7 @@ const ModalFade = styled.div`
 `;
 
 const DeleteCustomerModal = (props) => {
-  const { openDeleteModal, setOpenDeleteModal, row, fetchAmbients } = props;
+  const { openDeleteModal, setOpenDeleteModal, row, fetchWatchlistAmbients } = props;
 
   async function handleDelete(row) {
     const ambientRoutes = routes.ambient;
@@ -103,7 +103,7 @@ const DeleteCustomerModal = (props) => {
 
       setOpenDeleteModal(false);
 
-      fetchAmbients();
+      fetchWatchlistAmbients();
     } catch (error) {
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }

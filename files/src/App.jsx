@@ -16,7 +16,11 @@ import CustomerPage from "./components/Customer/CustomerPage.jsx";
 import CustomerGroupPage from "./components/CustomerGroup/CustomerGroupPage.jsx";
 import AmbientPage from "./components/Ambients/AmbientPage.jsx";
 import UserXAmbientPage from "./components/UserXAmbients/UserXAmbientPage.jsx";
-import SessionCheck from "./auth/useAuth.js";
+import AmbientWatchlistPage from "./components/AmbientWatchlist/AmbientWatchlistPage.jsx";
+import GlobalWatchlistPage from "./components/GlobalWatchlist/GlobalWatchlistPage.jsx";
+import CustomerWatchlistPage from "./components/CustomerWatchlist/CustomerWatchlistPage.jsx";
+import CameraPage from "./components/Cameras/CameraPage.jsx";
+import RegistryPage from "./components/Registry/RegistryPage.jsx";
 
 function App() {
   return (
@@ -50,6 +54,27 @@ function App() {
           <Route element={<BaseLayout />}>
             <Route path="/userxambients" element={<UserXAmbientPage />} />
           </Route>
+
+          <Route element={<BaseLayout />}>
+            <Route path="/cameras" element={<CameraPage />} />
+          </Route>
+
+          <Route element={<BaseLayout />}>
+            <Route path="/watchlist/global" element={<GlobalWatchlistPage />} />
+          </Route>
+
+          <Route element={<BaseLayout />}>
+            <Route path="/watchlist/ambient" element={<AmbientWatchlistPage />} />
+          </Route>
+
+          <Route element={<BaseLayout />}>
+            <Route path="/watchlist/customer" element={<CustomerWatchlistPage />} />
+          </Route>
+
+          <Route element={<BaseLayout />}>
+            <Route path="/registry" element={<RegistryPage />} />
+          </Route>
+
           <Route path="/" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

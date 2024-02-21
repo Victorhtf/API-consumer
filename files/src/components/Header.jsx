@@ -10,7 +10,7 @@ import SettingsModal from "./Header/SettingsModal";
 
 const SidebarBox = styled.div`
   width: 100%;
-  height: 60px;
+  height: 75px;
   background-color: #182136;
   color: black;
   display: flex;
@@ -19,21 +19,21 @@ const SidebarBox = styled.div`
   position: sticky;
   top: 0;
   z-index: 1000;
-  -moz-box-shadow: 4px 0 5px 0 #000000;
-  -webkit-box-shadow: 4px 0 5px 0 #000000;
-  box-shadow: 4px 0 5px 0 #000000;
+  -moz-box-shadow: 5px 0 6.25px 0 #000000;
+  -webkit-box-shadow: 5px 0 6.25px 0 #000000;
+  box-shadow: 5px 0 6.25px 0 #000000;
 
   .logout {
     justify-self: flex-end;
     display: flex;
     align-items: center;
-    margin-right: 30px;
+    margin-right: 37.5px;
   }
 
   .icon {
-    padding: 6px;
+    padding: 7.25px;
     color: white;
-    font-size: 22px;
+    font-size: 27.5px;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -45,23 +45,23 @@ const SidebarBox = styled.div`
     transition: 0.25s ease;
 
     &:hover {
-      box-shadow: 0 0 10px 1px rgba(78, 195, 238, 0.7);
+      box-shadow: 0 0 12.5px 1.25px rgba(78, 195, 238, 0.7);
       scale: 1.05;
     }
   }
 
   .text {
-    font-size: 0.89rem;
+    font-size: 1.0235rem;
     display: flex;
     align-items: flex-end;
     flex-direction: column;
     color: white;
-    margin: 1rem;
+    margin: 1.25rem;
   }
 
   .name {
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 750;
+    font-size: 1.125rem;
     text-transform: uppercase;
   }
 `;

@@ -1,7 +1,7 @@
 //Libs
 import { MenuItem, Select, FormControl, InputLabel, TextField } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { useFormik } from "formik";
+import { Formik, useFormik } from "formik";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import axios from "axios";
@@ -70,7 +70,6 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
         });
         return;
       }
-      console.debug(error);
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
@@ -128,66 +127,68 @@ function CreateUserModal({ openCreateModal, setOpenCreateModal, fetchUsers }) {
         <div className="form-box">
           <form onSubmit={formik.handleSubmit}>
             <div className="content">
-              <div className="form">
-                <div className="form-group">
-                  <TextField
-                    validationSchema={validateschema}
-                    fullWidth
-                    size="medium"
-                    id="username"
-                    label="Nome de usuário"
-                    variant="outlined"
-                    name="username"
-                    value={formik.values.username}
-                    onChange={formik.handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <TextField
-                    fullWidth
-                    size="medium"
-                    id="password"
-                    label="Senha"
-                    variant="outlined"
-                    name="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <TextField
-                    fullWidth
-                    size="medium"
-                    id="email"
-                    label="E-mail"
-                    variant="outlined"
-                    name="email"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <FormControl size="medium" fullWidth>
-                    <InputLabel id="roles">Papéis</InputLabel>
-                    <Select
-                      multiple
+              <Formik validationSchema={validateschema}>
+                <div className="form">
+                  <div className="form-group">
+                    <TextField
                       fullWidth
-                      MenuProps={MenuProps}
-                      id="roles"
-                      name="roles"
-                      label="roles"
-                      value={formik.values.roles}
+                      size="large"
+                      id="username"
+                      label="Nome de usuário"
+                      variant="outlined"
+                      name="username"
+                      value={formik.values.username}
                       onChange={formik.handleChange}
-                    >
-                      {roles.map((item, rolesIndex) => (
-                        <MenuItem key={rolesIndex} value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                    />
+                  </div>
+                  <div className="form-group">
+                    <TextField
+                      fullWidth
+                      size="large"
+                      id="password"
+                      label="Senha"
+                      variant="outlined"
+                      name="password"
+                      value={formik.values.password}
+                      onChange={formik.handleChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <TextField
+                      fullWidth
+                      size="large"
+                      id="email"
+                      label="E-mail"
+                      variant="outlined"
+                      name="email"
+                      value={formik.values.email}
+                      onChange={formik.handleChange}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <FormControl size="large" fullWidth>
+                      <InputLabel id="roles">Papéis</InputLabel>
+                      <Select
+                        multiple
+                        fullWidth
+                        MenuProps={MenuProps}
+                        id="roles"
+                        name="roles"
+                        label="roles"
+                        value={formik.values.roles}
+                        onChange={formik.handleChange}
+                      >
+                        {roles.map((item, rolesIndex) => (
+                          <MenuItem key={rolesIndex} value={item}>
+                            {item}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </div>
                 </div>
-              </div>
+              </Formik>
+
               <div className="buttons">
                 <button onClick={formik.handleReset} className="cancel-btn">
                   Limpar

@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 
 //Libs
 import { Input, Form, Space, Table, Tag } from "antd";
+import { IoMdDownload } from "react-icons/io";
+
+// import * as xlsx from "xlsx";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 
@@ -57,15 +60,13 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   async function fetchUsers() {
     const userRoutes = routes.user;
     try {
-      const response = await axios.get(userRoutes.listAll, {
+      const { data: response } = await axios.get(userRoutes.listAll, {
         headers: {
           auth: getToken(),
         },
       });
 
-      const usersData = response.data;
-
-      setUsers(usersData);
+      setUsers(response);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -83,9 +84,24 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     setOpenDeleteModal(true);
   }
 
+  // function handleExport() {
+  //   const newUsers = users.map((item) => ({
+  //     ...item,
+  //     roles: item.roles.map((role) => role.name).join(", "),
+  //   }));
+  //   var workbook = xlsx.utils.book_new();
+
+  //   const worksheet = xlsx.utils.json_to_sheet(newUsers);
+
+  //   xlsx.utils.book_append_sheet(workbook, worksheet, "Usuários");
+
+  //   xlsx.writeFile(workbook, "Users - Intradata CRUD.xlsx");
+  // }
+
   const columns = [
     {
       title: "ID",
+      align: "center",
       dataIndex: "id",
       key: "id",
       width: 60,
@@ -113,6 +129,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       title: "Papéis",
       key: "tags",
       dataIndex: "roles",
+      align: "center",
       filteredValue: null,
       filters: rolesList.map((item, rolesListIndex) => {
         return {
@@ -136,6 +153,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     {
       title: "Data da criação",
       key: "created_date",
+      align: "center",
       dataIndex: "created_date",
       filteredValue: null,
       sorter: (a, b) => {
@@ -150,6 +168,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     {
       title: "Ações",
       key: "ações",
+      align: "center",
       width: 120,
       filteredValue: null,
       render: (row) => (
@@ -207,18 +226,30 @@ function Index({ openCreateModal, setOpenCreateModal }) {
           marginBottom: 16,
         }}
       ></Form>
-      <Input.Search
-        placeholder="Nome de usuário"
-        style={{
-          width: "20%",
-          display: "flex",
-          alignSelf: "flex-end",
-          marginBottom: "6px",
-        }}
-        onChange={(e) => {
-          setSearchValue(e.target.value);
-        }}
-      />
+      <div style={{ display: "flex", width: "100%", justifyContent: "flex-end", alignItems: "flex-end", gap: "10px", marginBottom: "5px" }}>
+        <Input.Search
+          placeholder="Nome de usuário"
+          style={{
+            width: "20%",
+            display: "flex",
+            alignContent: "center",
+            alignSelf: "center",
+            justifyContent: "center",
+            justifySelf: "center",
+          }}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+          }}
+        />
+        {/* <button
+          className="download-btn"
+          onClick={() => {
+            handleExport();
+          }}
+        >
+          <IoMdDownload />
+        </button> */}
+      </div>
       <Table
         {...tableProps}
         pagination={{

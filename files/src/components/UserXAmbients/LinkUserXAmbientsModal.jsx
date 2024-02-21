@@ -111,9 +111,7 @@ const LinkUserXAmbientsModal = (props) => {
         },
       });
 
-      const usersData = response;
-
-      setUsersList(usersData);
+      setUsersList(response);
     } catch (error) {}
   }
 
@@ -216,13 +214,12 @@ const LinkUserXAmbientsModal = (props) => {
             <div className="content">
               <div className="form">
                 <div className="form-group">
-                  <FormControl size="medium">
+                  <FormControl size="large">
                     <Autocomplete
-                      sx={{ width: "200px" }}
+                      sx={{ width: "250px" }}
                       fullWidth
                       required
-                      maxMenuHeight="200"
-                      size="medium"
+                      size="large"
                       id="user_id"
                       name="user_id"
                       label="user_id"
@@ -242,11 +239,11 @@ const LinkUserXAmbientsModal = (props) => {
                       renderInput={(params) => <TextField {...params} label="ID de cliente" />}
                     />
                   </FormControl>
-                  <FormControl size="medium" sx={{ width: 300, maxHeight: "300px" }}>
+                  <FormControl size="large" sx={{ width: 375, maxHeight: "375px" }}>
                     <Autocomplete
                       multiple
                       fullWidth
-                      size="medium"
+                      size="large"
                       filterOptions={(options, { inputValue }) => {
                         return options.filter((option) => option.display_name.toLowerCase().includes(inputValue.toLowerCase()));
                       }}
@@ -256,7 +253,7 @@ const LinkUserXAmbientsModal = (props) => {
                         display: "flex",
                         margin: "dence",
                         flexWrap: "wrap",
-                        gap: 0.5,
+                        gap: 0.625,
                       }}
                       onChange={(event, options) => {
                         const selectedIds = options.map((option) => option.id);

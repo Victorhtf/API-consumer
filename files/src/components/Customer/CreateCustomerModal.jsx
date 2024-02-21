@@ -117,7 +117,7 @@ function CreateCustomerModal({ openCreateModal, setOpenCreateModal, fetchCustome
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="display_name"
                     label="Nome"
                     variant="outlined"
@@ -129,7 +129,7 @@ function CreateCustomerModal({ openCreateModal, setOpenCreateModal, fetchCustome
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="fantasy_name"
                     label="Nome fantasia"
                     variant="outlined"
@@ -139,12 +139,11 @@ function CreateCustomerModal({ openCreateModal, setOpenCreateModal, fetchCustome
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="medium" fullWidth>
+                  <FormControl size="large" fullWidth>
                     <Autocomplete
                       fullWidth
                       required
-                      maxMenuHeight="200"
-                      size="medium"
+                      size="large"
                       id="customer_id"
                       name="customer_id"
                       label="customer_id"

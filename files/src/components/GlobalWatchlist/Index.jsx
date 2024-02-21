@@ -7,9 +7,9 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 //Components
-import CreateCustomerGroupModal from "./CreateCustomerGroupModal";
-import EditCustomerGroupModal from "./EditCustomerGroupModal";
-import DeleteCustomerGroupModal from "./DeleteCustomerGroupModal";
+import CreateGlobalWatchlistModal from "./CreateGlobalWatchlistModal.jsx";
+import DeleteGlobalWatchlistModal from "./DeleteGlobalWatchlistModal.jsx";
+import EditGlobalWatchlistModal from "./EditGlobalWatchlistModal.jsx";
 
 //Dependencies
 import { routes } from "../../routes/routes.js";
@@ -20,7 +20,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 
-  const [customerGroups, setCustomerGroups] = useState([]);
+  const [watchlistGlobal, setwatchlistGlobal] = useState([]);
   const bordered = false;
   const [size, setSize] = useState("large");
   const showTitle = false;
@@ -31,33 +31,32 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   const [ellipsis, setEllipsis] = useState(false);
   const [rowState, setRowState] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [openModalDeleteCustomerGroup, setOpenModalDeleteCustomerGroup] = useState(false);
-  const [openModalEditCustomerGroup, setOpenModalEditCustomerGroup] = useState(false);
   const [rows, setRows] = useState([]);
   const [searchValue, setSearchValue] = useState("");
 
+  const watchlistRoutes = routes.watchlists.global;
+
   useEffect(() => {
-    fetchCustomerGroup();
+    fetchGlobalWatchlist();
     toast.info("Base de dados atualizada!", {
       position: "bottom-right",
     });
   }, []);
 
-  async function fetchCustomerGroup() {
-    const customerGroupsRoutes = routes.customerGroup;
+  async function fetchGlobalWatchlist() {
     try {
-      const response = await axios.get(customerGroupsRoutes.listAll, {
+      const { data: response } = await axios.get(watchlistRoutes.listAll, {
         headers: {
           auth: getToken(),
         },
       });
 
-      const customerGroupData = response.data;
+      setwatchlistGlobal(response);
 
-      setCustomerGroups(customerGroupData);
       setLoading(false);
     } catch (error) {
       setLoading(false);
+
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
@@ -74,89 +73,99 @@ function Index({ openCreateModal, setOpenCreateModal }) {
 
   const columns = [
     {
-      title: "CG ID",
-      dataIndex: "id",
+      title: "ID",
       align: "center",
       key: "id",
-      width: 100,
+      dataIndex: "id",
+      width: 75,
       filteredValue: null,
-
       sorter: (a, b) => a.id - b.id,
     },
     {
-      title: "Nome",
-      dataIndex: "display_name",
+      title: "xFaces ID",
+      key: "xfaces_watchlist_id",
+      dataIndex: "xfaces_watchlist_id",
       filteredValue: searchValue !== null ? [searchValue] : null,
       onFilter: (value, record) => {
-        return String(record.display_name).toLowerCase().includes(value.toLowerCase());
+        return String(record.type).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
-        return a.display_name.localeCompare(b.display_name);
+        return a.type.localeCompare(b.type);
       },
     },
     {
-      title: "Nome fantasia",
-      dataIndex: "fantasy_name",
+      title: "Nome",
+      key: "display_name",
+      dataIndex: "display_name",
       filteredValue: searchValue !== null ? [searchValue] : null,
       onFilter: (value, record) => {
-        return String(record.fantasy_name).toLowerCase().includes(value.toLowerCase());
+        return String(record.type).toLowerCase().includes(value.toLowerCase());
       },
       sorter: (a, b) => {
-        return a.fantasy_name.localeCompare(b.fantasy_name);
+        return a.type.localeCompare(b.type);
+      },
+    },
+    {
+      title: "Tipo",
+      align: "center",
+      key: "watchlist_global_type",
+      dataIndex: "watchlist_global_type",
+      filteredValue: searchValue !== null ? [searchValue] : null,
+      onFilter: (value, record) => {
+        return String(record.type).toLowerCase().includes(value.toLowerCase());
+      },
+      sorter: (a, b) => {
+        return a.type.localeCompare(b.type);
+      },
+      render: (watchlist_global_type) => {
+        return (
+          <>
+            <Tag style={{ marginBottom: "2px" }} color={watchlist_global_type.type == "EXTERNAL" ? "red" : "green"}>
+              {watchlist_global_type.type}
+            </Tag>
+          </>
+        );
       },
     },
     {
       title: "Data da criação",
       key: "created_date",
-      align: "center",
       dataIndex: "created_date",
-      filteredValue: null,
-      sorter: (a, b) => {
-        const dateA = new Date(a.create_date);
-        const dateB = new Date(b.create_date);
-        return dateA - dateB;
-      },
-      render: (date) => {
-        return new Date(date).toLocaleDateString("pt-BR");
-      },
-    },
-    {
-      title: "Data da atualização",
-      key: "updated_date",
-      dataIndex: "updated_date",
       align: "center",
       filteredValue: null,
+      width: 125,
       sorter: (a, b) => {
-        const dateA = new Date(a.update_date);
-        const dateB = new Date(b.update_date);
+        const dateA = new Date(a.created_date);
+        const dateB = new Date(b.created_date);
         return dateA - dateB;
       },
       render: (date) => {
         return new Date(date).toLocaleDateString("pt-BR");
       },
     },
+
     {
       title: "Ações",
       key: "ações",
-      align: "center",
-      width: 120,
+      width: 150,
+
       render: (row) => (
         <Space size="middle">
           <a
-            onClick={() => {
-              handleDeleteModal(row);
-            }}
+            disabled
+            // onClick={() => {
+            //   handleDeleteModal(row);
+            // }}
           >
             Delete
           </a>
-          <a>
-            <Space
-              onClick={() => {
-                handleEditModal(row);
-              }}
-            >
-              Editar
-            </Space>
+          <a
+            disabled
+            // onClick={() => {
+            //   handleEditModal(row);
+            // }}
+          >
+            Editar
           </a>
         </Space>
       ),
@@ -180,14 +189,19 @@ function Index({ openCreateModal, setOpenCreateModal }) {
   return (
     <>
       {openCreateModal ? (
-        <CreateCustomerGroupModal fetchCustomerGroup={fetchCustomerGroup} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
+        <CreateGlobalWatchlistModal fetchGlobalWatchlist={fetchGlobalWatchlist} openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
       ) : null}
-      {openEditModal && customerGroups != undefined && customerGroups.length > 0 ? (
-        <EditCustomerGroupModal fetchCustomerGroup={fetchCustomerGroup} rowState={rowState} openEditModal={openEditModal} setOpenEditModal={setOpenEditModal} />
+      {openEditModal && watchlistGlobal != undefined && watchlistGlobal.length > 0 ? (
+        <EditGlobalWatchlistModal
+          fetchGlobalWatchlist={fetchGlobalWatchlist}
+          rowState={rowState}
+          openEditModal={openEditModal}
+          setOpenEditModal={setOpenEditModal}
+        />
       ) : null}
-      {openDeleteModal && customerGroups != undefined && customerGroups.length > 0 ? (
-        <DeleteCustomerGroupModal
-          fetchCustomerGroup={fetchCustomerGroup}
+      {openDeleteModal && watchlistGlobal != undefined && watchlistGlobal.length > 0 ? (
+        <DeleteGlobalWatchlistModal
+          fetchGlobalWatchlist={fetchGlobalWatchlist}
           row={rowState}
           openDeleteModal={openDeleteModal}
           setOpenDeleteModal={setOpenDeleteModal}
@@ -197,16 +211,16 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         layout="inline"
         className="components-table-demo-control-bar"
         style={{
-          marginBottom: 16,
+          marginBottom: 20,
         }}
       ></Form>
       <Input.Search
         placeholder="Nome"
         style={{
-          width: "20%",
+          width: "25%",
           display: "flex",
           alignSelf: "flex-end",
-          marginBottom: "6px",
+          marginBottom: "7.5px",
         }}
         onChange={(e) => {
           setSearchValue(e.target.value);
@@ -216,11 +230,13 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         {...tableProps}
         pagination={{
           position: [top, bottom],
+          pageSize: 6,
         }}
         columns={tableColumns}
-        dataSource={customerGroups.length > 0 ? customerGroups : []}
+        dataSource={watchlistGlobal.length > 0 ? watchlistGlobal : []}
         style={{ width: "100%", height: "100%" }}
         rowKey={"id"}
+        scroll={{ y: "calc(100vh - 4em)" }}
       />
     </>
   );

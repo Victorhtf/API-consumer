@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 //Libs
-import { FormControl, TextField, Autocomplete } from "@mui/material";
+import { MenuItem, Select, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
@@ -18,7 +18,7 @@ import { ModalFade } from "../StyledComponents/ModalFade.jsx";
 //Styles
 import "../../Globals.css";
 
-function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, rowState }) {
+function EditCustomerModal({ openEditModal, setOpenEditModal, fetchWatchlistAmbients, rowState }) {
   const [loading, setLoading] = useState(false);
   const [customerList, setCustomerList] = useState([]);
   const [citiesList, setCitiesList] = useState([]);
@@ -117,7 +117,7 @@ function EditCustomerModal({ openEditModal, setOpenEditModal, fetchAmbients, row
 
       resetForm();
 
-      fetchAmbients();
+      fetchWatchlistAmbients();
 
       toast.success(`Ambiente '${values.display_name}' atualizado com sucesso!`, { position: "bottom-right" });
     } catch (error) {

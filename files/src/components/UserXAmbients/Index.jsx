@@ -43,9 +43,7 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
         },
       });
 
-      const usersData = response;
-
-      setUsersList(usersData);
+      setUsersList(response);
     } catch (error) {}
   }
 
@@ -83,6 +81,7 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
     {
       title: "Nome de usuário",
       key: "username",
+      align: "center",
       dataIndex: "username",
       filteredValue: searchValue !== null ? [searchValue] : null,
       onFilter: (value, record) => {
@@ -95,6 +94,7 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
     {
       title: "Ambiente vinculado",
       key: "ambients",
+      align: "center",
       dataIndex: "ambients",
       render: (ambients) => {
         return ambients.length > 0 ? (
@@ -113,6 +113,7 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
     {
       title: "Ações",
       key: "ações",
+      align: "center",
       width: 120,
 
       render: (row) => (

@@ -3,13 +3,10 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 //Libs
-import { MenuItem, Chip, Select, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
+import { Chip, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { useFormik, validateYupSchema } from "formik";
+import { useFormik } from "formik";
 import { toast } from "react-toastify";
-import styled from "styled-components";
-import axios from "axios";
-import * as Yup from "yup";
 
 //Dependencies
 import { getToken } from "../../auth/useAuth";
@@ -36,9 +33,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
         },
       });
 
-      const customerData = response;
-
-      setCustomerList(customerData);
+      setCustomerList(response);
     } catch (error) {
       setCustomerList([]);
     }
@@ -168,7 +163,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="external_id"
                     label="External ID"
                     variant="outlined"
@@ -181,7 +176,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                   <TextField
                     fullWidth
                     required
-                    size="medium"
+                    size="large"
                     id="display_name"
                     label="Nome"
                     variant="outlined"
@@ -194,7 +189,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                   <FormControl fullWidth>
                     <Autocomplete
                       fullWidth
-                      size="medium"
+                      size="large"
                       filterOptions={(options, { inputValue }) => {
                         return options.filter((option) => option.display_name.toLowerCase().includes(inputValue.toLowerCase()));
                       }}
@@ -207,7 +202,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                         display: "flex",
                         margin: "dence",
                         flexWrap: "wrap",
-                        gap: 0.5,
+                        gap: 0.625,
                       }}
                       getOptionLabel={(option) => option.display_name}
                       variant="outlined"
@@ -222,7 +217,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                   <TextField
                     fullWidth
                     required
-                    size="medium"
+                    size="large"
                     id="address"
                     label="Endereço"
                     variant="outlined"
@@ -234,7 +229,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                 <div className="form-group">
                   <TextField
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="address_complement"
                     label="Complemento"
                     variant="outlined"
@@ -248,7 +243,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                   <TextField
                     required
                     fullWidth
-                    size="medium"
+                    size="large"
                     id="postal_code"
                     label="CEP"
                     variant="outlined"
@@ -258,10 +253,10 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                   />
                 </div>
                 <div className="form-group">
-                  <FormControl size="medium" fullWidth>
+                  <FormControl size="large" fullWidth>
                     <Autocomplete
                       isOptionEqualToValue={(option, value) => option.city_id === value.city_id}
-                      size="medium"
+                      size="large"
                       filterOptions={(x) => x}
                       fullWidth
                       options={filteredCities}
