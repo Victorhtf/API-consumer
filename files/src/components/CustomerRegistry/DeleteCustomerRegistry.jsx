@@ -1,11 +1,13 @@
 //React
 import * as React from "react";
+import { useState } from "react";
 
 //Libs
 import { TextField } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import { useFormik } from "formik";
 import { FaCheckCircle } from "react-icons/fa";
+import { IoIosWarning } from "react-icons/io";
 import { HiXCircle } from "react-icons/hi";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -13,18 +15,23 @@ import { toast } from "react-toastify";
 //Dependencies
 import { routes } from "../../routes/routes.js";
 import { getToken } from "../../auth/useAuth.js";
+import Loading from "../Loading/Loading.jsx";
 
-function DeleteRegistry({ handleSetDeleteHistory }) {
-  async function handleSubmit(values, props) {
-    const { resetForm } = props;
+function DeleteCustomerRegistry({ handleSetDeleteHistory }) {
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(values, { resetForm, setSubmitting }) {
     const customerRoutes = routes.customer;
+
+    setLoading(true);
+    setSubmitting(true);
 
     const deletedData = [];
 
     class History {
-      constructor(deleted_at, status, display_name) {
+      constructor(deleted_at, statusIcon, display_name) {
         this.deleted_at = deleted_at;
-        this.status = status;
+        this.statusIcon = statusIcon;
         this.display_name = display_name;
       }
     }
@@ -37,42 +44,54 @@ function DeleteRegistry({ handleSetDeleteHistory }) {
       const date = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 
       for (const id_xfaces of splittedValues) {
+        let statusIcon;
+
         try {
           const body = {
             display_name: id_xfaces,
           };
 
-          await axios.post(customerRoutes.deleteByDisplayName, body, {
+          const response = await axios.post(customerRoutes.deleteByDisplayName, body, {
             headers: {
               auth: token,
             },
           });
 
-          const status = (
-            <div style={{ width: "100%", height: "100%" }}>
-              <FaCheckCircle style={{ color: "green" }} />
-            </div>
-          );
+          if (response.status == 200 && response.data.msg === "WatchlistMember Not Excluded - Not Found") {
+            statusIcon = (
+              <div style={{ width: "100%", height: "100%" }}>
+                <IoIosWarning style={{ color: "orange" }} />
+              </div>
+            );
 
-          const historyEntry = new History(date, status, id_xfaces);
+            toast.warn(`Registro '${id_xfaces}' não encontrado!`);
+          } else {
+            statusIcon = (
+              <div style={{ width: "100%", height: "100%" }}>
+                <FaCheckCircle style={{ color: "green" }} />
+              </div>
+            );
+
+            toast.success(`Registro '${id_xfaces}' deletado com sucesso!`);
+          }
+
+          const historyEntry = new History(date, statusIcon, id_xfaces);
+
           deletedData.push(historyEntry);
-
-          toast.success(`Registro '${id_xfaces}' deletado com sucesso!`);
         } catch (error) {
-          const status = (
+          toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
+          const statusIcon = (
             <div style={{ width: "100%", height: "100%" }}>
               <HiXCircle style={{ color: "red" }} />
             </div>
           );
 
-          const historyEntry = new History(date, status, id_xfaces);
+          const historyEntry = new History(date, statusIcon, id_xfaces);
           deletedData.push(historyEntry);
-
-          toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
         }
       }
 
-      // Move a chamada da função handleSetDeleteHistory para fora do loop for
+      setLoading(false);
       handleSetDeleteHistory(deletedData);
 
       resetForm();
@@ -105,14 +124,14 @@ function DeleteRegistry({ handleSetDeleteHistory }) {
           >
             <FormControl style={{ height: "80%" }} fullWidth>
               <TextField
-                placeholder={`Digite um ou mais ID's de registro separados por quebras de linha`}
+                placeholder={`Digite um ou mais id's separados por quebras de linha`}
                 multiline
-                helperText="Para excluir os registros, insira um ID no campo acima."
+                helperText="Para excluir os registros, insira um id no campo acima."
                 rows={15}
                 variant="outlined"
                 id="display_name"
                 value={formik.values.display_name}
-                label="ID do registro"
+                label="Display name"
                 onChange={formik.handleChange}
               />
             </FormControl>
@@ -125,7 +144,7 @@ function DeleteRegistry({ handleSetDeleteHistory }) {
               type="submit"
               className="blue-btn"
             >
-              Excluir registros
+              {loading == false ? "Excluir registros" : <Loading />}{" "}
             </button>
           </div>
         </form>
@@ -134,4 +153,4 @@ function DeleteRegistry({ handleSetDeleteHistory }) {
   );
 }
 
-export default DeleteRegistry;
+export default DeleteCustomerRegistry;

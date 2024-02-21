@@ -83,6 +83,7 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
       key: "username",
       align: "center",
       dataIndex: "username",
+      width: 300,
       filteredValue: searchValue !== null ? [searchValue] : null,
       onFilter: (value, record) => {
         return String(record.username).toLowerCase().includes(value.toLowerCase());
@@ -94,7 +95,6 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
     {
       title: "Ambiente vinculado",
       key: "ambients",
-      align: "center",
       dataIndex: "ambients",
       render: (ambients) => {
         return ambients.length > 0 ? (

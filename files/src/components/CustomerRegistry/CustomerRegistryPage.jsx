@@ -6,8 +6,8 @@ import styled from "styled-components";
 
 //Styles
 import "../../Globals.css";
-import DeleteRegistry from "./DeleteRegistry";
-import HistoryRegistry from "./HistoryRegistry";
+import DeleteRegistry from "./DeleteCustomerRegistry";
+import HistoryRegistry from "./HistoryDeleteCustomerRegistry";
 
 const Box = styled.div`
   width: 100%;
@@ -30,7 +30,7 @@ const Box = styled.div`
   }
 `;
 
-function RegistryPage() {
+function CustomerRegistryPage() {
   const [deletedData, setDeletedData] = useState([]);
 
   const handleSetDeleteHistory = (data) => {
@@ -66,4 +66,4 @@ function RegistryPage() {
   );
 }
 
-export default RegistryPage;
+export default CustomerRegistryPage;

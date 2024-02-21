@@ -20,7 +20,7 @@ import AmbientWatchlistPage from "./components/AmbientWatchlist/AmbientWatchlist
 import GlobalWatchlistPage from "./components/GlobalWatchlist/GlobalWatchlistPage.jsx";
 import CustomerWatchlistPage from "./components/CustomerWatchlist/CustomerWatchlistPage.jsx";
 import CameraPage from "./components/Cameras/CameraPage.jsx";
-import RegistryPage from "./components/Registry/RegistryPage.jsx";
+import CustomerRegistryPage from "./components/CustomerRegistry/CustomerRegistryPage.jsx";
 
 function App() {
   return (
@@ -72,7 +72,7 @@ function App() {
           </Route>
 
           <Route element={<BaseLayout />}>
-            <Route path="/registry" element={<RegistryPage />} />
+            <Route path="/registry" element={<CustomerRegistryPage />} />
           </Route>
 
           <Route path="/" element={<Login />} />

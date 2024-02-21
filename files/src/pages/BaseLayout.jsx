@@ -37,7 +37,6 @@ const Card = styled.div`
 window.addEventListener("resize", () => {
   const larguraDaTela = window.innerWidth;
   return larguraDaTela;
-  //Variavel setada, agr só utilizar
 });
 
 window.dispatchEvent(new Event("resize"));

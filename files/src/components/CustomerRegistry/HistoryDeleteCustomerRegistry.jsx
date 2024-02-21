@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 //Libs
 import { Table } from "antd";
 
-function HistoryRegistry({ deletedData }) {
+function HistoryDeleteCustomerRegistry({ deletedData }) {
   const bordered = false;
   const showTitle = false;
   const showHeader = true;
@@ -19,7 +19,6 @@ function HistoryRegistry({ deletedData }) {
     if (Array.isArray(deletedData) && deletedData.length > 0) {
       setDataSource(deletedData);
     }
-    console.log(dataSource);
   }, [deletedData]);
 
   const columns = [
@@ -44,10 +43,10 @@ function HistoryRegistry({ deletedData }) {
     },
     {
       title: "Status",
-      key: "status",
+      key: "statusIcon",
       align: "center",
       width: 60,
-      dataIndex: "status",
+      dataIndex: "statusIcon",
     },
   ];
 
@@ -80,4 +79,4 @@ function HistoryRegistry({ deletedData }) {
   );
 }
 
-export default HistoryRegistry;
+export default HistoryDeleteCustomerRegistry;
