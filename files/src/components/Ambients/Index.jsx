@@ -160,6 +160,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
       align: "center",
       key: "created_date",
       dataIndex: "created_date",
+      defaultSortOrder: "descend",
       filteredValue: null,
       width: 125,
       sorter: (a, b) => {

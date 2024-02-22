@@ -61,16 +61,6 @@ function Index({ openCreateModal, setOpenCreateModal }) {
     }
   }
 
-  function handleEditModal(row) {
-    setOpenEditModal(true);
-    setRowState(row);
-  }
-
-  async function handleDeleteModal(row) {
-    setRowState(row);
-    setOpenDeleteModal(true);
-  }
-
   const columns = [
     {
       title: "ID",
@@ -176,6 +166,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       align: "center",
       key: "created_date",
       dataIndex: "created_date",
+      defaultSortOrder: "descend",
       filteredValue: null,
       width: 125,
       sorter: (a, b) => {

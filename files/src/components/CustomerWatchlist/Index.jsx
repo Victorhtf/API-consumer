@@ -145,6 +145,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       title: "Data da criação",
       key: "created_date",
       dataIndex: "created_date",
+      defaultSortOrder: "descend",
       filteredValue: null,
       width: 125,
       sorter: (a, b) => {
