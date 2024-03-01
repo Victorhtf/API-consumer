@@ -233,7 +233,7 @@ function CreateCameraModal({ openCreateModal, setOpenCreateModal, fetchCameras }
                   Limpar
                 </button>
                 <button disabled={formik.isSubmitting} type="submit" className="blue-btn">
-                  Criar ambiente
+                  Criar câmera
                 </button>
               </div>
             </div>

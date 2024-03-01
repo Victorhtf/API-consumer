@@ -40,7 +40,7 @@ function CameraPage() {
             setOpenCreateModal(true);
           }}
         >
-          Criar watchlist
+          Criar câmera
         </button>
       </div>
       <Index openCreateModal={openCreateModal} setOpenCreateModal={setOpenCreateModal} />
