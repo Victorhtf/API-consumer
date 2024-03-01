@@ -216,6 +216,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         {...tableProps}
         pagination={{
           position: [top, bottom],
+          pageSize: 15,
         }}
         columns={tableColumns}
         dataSource={customerGroups.length > 0 ? customerGroups : []}

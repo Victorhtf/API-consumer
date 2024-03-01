@@ -258,7 +258,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
         {...tableProps}
         pagination={{
           position: [top, bottom],
-          pageSize: 6,
+          pageSize: 15,
         }}
         columns={tableColumns}
         dataSource={watchlistAmbient.length > 0 ? watchlistAmbient : []}

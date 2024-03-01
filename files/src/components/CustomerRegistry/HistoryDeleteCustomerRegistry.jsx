@@ -69,6 +69,7 @@ function HistoryDeleteCustomerRegistry({ deletedData }) {
         {...tableProps}
         pagination={{
           position: [top, bottom],
+          pageSize: 15,
         }}
         columns={tableColumns}
         dataSource={dataSource.length > 0 ? dataSource : []}

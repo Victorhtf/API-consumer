@@ -46,48 +46,51 @@ function DeleteCustomerRegistry({ handleSetDeleteHistory }) {
       for (const id_xfaces of splittedValues) {
         let statusIcon;
 
-        try {
-          const body = {
-            display_name: id_xfaces,
-          };
+        if (id_xfaces.length > 0) {
+          console.log(id_xfaces);
+          try {
+            const body = {
+              display_name: id_xfaces,
+            };
 
-          const response = await axios.post(customerRoutes.deleteByDisplayName, body, {
-            headers: {
-              auth: token,
-            },
-          });
+            const response = await axios.post(customerRoutes.deleteByDisplayName, body, {
+              headers: {
+                auth: token,
+              },
+            });
 
-          if (response.status == 200 && response.data.msg === "WatchlistMember Not Excluded - Not Found") {
-            statusIcon = (
+            if (response.status == 200 && response.data.msg === "WatchlistMember Not Excluded - Not Found") {
+              statusIcon = (
+                <div style={{ width: "100%", height: "100%" }}>
+                  <IoIosWarning style={{ color: "orange" }} />
+                </div>
+              );
+
+              toast.warn(`Registro '${id_xfaces}' não encontrado!`);
+            } else {
+              statusIcon = (
+                <div style={{ width: "100%", height: "100%" }}>
+                  <FaCheckCircle style={{ color: "green" }} />
+                </div>
+              );
+
+              toast.success(`Registro '${id_xfaces}' deletado com sucesso!`);
+            }
+
+            const historyEntry = new History(date, statusIcon, id_xfaces);
+
+            deletedData.push(historyEntry);
+          } catch (error) {
+            toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
+            const statusIcon = (
               <div style={{ width: "100%", height: "100%" }}>
-                <IoIosWarning style={{ color: "orange" }} />
+                <HiXCircle style={{ color: "red" }} />
               </div>
             );
 
-            toast.warn(`Registro '${id_xfaces}' não encontrado!`);
-          } else {
-            statusIcon = (
-              <div style={{ width: "100%", height: "100%" }}>
-                <FaCheckCircle style={{ color: "green" }} />
-              </div>
-            );
-
-            toast.success(`Registro '${id_xfaces}' deletado com sucesso!`);
+            const historyEntry = new History(date, statusIcon, id_xfaces);
+            deletedData.push(historyEntry);
           }
-
-          const historyEntry = new History(date, statusIcon, id_xfaces);
-
-          deletedData.push(historyEntry);
-        } catch (error) {
-          toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
-          const statusIcon = (
-            <div style={{ width: "100%", height: "100%" }}>
-              <HiXCircle style={{ color: "red" }} />
-            </div>
-          );
-
-          const historyEntry = new History(date, statusIcon, id_xfaces);
-          deletedData.push(historyEntry);
         }
       }
 
