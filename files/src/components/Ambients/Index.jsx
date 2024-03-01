@@ -262,7 +262,7 @@ function Index({ openCreateModal, setOpenCreateModal, fetchAmbients }) {
         {...tableProps}
         pagination={{
           position: [top, bottom],
-          pageSize: 6,
+          pageSize: 15,
         }}
         columns={tableColumns}
         dataSource={ambient.length > 0 ? ambient : []}

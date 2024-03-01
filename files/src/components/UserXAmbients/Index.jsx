@@ -180,6 +180,7 @@ function Index({ openLinkUserXAmbientsModal, setOpenLinkUserXAmbientsModal, fetc
         {...tableProps}
         pagination={{
           position: [top, bottom],
+          pageSize: 15,
         }}
         columns={tableColumns}
         dataSource={userxambient.length > 0 ? userxambient : []}

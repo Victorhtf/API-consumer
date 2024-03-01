@@ -40,7 +40,7 @@ function UserXAmbientPage() {
             setOpenLinkUserXAmbientsModal(true);
           }}
         >
-          Criar vínculo
+          Alterar vínculo
         </button>
       </div>
       <Index openLinkUserXAmbientsModal={openLinkUserXAmbientsModal} setOpenLinkUserXAmbientsModal={setOpenLinkUserXAmbientsModal} />
