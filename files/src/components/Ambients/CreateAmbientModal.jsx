@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 
 //Libs
 import { Chip, FormControl, InputLabel, CircularProgress, TextField, Autocomplete } from "@mui/material";
+import { FiSearch } from "react-icons/fi";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-import { useFormik } from "formik";
+import { useFormik, useFormikContext } from "formik";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -23,6 +24,44 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
   const [citiesList, setCitiesList] = useState([]);
   const [citiesListAux, setCitiesListAux] = useState([]);
   const [filteredCities, setFilteredCities] = useState([]);
+
+  async function handleCEPSearch(formik) {
+    const postal_code = String(formik.values.postal_code);
+    const ambientRoutes = routes.ambient;
+
+    try {
+      const { data } = await axios.get(`https://viacep.com.br/ws/${postal_code}/json/`);
+      console.log(data);
+
+      const ibgeCityLength = data.localidade.length;
+
+      const body = { search: data.localidade.normalize("NFD").replace(/\p{Mn}/gu, "") };
+
+      formik.setFieldValue("address", data.logradouro);
+      try {
+        const intradataCity = await axios.post(ambientRoutes.listCities, body, {
+          headers: {
+            auth: getToken(),
+          },
+        });
+
+        const filteredCity = intradataCity.data.filter((intradataCity) => {
+          return intradataCity.city && intradataCity.city.length === ibgeCityLength;
+        });
+
+        if (filteredCity.length > 0) {
+          setFilteredCities([filteredCity[0]]);
+          formik.setFieldValue("city_id", filteredCity[0].city_id);
+        }
+
+        console.log(filteredCity[0]);
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async function handleCustomerList() {
     const customerRoutes = routes.customer;
@@ -77,6 +116,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
       setFilteredCities(cityData);
 
       setLoading(false);
+      return cityData;
     } catch (error) {
       setCustomerList([]);
     }
@@ -216,6 +256,29 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                 </div>
                 <div className="form-group">
                   <TextField
+                    required
+                    fullWidth
+                    size="large"
+                    id="postal_code"
+                    label="CEP"
+                    variant="outlined"
+                    name="postal_code"
+                    value={formik.values.postal_code}
+                    onChange={(event, values) => {
+                      formik.setFieldValue("postal_code", event.target.value);
+                    }}
+                  />
+                  <div
+                    className="search-blue-btn"
+                    onClick={() => {
+                      handleCEPSearch(formik);
+                    }}
+                  >
+                    <FiSearch />
+                  </div>
+                </div>
+                <div className="form-group">
+                  <TextField
                     fullWidth
                     required
                     size="large"
@@ -241,19 +304,6 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                 </div>
 
                 <div className="form-group">
-                  <TextField
-                    required
-                    fullWidth
-                    size="large"
-                    id="postal_code"
-                    label="CEP"
-                    variant="outlined"
-                    name="postal_code"
-                    value={formik.values.postal_code}
-                    onChange={formik.handleChange}
-                  />
-                </div>
-                <div className="form-group">
                   <FormControl size="large" fullWidth>
                     <Autocomplete
                       isOptionEqualToValue={(option, value) => option.city_id === value.city_id}
@@ -261,11 +311,11 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                       filterOptions={(x) => x}
                       fullWidth
                       options={filteredCities}
-                      getOptionLabel={(option) => option.city + " - " + option.state.state}
+                      getOptionLabel={(option) => (option.city != undefined ? option.city + " - " + option.state.state : "")}
                       id="city_id"
                       loading={loading}
                       loadingText="Carregando..."
-                      onChange={(event, value) => formik.setFieldValue("city_id", value)}
+                      onChange={(event, value) => formik.setFieldValue("city_id", value ? value.city_id : "")}
                       renderInput={(params) => {
                         setCitiesListAux(params.inputProps.value);
 
