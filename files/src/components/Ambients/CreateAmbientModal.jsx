@@ -31,7 +31,6 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
 
     try {
       const { data } = await axios.get(`https://viacep.com.br/ws/${postal_code}/json/`);
-      console.log(data);
 
       const ibgeCityLength = data.localidade.length;
 
@@ -51,10 +50,8 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
 
         if (filteredCity.length > 0) {
           setFilteredCities([filteredCity[0]]);
-          formik.setFieldValue("city_id", filteredCity[0].city_id);
+          formik.setFieldValue("city_id", filteredCity[0]);
         }
-
-        console.log(filteredCity[0]);
       } catch (error) {
         console.log(error);
       }
@@ -156,6 +153,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
 
       toast.success(`Ambiente '${values.display_name}' adicionado com sucesso!`);
     } catch (error) {
+      console.log(error);
       toast.error("Ops, algo deu errado. Tente novamente mais tarde.");
     }
   }
@@ -168,7 +166,7 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
       address: "",
       address_complement: "",
       postal_code: "",
-      city_id: "",
+      city_id: null,
     },
     onSubmit: handleSubmit,
     resetForm: () => {
@@ -311,11 +309,12 @@ function CreateAmbientModal({ openCreateModal, setOpenCreateModal, fetchAmbients
                       filterOptions={(x) => x}
                       fullWidth
                       options={filteredCities}
-                      getOptionLabel={(option) => (option.city != undefined ? option.city + " - " + option.state.state : "")}
+                      getOptionLabel={(option) => option.city + " - " + option.state.state}
                       id="city_id"
+                      value={formik.values.city_id}
                       loading={loading}
                       loadingText="Carregando..."
-                      onChange={(event, value) => formik.setFieldValue("city_id", value ? value.city_id : "")}
+                      onChange={(event, value) => formik.setFieldValue("city_id", value)}
                       renderInput={(params) => {
                         setCitiesListAux(params.inputProps.value);
 
