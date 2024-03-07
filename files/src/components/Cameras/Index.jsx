@@ -150,7 +150,7 @@ function Index({ openCreateModal, setOpenCreateModal }) {
       },
     },
     {
-      title: "Ativo",
+      title: "Status",
       key: "active",
       align: "center",
       dataIndex: "active",
