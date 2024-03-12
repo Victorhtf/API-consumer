@@ -1,4 +1,5 @@
 
+  
 # INTRADATA
 O backend do INTRADATA; Acessível em https://api.intradata.ai/. É desenvolvido utilizando Typescript/Node e é acessado através da interface Frontend do INTRADATA, bem como por meio de CRUD, Dremio e outras funcionalidades.
 O acesso ao INTRADATA seja de clientes é feito através de USUÁRIOS, cada cliente possui um usuário principal (administrador da loja) podendo ter ou não outros usuários associados ao Administrador, nesse caso é criado um 'Grupo de cliente', ao qual é possível associar outros usuários em um único grupo de loja, o usuário permite acesso ao frontend e à API.
@@ -43,13 +44,19 @@ As câmeras são criadas através do consumo da API do X-Faces, e para a criaç�
 
 -  **Tipo de câmera:** (ENTRANCE/EXIT/ZONE/EXTERNAL/PEDESTRIANS)
 
-	-  _ENTRANCE_: Câmera do tipo 'ENTRADA'.
-	-  _EXIT_: Câmera do tipo 'SAÍDA'.
-	-  _ZONE_: Câmera do tipo 'ZONA'.
-	-  _EXTERNAL_: Camera do tipo 'EXTERNA'.
-	-  _PEDESTRIANS_: Câmera do tipo 'PEDESTRES'
+	-  _ENTRANCE_: Câmera do tipo 'ENTRADA'. Utilizada para detectar e contabilizar a entrada de pessoas dentro da loja, atualmente é o único tipo utilizado.
+	-  _EXIT_: Câmera do tipo 'SAÍDA'. Para informações de saída de clientes da loja.
+	-  _ZONE_: Câmera do tipo 'ZONA'. Câmera utilizada em um ambiente específico da loja a fim de contabilizar o tempo de permanência no ambiente.
+	-  _EXTERNAL_: Camera do tipo 'EXTERNA'. Utilizada a fim de entender o fluxo de pessoas fora da loja. Posteriormente foi substituída pelo tipo 'PEDESTRES'
+	-  _PEDESTRIANS_: Câmera do tipo 'PEDESTRES'. Função utilizada para detectar corpos e não rostos na câmera. Gera informações de fluxo.
 
-  
+Outra estrutura importante no INTRADATA é o conceito de *'watchlists'*. Watchlist é basicamente a criação de uma lista para incluir rostos a fim de agrupar certas características. A utilização no INTRADATA se dá atualmente pela detecção do rosto de uma pessoa na câmera. Essa pessoa, caso estiver cadastrada previamente em uma watchlist de funcionários, irá entrar apenas para a watchlist de funcionários, e desconsiderado dos cálculos estatísticos da loja. 
+Caso o rosto seja um rosto não cadastrado na watchlist esse rosto é considerado como *'customer'*, se ele votar posteriormente na loja a câmera iria verificar que ele está incluso em uma watchlist, considerando ele para os cálculos. Clientes que não retornaram em 3 meses após a primeira detecção são apagados da watchlist e caso apareçam novamente serão considerados clientes novos.
+As categorias de watchlists são *ambiente*, *customer* e *global*, sendo ambiente para 
+Na criação de watchlists existem 3 parâmetros passíveis de alterações, são eles:
+- **Nome:** Nome da watchlist em questão.
+- **Tipo:** Qual é o tipo da watchlist a ser definida. Cada categoria de watchlist tem tipos diferentes, sejam ambiente, global ou customer. 
+- **Threshold:** É o grau de confiabilidade na detecção do rosto para que esse rosto seja incluído na watchlist. de 1% a 100%.
 
 ### Estrutura de Diretórios
 -  **middleware**: Implementa middleware para processamento de solicitações, incluindo adição de metadados à token de login.
