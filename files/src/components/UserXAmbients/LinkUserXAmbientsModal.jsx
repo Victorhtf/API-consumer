@@ -259,7 +259,9 @@ const LinkUserXAmbientsModal = (props) => {
                         const selectedIds = options.map((option) => option.id);
                         formik.setFieldValue("ambient_id", selectedIds);
                       }}
-                      getOptionLabel={(option) => option.display_name}
+                      getOptionLabel={(option) => {
+                        return option.customer.display_name.toUpperCase() + " - " + option.display_name;
+                      }}
                       variant="outlined"
                       renderTags={(value, getTagProps) =>
                         value.map((option, index) => <Chip variant="outlined" label={option.display_name} {...getTagProps({ index })} />)
