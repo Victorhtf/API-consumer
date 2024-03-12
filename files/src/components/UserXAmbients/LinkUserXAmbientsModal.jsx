@@ -131,7 +131,17 @@ const LinkUserXAmbientsModal = (props) => {
 
       const ambientData = response;
 
-      setAmbientsList(ambientData);
+      const ambientesOrdenados = ambientData.sort((a, b) => {
+        const comparacaoCustomer = a.customer.display_name.localeCompare(b.customer.display_name);
+
+        if (comparacaoCustomer === 0) {
+          return a.display_name.localeCompare(b.display_name);
+        }
+
+        return comparacaoCustomer;
+      });
+
+      setAmbientsList(ambientesOrdenados);
     } catch (error) {}
   }
 
@@ -236,7 +246,7 @@ const LinkUserXAmbientsModal = (props) => {
                       renderTags={(value, getTagProps) =>
                         value.map((option, index) => <Chip variant="outlined" label={option.username} {...getTagProps({ index })} />)
                       }
-                      renderInput={(params) => <TextField {...params} label="ID de cliente" />}
+                      renderInput={(params) => <TextField {...params} label="Usuário" />}
                     />
                   </FormControl>
                   <FormControl size="large" sx={{ width: 375, maxHeight: "375px" }}>
@@ -266,7 +276,7 @@ const LinkUserXAmbientsModal = (props) => {
                       renderTags={(value, getTagProps) =>
                         value.map((option, index) => <Chip variant="outlined" label={option.display_name} {...getTagProps({ index })} />)
                       }
-                      renderInput={(params) => <TextField {...params} label="ID de cliente" />}
+                      renderInput={(params) => <TextField {...params} label="Ambiente" />}
                     />
                   </FormControl>
                 </div>
