@@ -3,7 +3,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 
 //Libs
-import { MenuItem, Select, InputLabel, TextField, Switch } from "@mui/material";
+import { MenuItem, Select, InputLabel, TextField, Switch, Autocomplete, Chip } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
 import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -36,7 +36,19 @@ function CreateCameraModal({ openCreateModal, setOpenCreateModal, fetchCameras }
         },
       });
 
-      setAmbientsList(response);
+      const ambientData = response;
+
+      const ambientesOrdenados = ambientData.sort((a, b) => {
+        const comparacaoCustomer = a.customer.display_name.localeCompare(b.customer.display_name);
+
+        if (comparacaoCustomer === 0) {
+          return a.display_name.localeCompare(b.display_name);
+        }
+
+        return comparacaoCustomer;
+      });
+
+      setAmbientsList(ambientesOrdenados);
     } catch (error) {}
   }
 
@@ -152,24 +164,31 @@ function CreateCameraModal({ openCreateModal, setOpenCreateModal, fetchCameras }
 
                 <div className="form-group">
                   <FormControl size="large" fullWidth>
-                    <InputLabel id="roles">Ambientes</InputLabel>
-                    <Select
+                    <Autocomplete
                       fullWidth
-                      required
-                      label="Ambiente"
                       size="large"
-                      id="ambient_id"
-                      variant="outlined"
-                      name="ambient_id"
-                      value={formik.values.ambient_id}
-                      onChange={formik.handleChange}
-                    >
-                      {ambientsList.map((ambient, ambientIndex) => (
-                        <MenuItem key={ambientIndex} value={ambient.id}>
-                          {ambient.display_name}
-                        </MenuItem>
-                      ))}
-                    </Select>
+                      filterOptions={(options, { inputValue }) => {
+                        return options.filter((option) => option.display_name.toLowerCase().includes(inputValue.toLowerCase()));
+                      }}
+                      id="customerList"
+                      options={ambientsList}
+                      sx={{
+                        display: "flex",
+                        margin: "dence",
+                        flexWrap: "wrap",
+                        gap: 0.625,
+                      }}
+                      onChange={(event, options) => {
+                        console.log(options);
+                        const selectedId = [options.id];
+                        console.log(selectedId);
+                        formik.setFieldValue("ambient_id", selectedId);
+                      }}
+                      getOptionLabel={(option) => {
+                        return option.customer.display_name.toUpperCase() + " - " + option.display_name;
+                      }}
+                      renderInput={(params) => <TextField {...params} label="Ambiente" />}
+                    />
                   </FormControl>
                 </div>
 
