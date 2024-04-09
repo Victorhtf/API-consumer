@@ -179,10 +179,10 @@ function CreateCameraModal({ openCreateModal, setOpenCreateModal, fetchCameras }
                         gap: 0.625,
                       }}
                       onChange={(event, options) => {
-                        console.log(options);
                         const selectedId = [options.id];
-                        console.log(selectedId);
-                        formik.setFieldValue("ambient_id", selectedId);
+                        if (selectedId.length > 0) {
+                          formik.setFieldValue("ambient_id", selectedId[0]);
+                        }
                       }}
                       getOptionLabel={(option) => {
                         return option.customer.display_name.toUpperCase() + " - " + option.display_name;
